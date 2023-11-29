@@ -84,27 +84,37 @@ def parser(expr: str) -> list[Tree]:
     expr_list.append(Tree(value, nature))
     return expr_list
 
-def replace_tree(tree1: Tree, tree2: Tree) -> None:
+def replace_tree(tree1: Tree, tree2: Tree) -> Tree:
     tree1.value = tree2.value
     tree1.nature = tree2.nature
     tree1.childs = tree2.childs
+    return tree1
+
+def find_root(tree: Tree) -> Tree:
+    if (not tree.father):
+        return tree
+    return find_root(tree.father)
 
 def to_tree(expr_list: list[Tree]) -> Tree:
     tree = Tree()
     for t in expr_list:
         if t.nature == 'int':
             replace_tree(tree, t)
-            t = tree
+            tree = find_root(tree)
         elif t.nature == 'opr':
-            replace_tree(t.append_child(), tree)
-            t = t.append_child()
+            if not (is_opr:=tree.value in OPERATORS) or OPERATORS[t.value] <= OPERATORS[tree.value]:
+                replace_tree(t.append_child(), tree)
+                tree = t.append_child()
+            elif is_opr:
+                child: Tree = tree.childs[-1]
+                while child.nature == 'opr' and OPERATORS[t.value] > OPERATORS[child.value]:
+                        child = child.childs[-1]
+                replace_tree(t.append_child(), child)
+                tree = replace_tree(child.father.childs[-1], t).append_child()
 
-        tree = t
-    while tree.father != None:
-        tree = tree.father
-    return tree
+    return find_root(tree)
 
-parsed = parser('5*3+7+3')
+parsed = parser('3-5*3+7/3+5')
 # for value in parsed:
 #     print_tree(value)
 tree = to_tree(parsed)
