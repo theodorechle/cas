@@ -105,6 +105,8 @@ def to_tree(expr_list: list[Tree]) -> Tree:
         elif t.nature == CLOSING_PARENTHESIS:
             tree.father.nature = CLOSING_PARENTHESIS
             tree = find_root_or_parenthesis(tree)
-    
+        # print('\nRoot :')
+        # print_tree(find_root(tree))
+        # print('\n')
     remove_parenthesis(find_root(tree))
     return find_root(tree)
