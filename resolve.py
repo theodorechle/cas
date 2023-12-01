@@ -1,5 +1,11 @@
+from math import modf
 from constants import *
 from tree import *
+
+def find_father_or_none(tree: Tree) -> Tree:
+    if (tree.father):
+        return tree.father
+    return tree
 
 def add(tree: Tree) -> Tree:
     child1, child2 = tree.childs[:2]
@@ -8,7 +14,7 @@ def add(tree: Tree) -> Tree:
     if child2.nature != TYPE_NUMBER:
         return child2
     replace_tree(tree, Tree(str(float(child1.value) + float(child2.value)), TYPE_NUMBER))
-    return tree
+    return find_father_or_none(tree)
 
 def substract(tree: Tree) -> Tree:
     child1, child2 = tree.childs[:2]
@@ -17,7 +23,7 @@ def substract(tree: Tree) -> Tree:
     if child2.nature != TYPE_NUMBER:
         return child2
     replace_tree(tree, Tree(str(float(child1.value) - float(child2.value)), TYPE_NUMBER))
-    return tree
+    return find_father_or_none(tree)
 
 def multiply(tree: Tree) -> Tree:
     child1, child2 = tree.childs[:2]
@@ -26,7 +32,7 @@ def multiply(tree: Tree) -> Tree:
     if child2.nature != TYPE_NUMBER:
         return child2
     replace_tree(tree, Tree(str(float(child1.value) * float(child2.value)), TYPE_NUMBER))
-    return tree
+    return find_father_or_none(tree)
 
 def divide(tree: Tree) -> Tree:
     child1, child2 = tree.childs[:2]
@@ -35,7 +41,7 @@ def divide(tree: Tree) -> Tree:
     if child2.nature != TYPE_NUMBER:
         return child2
     replace_tree(tree, Tree(str(float(child1.value) / float(child2.value)), TYPE_NUMBER))
-    return tree
+    return find_father_or_none(tree)
 
 
 def power(tree: Tree) -> Tree:
@@ -45,7 +51,13 @@ def power(tree: Tree) -> Tree:
     if child2.nature != TYPE_NUMBER:
         return child2
     replace_tree(tree, Tree(str(float(child1.value) ** float(child2.value)), TYPE_NUMBER))
-    return tree
+    return find_father_or_none(tree)
+
+def round_nbr_tree(tree: Tree) -> None:
+    if tree.nature == TYPE_NUMBER and not (cut_value := modf(float(tree.value)))[0]:
+        tree.value = int(cut_value[1])
+    for child in tree.childs:
+        round_nbr_tree(child)
 
 def resolve(tree: Tree) -> Tree:
     while True:
@@ -65,4 +77,6 @@ def resolve(tree: Tree) -> Tree:
         print('\nRoot :')
         print_tree(find_root(tree))
         print('\n')
+    
+    round_nbr_tree(tree)
     return tree

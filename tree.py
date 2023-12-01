@@ -26,6 +26,8 @@ def replace_tree(tree1: Tree, tree2: Tree) -> Tree:
     tree1.value = tree2.value
     tree1.nature = tree2.nature
     tree1.childs = tree2.childs
+    for child in tree1.childs:
+        child.father = tree1
     return tree1
 
 def find_root(tree: Tree) -> Tree:
