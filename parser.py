@@ -85,7 +85,7 @@ def remove_parenthesis(tree: Tree) -> Tree:
 def to_tree(expr_list: list[Tree]) -> Tree:
     tree = Tree()
     for t in expr_list:
-        if t.nature == TYPE_NUMBER:
+        if t.nature == TYPE_NUMBER or t.nature == TYPE_VARIABLE:
             replace_tree(tree, t)
             tree = find_root_or_parenthesis(tree)
         elif t.nature == TYPE_OPERATOR:
