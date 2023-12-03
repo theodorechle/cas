@@ -3,7 +3,7 @@ from tree import *
 from parser import *
 from resolve import *
 
-parsed = parser('(5*((10-7)+3)*7)**5')
+parsed = parser('(5*((10-a-7)+3)*7)**5')
 print('parsed :')
 for t in parsed:
     print_tree(t)

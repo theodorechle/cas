@@ -10,6 +10,8 @@ class Tree:
         self.childs: list[Tree] = []
 
     def append_tree_child(self, child: Type['Tree']) -> Type['Tree']:
+        child.father = self
+        child.child_index = len(self.childs)
         self.childs.append(child)
         return child
     
