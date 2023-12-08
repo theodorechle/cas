@@ -163,9 +163,9 @@ def resolve(tree: Tree) -> Tree:
                 tree = divide(tree)
             elif tree.value == '**':
                 tree = power(tree)
-        print('\nRoot :')
-        print_tree(find_root(tree))
-        print('\n')
+        # print('\nRoot :')
+        # print_tree(find_root(tree))
+        # print('\n')
         if c == length:
             root = find_root(tree)
             if s != (new_s := tree_str(root)):
