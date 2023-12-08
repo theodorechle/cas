@@ -173,7 +173,7 @@ def resolve(tree: Tree) -> Tree:
                 length = tree_length(root)
                 c = 0
             else:
-                return root
+                return tree
         else:
             c += 1
     round_nbr_tree(tree)

@@ -1,21 +1,20 @@
-from typing import Type
 from constants import *
 
 class Tree:
-    def __init__(self, value: str='', nature: int=0, father: Type['Tree']|None=None, child_index: int=0) -> None:
+    def __init__(self, value: str='', nature: int=0, father: 'Tree'|None=None, child_index: int=0) -> None:
         self.value: str = value
         self.nature: int = nature
         self.father: Tree|None = father
         self.child_index: int = child_index
         self.childs: list[Tree] = []
 
-    def append_tree_child(self, child: Type['Tree']) -> Type['Tree']:
+    def append_tree_child(self, child: 'Tree') -> 'Tree':
         child.father = self
         child.child_index = len(self.childs)
         self.childs.append(child)
         return child
     
-    def append_child(self, value: str='', nature: int=0) -> Type['Tree']:
+    def append_child(self, value: str='', nature: int=0) -> 'Tree':
         return self.append_tree_child(Tree(value, nature, self, len(self.childs)))
 
 
