@@ -1,5 +1,5 @@
 from typing import Type
-from constants import TYPES
+from constants import *
 
 class Tree:
     def __init__(self, value: str='', nature: int=0, father: Type['Tree']|None=None, child_index: int=0) -> None:
@@ -36,3 +36,24 @@ def find_root(tree: Tree) -> Tree:
     if not tree.father:
         return tree
     return find_root(tree.father)
+
+def tree_str(tree: Tree) -> Tree:
+    if tree.nature == TYPE_OPERATOR:
+        s = f'({tree_str(tree.childs[0])}{tree.value}{tree_str(tree.childs[1])})'
+    elif tree.nature == TYPE_FUNCTION:
+        s = f'{tree.value}('
+        if tree.childs:
+            s += tree_str(tree.childs[0])
+            for child in tree.childs[1:]:
+                s += f',{tree_str(child)}'
+        s += ')'
+    else:
+        s = tree.value
+    return s
+
+def tree_length(tree: Tree) -> int:
+    nb = 0
+    for child in tree.childs:
+        if (n := tree_length(child)) > nb:
+            nb = n
+    return nb + 1

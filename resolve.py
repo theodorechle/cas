@@ -60,32 +60,38 @@ def recursive_operation(tree: Tree, value: Tree, operator: str, first_recursion:
 def operate_on_left_litteral(tree: Tree) -> None:
     child1, child2 = tree.childs
     if child1.nature == TYPE_OPERATOR:
-        if child2.nature == TYPE_NUMBER:
-            if not is_litteral_calculation(child1):
-                return child1
-            if OPERATORS[child1.value] <= OPERATORS[tree.value]:
-                if recursive_operation(tree, child2, tree.value, True) != None:
-                    if tree.father: return tree.father
-                replace_tree(tree, child1)
-                return tree
-        return child1
+        if child2.nature != TYPE_NUMBER or not is_litteral_calculation(child1):
+            return child1
+        if OPERATORS[child1.value] > OPERATORS[tree.value]:
+            if tree.father:
+                return tree.father
+            return child2
+        if recursive_operation(tree, child2, tree.value, True) != None:
+            if tree.father: return tree.father
+        replace_tree(tree, child1)
+        return tree
     if child1.nature == TYPE_VARIABLE:
-        return tree.father
+        if child2.nature != TYPE_OPERATOR or is_litteral_calculation(child2) and tree.father:
+            return tree.father
+        return child2
 
 def operate_on_right_litteral(tree: Tree) -> None:
     child1, child2 = tree.childs
     if child2.nature == TYPE_OPERATOR:
-        if child1.nature == TYPE_NUMBER:
-            if not is_litteral_calculation(child2):
+        if child1.nature != TYPE_NUMBER or not is_litteral_calculation(child2):
                 return child2
-            if OPERATORS[child2.value] <= OPERATORS[tree.value]:
-                if recursive_operation(tree, child1, tree.value, True) != None:
-                    if tree.father: return tree.father
-                replace_tree(tree, child2)
-                return tree
-        return child2
+        if OPERATORS[child2.value] > OPERATORS[tree.value]:
+            if tree.father:
+                return tree.father
+            return child2
+        if recursive_operation(tree, child1, tree.value, True) != None:
+            if tree.father: return tree.father
+        replace_tree(tree, child2)
+        return tree
     if child2.nature == TYPE_VARIABLE:
-        return tree.father
+        if child1.nature != TYPE_OPERATOR or is_litteral_calculation(child1) and tree.father:
+            return tree.father
+        return child1
 
 def add(tree: Tree) -> Tree:
     t = operate_on_left_litteral(tree)
@@ -140,6 +146,9 @@ def round_nbr_tree(tree: Tree) -> None:
         round_nbr_tree(child)
 
 def resolve(tree: Tree) -> Tree:
+    s = tree_str(tree)
+    c = 0
+    length = tree_length(tree)
     while True:
         if not tree.father and not tree.childs:
             break
@@ -157,6 +166,15 @@ def resolve(tree: Tree) -> Tree:
         print('\nRoot :')
         print_tree(find_root(tree))
         print('\n')
-    
+        if c == length:
+            root = find_root(tree)
+            if s != (new_s := tree_str(root)):
+                s = new_s
+                length = tree_length(root)
+                c = 0
+            else:
+                return root
+        else:
+            c += 1
     round_nbr_tree(tree)
     return tree
