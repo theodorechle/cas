@@ -37,8 +37,8 @@ def operate(child: Tree, value: Tree, operator: str) -> None:
     t.nature = child.nature
     child.value = operator
     child.nature = TYPE_OPERATOR
-    child.append_tree_child(t)
     child.append_tree_child(value)
+    child.append_tree_child(t)
 
 def recursive_operation(tree: Tree, value: Tree, operator: str, first_recursion: bool = False) -> None|int:
     for child in tree.childs:
@@ -71,8 +71,10 @@ def operate_on_left_litteral(tree: Tree) -> None:
         replace_tree(tree, child1)
         return tree
     if child1.nature == TYPE_VARIABLE:
-        if child2.nature != TYPE_OPERATOR or is_litteral_calculation(child2) and tree.father:
-            return tree.father
+        if child2.nature != TYPE_OPERATOR or is_litteral_calculation(child2):
+            if tree.father:
+                return tree.father
+            return tree
         return child2
 
 def operate_on_right_litteral(tree: Tree) -> None:
@@ -89,8 +91,10 @@ def operate_on_right_litteral(tree: Tree) -> None:
         replace_tree(tree, child2)
         return tree
     if child2.nature == TYPE_VARIABLE:
-        if child1.nature != TYPE_OPERATOR or is_litteral_calculation(child1) and tree.father:
-            return tree.father
+        if child2.nature != TYPE_OPERATOR or is_litteral_calculation(child1):
+            if tree.father:
+                return tree.father
+            return tree
         return child1
 
 def add(tree: Tree) -> Tree:
@@ -163,9 +167,9 @@ def resolve(tree: Tree) -> Tree:
                 tree = divide(tree)
             elif tree.value == '**':
                 tree = power(tree)
-        # print('\nRoot :')
-        # print_tree(find_root(tree))
-        # print('\n')
+        print('\nRoot :')
+        print_tree(find_root(tree))
+        print('\n')
         if c == length:
             root = find_root(tree)
             if s != (new_s := tree_str(root)):
@@ -173,7 +177,8 @@ def resolve(tree: Tree) -> Tree:
                 length = tree_length(root)
                 c = 0
             else:
-                return tree
+                tree = root
+                break
         else:
             c += 1
     round_nbr_tree(tree)

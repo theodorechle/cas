@@ -3,7 +3,7 @@ from tree import *
 from parser import *
 from resolve import *
 
-parsed = parser('5(2)')
+parsed = parser('5-(a+7)') # must be -a-2
 # print('parsed :')
 # for t in parsed:
 #     print_tree(t)

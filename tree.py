@@ -39,7 +39,12 @@ def find_root(tree: Tree) -> Tree:
 
 def tree_str(tree: Tree) -> Tree:
     if tree.nature == TYPE_OPERATOR:
-        s = f'({tree_str(tree.childs[0])}{tree.value}{tree_str(tree.childs[1])})'
+        # detect +- to replace with -
+        operator_redundancy = (OPERATORS[tree.value] != 1 or (tree.childs[1].nature != TYPE_OPERATOR or OPERATORS[tree.childs[1].value] != 1) and (tree.childs[1].nature != TYPE_NUMBER or str(tree.childs[1].value)[0] != "-"))
+        s = f'{tree_str(tree.childs[0])}{tree.value if operator_redundancy else ""}{tree_str(tree.childs[1])}'
+        parenthesis = tree.father and OPERATORS[tree.father.value] > OPERATORS[tree.value]
+        if parenthesis:
+            s = f'({s})'
     elif tree.nature == TYPE_FUNCTION:
         s = f'{tree.value}('
         if tree.childs:
