@@ -93,7 +93,7 @@ def tree_str(tree: Tree) -> str:
         # detect +- to replace with -
         operator_redundancy = (OPERATORS[tree.value] == 1 and (tree.childs[1].nature == TYPE_NUMBER and str(tree.childs[1].value)[0] == "-"))
         s = f'{tree_str(tree.childs[0])}{tree.value if not operator_redundancy else ""}{tree_str(tree.childs[1])}'
-        parenthesis = tree.parent and (OPERATORS[tree.parent.value] > OPERATORS[tree.value] or tree.parent.value == EXPONANT) or tree.value in NO_TOGGLE
+        parenthesis = tree.parent and (OPERATORS[tree.parent.value] > OPERATORS[tree.value])
         if parenthesis:
             s = f'({s})'
     elif tree.nature == TYPE_FUNCTION:

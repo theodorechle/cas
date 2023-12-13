@@ -9,7 +9,7 @@ def is_nature(nature: int, check_nature: int):
 
 def parser(expr: str, debug=False) -> list[Tree]:
     """
-    Parse a string mathematical expression into a list
+    Parse a string mathematical expression into a list of trees who contains only their value and their nature
     Add implicit mutliplications
     """
     expr_list: list[Tree] = []
@@ -104,6 +104,9 @@ def parser(expr: str, debug=False) -> list[Tree]:
     return expr_list
 
 def find_root_or_parenthesis(tree: Tree) -> Tree:
+    """
+    Return root or a tree containing an opening parenthesis
+    """
     if not tree.parent or tree.parent.nature == OPENING_PARENTHESIS:
         return tree
     return find_root_or_parenthesis(tree.parent)
@@ -115,8 +118,15 @@ def remove_parenthesis(tree: Tree) -> Tree:
         remove_parenthesis(child)
 
 def to_tree(expr_list: list[Tree], debug=False) -> Tree:
+    """
+    Transform a list (like the ones the parser function returns) into a tree containing the entire expression in the list
+    """
     if debug:
-      print("Parser :")
+        print("Parser :")
+    
+    # create a tree, loop into all the trees in the given list and replace the tree with the tree found in the list (with the replace_tree function)
+    # after, create a new tree who is placed relatively to the actual tree and set it to the tree variable
+    # and loop
     tree = Tree()
     for t in expr_list:
         if t.nature == TYPE_NUMBER or t.nature == TYPE_VARIABLE:
@@ -124,6 +134,8 @@ def to_tree(expr_list: list[Tree], debug=False) -> Tree:
             tree = find_root_or_parenthesis(tree)
         elif t.nature == TYPE_OPERATOR:
             if not (is_opr:=tree.nature == TYPE_OPERATOR) or OPERATORS[t.value] <= OPERATORS[tree.value]:
+                # '-' can be before a value to represent a negative value and not a substraction
+                # if so, substract the value to 0 to be understandable by the solver
                 if not tree.nature and t.value == '-':
                     replace_tree(tree, Tree('0', TYPE_NUMBER))
                 replace_tree(t.append_child(), tree)
@@ -136,17 +148,10 @@ def to_tree(expr_list: list[Tree], debug=False) -> Tree:
                 replace_tree(t.append_child(), child)
                 tree = replace_tree(child.parent.childs[-1], t).append_child()
         elif t.nature == OPENING_PARENTHESIS:
-#            print("WWWW")
-#            print_tree(tree)
-#            tree = tree.append_child()
             if not TYPES[tree.nature] == 'NUL':
               tree = tree.append_child()
             replace_tree(tree, t)
-#            print("545")
-#            print_tree(tree)
             tree = tree.append_child()
-#            print("4256145")
-#            print_tree(tree)
         elif t.nature == CLOSING_PARENTHESIS:
             tree.parent.nature = CLOSING_PARENTHESIS
             tree = find_root_or_parenthesis(tree)
