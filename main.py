@@ -3,15 +3,11 @@ from tree import *
 from parser import *
 from resolve import *
 
-parsed = parser('5-(a+7)') # must be -a-2
-# print('parsed :')
-# for t in parsed:
-#     print_tree(t)
-tree = to_tree(parsed)
-# print('\ntree :')
-# print_tree(tree)
-tree = resolve(tree)
-# print('\nresolved tree :')
-# print_tree(tree)
-string = tree_str(tree)
-print(string)
+def solve(expr, debug=False):
+    parsed = parser(expr, debug=debug)
+    tree = to_tree(parsed, debug=debug)
+    solved_tree = resolve(tree, debug=debug)
+    return tree_str(solved_tree)
+
+while True:
+    print(solve(input(), True))

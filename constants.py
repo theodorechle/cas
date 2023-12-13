@@ -15,10 +15,20 @@ TYPES = {
     TYPE_FUNCTION: 'func'
 }
 
+ADDITION = '+'
+SUBSTRACTION = '-'
+MULTIPLICATION = '*'
+DIVISION = '/'
+EXPONANT = '**'
+
 OPERATORS = {
-    '+': 1,
-    '-': 1,
-    '*': 2,
-    '/': 2,
-    '**': 3,
+    ADDITION: 1,
+    SUBSTRACTION: 1,
+    MULTIPLICATION: 2,
+    DIVISION: 2,
+    EXPONANT: 3,
 }
+
+MULTIPLE_CHARS_OPERATORS = [ope for ope in OPERATORS.keys() if len(ope) > 1]
+
+NO_TOGGLE = '-/'
