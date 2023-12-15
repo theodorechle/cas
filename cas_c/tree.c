@@ -4,14 +4,13 @@ TreeList* createTreeList() {
     TreeList* t;
     t = (TreeList*)malloc(sizeof(TreeList));
     if (t == NULL) {
-        fprintf(stderr, "error : 'createTreeList' : erreur malloc\n");
+        fprintf(stderr, "error : 'createChild' : erreur malloc\n");
         exit(1);
     }
     t->tree = NULL;
     t->next = NULL;
     return t;
 }
-
 
 String* createString() {
     String* s;
@@ -45,8 +44,10 @@ Tree* createTree() {
 
 Tree* addChild(Tree* t, Tree* tree) {
     TreeList* tl=t->childs;
-    TreeList* tl2 = tl;
-    tree->childIndex = getNbChilds(t);
+    TreeList* tl2=tl;
+    Tree* newTree=createTree();
+    newTree = replaceTree(newTree, tree);
+    newTree->childIndex = getNbChilds(t);
     if (tl == NULL) {
         t->childs = createTreeList();
         tl2 = t->childs;
@@ -57,9 +58,9 @@ Tree* addChild(Tree* t, Tree* tree) {
         tl2->next = createTreeList();
         tl2 = tl2->next;
     }
-    setParent(tree, t);
-    tl2->tree = tree;
-    return tree;
+    setParent(newTree, t);
+    tl2->tree = newTree;
+    return newTree;
 }
 
 Tree* deleteChilds(Tree* t) {
@@ -141,4 +142,37 @@ Tree* getChild(Tree* t, int nb) {
         tl = tl->next;
     }
     return tl->tree;
+}
+
+Tree* replaceTree(Tree* tree1, Tree* tree2) {
+    tree1->value = tree2->value;
+    tree1->type = tree2->type;
+    tree1->childs = tree2->childs;
+    for (int i=0; i<getNbChilds(tree1); i++)
+        getChild(tree1, i)->parent = tree1;
+    return tree1;
+}
+
+void printTree(Tree* tree, int level) {
+    for (int i=0; i<level; i++)
+        printf("\t");
+    printf("%s (%s)\n", tree->value->str, TYPES[tree->type]);
+    for (int i=0; i<getNbChilds(tree); i++)
+        printTree(getChild(tree, i), level+1);
+}
+
+Tree* findRoot(Tree* tree) {
+    if (tree->parent == NULL)
+        return tree;
+    return findRoot(tree->parent);
+}
+
+int treeLength(Tree* tree) {
+    if (tree == NULL) return 0;
+    int nb=0, n;
+    for (int i=0; i<getNbChilds(tree); i++)
+        n = treeLength(getChild(tree, i));
+        if (n > nb)
+            nb = n;
+    return nb + 1;
 }

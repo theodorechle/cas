@@ -1,0 +1,21 @@
+#define TYPE_VARIABLE 1
+#define TYPE_NUMBER 2
+#define TYPE_OPERATOR 3
+#define OPENING_PARENTHESIS 4
+#define CLOSING_PARENTHESIS 5
+#define TYPE_FUNCTION 6
+
+#define ADDITION "+"
+#define SUBSTRACTION "-"
+#define MULTIPLICATION "*"
+#define DIVISION "/"
+#define EXPONANT "**"
+
+#define ADDITION_PRIORITY 1
+#define SUBSTRACTION_PRIORITY 1
+#define MULTIPLICATION_PRIORITY 2
+#define DIVISION_PRIORITY 2
+#define EXPONANT_PRIORITY 3
+
+extern const unsigned char TYPES[7][4];
+extern const unsigned char* MULTIPLE_CHARS_OPERATORS[];
