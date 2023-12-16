@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include "constants.h"
@@ -48,6 +49,8 @@ Tree* deleteChilds(Tree* t);
 
 Tree* deleteTree(Tree* t);
 
+void appendToString(String* value, char* str);
+
 void appendToValue(Tree* t, char* str);
 
 void setValue(Tree* t, char* value);
@@ -71,3 +74,5 @@ void printTree(Tree* tree, int level);
 Tree* findRoot(Tree* tree);
 
 int treeLength(Tree* tree);
+
+char* treeStr(Tree* tree);

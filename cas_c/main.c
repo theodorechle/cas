@@ -15,5 +15,6 @@ int main() {
     tree = getParent(tree);
     printTree(tree, 0);
     printf("size : %d\n", treeLength(tree));
+    printf("%s\n", treeStr(tree));
     return 0;
 }

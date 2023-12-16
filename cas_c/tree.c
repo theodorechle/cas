@@ -82,8 +82,7 @@ Tree* deleteTree(Tree* t) {
     return NULL;
 }
 
-void appendToValue(Tree* t, char* str) {
-    String* value=t->value;
+void appendToString(String* value, char* str) {
     int length=strlen(value->str) + strlen(str) + 1;
     if (length >= value->size) {
         value->size = length;
@@ -94,6 +93,10 @@ void appendToValue(Tree* t, char* str) {
         }
     }
     strcat(value->str, str);
+}
+
+void appendToValue(Tree* t, char* str) {
+    appendToString(t->value, str);
 }
 
 void setValue(Tree* t, char* value) {
@@ -176,4 +179,37 @@ int treeLength(Tree* tree) {
             nb = n;
     }
     return nb + 1;
+}
+
+char* treeStr(Tree* tree) {
+    bool parenthesis;
+    String* str;
+    str = createString();
+    if (tree->type == TYPE_OPERATOR) {
+        if (tree->parent != NULL && tree->type < tree->parent->type) {
+            parenthesis = true;
+            appendToString(str, "(");
+        }
+        appendToString(str, treeStr(getChild(tree, 0)));
+        appendToString(str, tree->value->str);
+        appendToString(str, treeStr(getChild(tree, 1)));
+        if (parenthesis)
+            appendToString(str, ")");
+    }
+    else if (tree->type == TYPE_FUNCTION)
+    {
+        appendToString(str, tree->value->str);
+        appendToString(str, "(");
+        if (getNbChilds(tree)) {
+            appendToString(str, treeStr(getChild(tree, 0)));
+            for (int i=1; i<getNbChilds(tree); i++) {
+                appendToString(str, ", ");
+                appendToString(str, treeStr(getChild(tree, i)));
+            }
+        }
+        appendToString(str, ")");
+    }
+    else
+        appendToString(str, tree->value->str);
+    return str->str;
 }
