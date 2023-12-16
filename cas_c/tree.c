@@ -170,9 +170,10 @@ Tree* findRoot(Tree* tree) {
 int treeLength(Tree* tree) {
     if (tree == NULL) return 0;
     int nb=0, n;
-    for (int i=0; i<getNbChilds(tree); i++)
+    for (int i=0; i<getNbChilds(tree); i++) {
         n = treeLength(getChild(tree, i));
         if (n > nb)
             nb = n;
+    }
     return nb + 1;
 }
