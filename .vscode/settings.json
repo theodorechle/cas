@@ -3,6 +3,8 @@
         "type_traits": "c",
         "tree.h": "c",
         "string.h": "c",
-        "constants.h": "c"
+        "constants.h": "c",
+        "main.h": "c",
+        "parser.h": "c"
     }
 }
