@@ -42,15 +42,14 @@ Tree* createTree() {
     return t;
 }
 
-Tree* addChild(Tree* t, Tree* tree) {
-    TreeList* tl=t->childs;
-    TreeList* tl2=tl;
+TreeList* addTree(TreeList* trees, Tree* tree) {
+    TreeList* tl2=trees;
     Tree* newTree=createTree();
     newTree = replaceTree(newTree, tree);
-    newTree->childIndex = getNbChilds(t);
-    if (tl == NULL) {
-        t->childs = createTreeList();
-        tl2 = t->childs;
+    newTree->childIndex = getNbTrees(trees);
+    if (trees == NULL) {
+        trees = createTreeList();
+        tl2 = trees;
     }
     else {
         while (tl2->next != NULL)
@@ -58,8 +57,19 @@ Tree* addChild(Tree* t, Tree* tree) {
         tl2->next = createTreeList();
         tl2 = tl2->next;
     }
-    setParent(newTree, t);
     tl2->tree = newTree;
+    return trees;
+}
+
+Tree* addChild(Tree* t, Tree* tree) {
+    Tree* newTree;
+    if (t == NULL) {
+        fprintf(stderr, "error : 'addChild' : tree is NULL\n");
+        exit(4);
+    }
+    t->childs = addTree(t->childs, tree);
+    newTree = getChild(t, -1);
+    setParent(newTree, t);
     return newTree;
 }
 
@@ -99,6 +109,20 @@ void appendToValue(Tree* t, char* str) {
     appendToString(t->value, str);
 }
 
+void appendCharToString(String* value, char character) {
+    char c[2];
+    c[0] = character;
+    appendToString(value, c);
+}
+
+void clearString(String* str) {
+    str->str[0] = '\0';
+}
+
+void clearValue(Tree* t) {
+    clearString(t->value);
+}
+
 void setValue(Tree* t, char* value) {
     t->value->str[0]='\0';
     appendToValue(t, value);
@@ -124,9 +148,8 @@ Tree* getParent(Tree* t) {
     return t->parent;
 }
 
-int getNbChilds(Tree* t) {
+int getNbTrees(TreeList* tl) {
     int nb=0;
-    TreeList* tl=t->childs;
     while (tl != NULL) {
         nb++;
         tl = tl->next;
@@ -134,17 +157,25 @@ int getNbChilds(Tree* t) {
     return nb;
 }
 
-Tree* getChild(Tree* t, int nb) {
-    TreeList* tl=t->childs;
-    int l = getNbChilds(t);
+int getNbChilds(Tree* t) {
+    return getNbTrees(t->childs);
+}
+
+Tree* getTree(TreeList* tl, int nb) {
+    int l = getNbTrees(tl);
+    if (nb < 0)
+        nb = l + nb;
     if (nb >= l) {
-        fprintf(stderr, "error : 'getChilds' : trying to access child %d of %d\n", nb, l);
+        fprintf(stderr, "error : 'getTree' : trying to access child %d of %d\n", nb, l);
         exit(2);
     }
     for (nb; nb > 0; nb--) {
         tl = tl->next;
     }
     return tl->tree;
+}
+Tree* getChild(Tree* t, int nb) {
+    return getTree(t->childs, nb);
 }
 
 Tree* replaceTree(Tree* tree1, Tree* tree2) {
@@ -212,4 +243,8 @@ char* treeStr(Tree* tree) {
     else
         appendToString(str, tree->value->str);
     return str->str;
+}
+
+bool isEmptyValue(String* str) {
+    return !str->size;
 }

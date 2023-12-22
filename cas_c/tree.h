@@ -39,6 +39,8 @@ Tree* createTree();
 
 Tree* replaceTree(Tree* tree1, Tree* tree2);
 
+TreeList* addTree(TreeList* trees, Tree* tree);
+
 /**
  * Add the child at the end of the tree childs' list
  * Doesn't change child
@@ -53,6 +55,12 @@ void appendToString(String* value, char* str);
 
 void appendToValue(Tree* t, char* str);
 
+void appendCharToString(String* value, char character);
+
+void clearString(String* str);
+
+void clearValue(Tree* t);
+
 void setValue(Tree* t, char* value);
 
 void setType(Tree* t, int type);
@@ -65,6 +73,8 @@ int getType(Tree* t);
 
 Tree* getParent(Tree* t);
 
+int getNbTrees(TreeList* tl);
+
 int getNbChilds(Tree* t);
 
 Tree* getChild(Tree* t, int nb);
@@ -76,3 +86,5 @@ Tree* findRoot(Tree* tree);
 int treeLength(Tree* tree);
 
 char* treeStr(Tree* tree);
+
+bool isEmptyValue(String* str);
