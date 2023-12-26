@@ -1,7 +1,7 @@
 #include "main.h"
 
 int main() {
-    char* expr="5+3";
+    char* expr="5+3*(7-3)";
     TreeList* tl;
     tl = parser(expr, true);
     while (tl != NULL) {
