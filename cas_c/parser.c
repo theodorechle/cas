@@ -9,11 +9,9 @@ bool isFunction(char* litteral) {
 }
 
 bool isOperator(String* value) {
-    for (int i=0; i < NB_OPE; i++) {
-        printf("%s == %s : %d\n", value->str, OPERATORS[i], strcmp(value->str, OPERATORS[i]) == 0);
+    for (int i=0; i < NB_OPE; i++)
         if (strcmp(value->str, OPERATORS[i]) == 0)
             return true;
-    }
     return false;
 }
 
@@ -40,7 +38,7 @@ TreeList* parser(char* expr, bool debug) {
         printf("character : %c\n", character);
         if (isspace(character)) {
             if (debug) printf("Found type of character '%c' is space\n", character);
-            if (!value->size)
+            if (isEmptyValue(value))
                 createNewTree = false;
         }
         else if (isalpha(character)) {
@@ -60,8 +58,7 @@ TreeList* parser(char* expr, bool debug) {
         else if (character == OPENING_PARENTHESIS[0]) {
             if (debug) printf("Found type of character '%c' is opening parenthesis\n", character);
             if (!type) type = TYPE_OPENING_PARENTHESIS;
-            else if (type == TYPE_NUMBER || type == TYPE_VARIABLE)
-            {
+            else if (type == TYPE_NUMBER || type == TYPE_VARIABLE) {
                 exprList = addTreeByValues(exprList, value, type);
                 clearString(value);
                 appendToString(value, MULTIPLICATION);
@@ -112,6 +109,7 @@ TreeList* parser(char* expr, bool debug) {
         }
         index++;
     }
-    exprList = addTreeByValues(exprList, value, type);
+    if (!isEmptyValue(value))
+        exprList = addTreeByValues(exprList, value, type);
     return exprList;
 }

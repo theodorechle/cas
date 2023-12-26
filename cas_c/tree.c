@@ -109,6 +109,7 @@ void appendCharToString(String* value, char character) {
 
 void clearString(String* str) {
     str->str[0] = '\0';
+    str->size = 0;
 }
 
 void clearValue(Tree* t) {
