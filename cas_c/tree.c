@@ -43,21 +43,13 @@ Tree* createTree() {
 }
 
 TreeList* addTree(TreeList* trees, Tree* tree) {
-    TreeList* tl2=trees;
-    Tree* newTree=createTree();
-    newTree = replaceTree(newTree, tree);
-    newTree->childIndex = getNbTrees(trees);
-    if (trees == NULL) {
+    if (trees == NULL)
         trees = createTreeList();
-        tl2 = trees;
+    if (trees->tree == NULL) {
+        trees->tree = tree;
+        return trees;
     }
-    else {
-        while (tl2->next != NULL)
-            tl2 = tl2->next;
-        tl2->next = createTreeList();
-        tl2 = tl2->next;
-    }
-    tl2->tree = newTree;
+    trees->next = addTree(trees->next, tree);
     return trees;
 }
 

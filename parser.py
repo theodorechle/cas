@@ -27,7 +27,7 @@ def parser(expr: str, debug=False) -> list[Tree]:
         elif char.isalpha():
             if is_nature(nature, TYPE_VARIABLE):
                 # implicit multiplication
-                if not value and expr_list and expr_list[-1].nature in (TYPE_NUMBER, CLOSING_PARENTHESIS):
+                if not value and expr_list and expr_list[-1].nature in (TYPE_NUMBER, TYPE_CLOSING_PARENTHESIS):
                     value = MULTIPLICATION
                     nature = TYPE_OPERATOR
                     index_ -= 1
@@ -40,17 +40,17 @@ def parser(expr: str, debug=False) -> list[Tree]:
         elif char == '(':
             if not nature:
                 # implicit multiplication
-                if expr_list and expr_list[-1].nature in (TYPE_NUMBER, TYPE_VARIABLE, CLOSING_PARENTHESIS):
+                if expr_list and expr_list[-1].nature in (TYPE_NUMBER, TYPE_VARIABLE, TYPE_CLOSING_PARENTHESIS):
                     value = MULTIPLICATION
                     nature = TYPE_OPERATOR
                     index_ -= 1
                 else:
-                    nature = OPENING_PARENTHESIS
+                    nature = TYPE_OPENING_PARENTHESIS
             else:
                 index_ -= 1
         elif char == ')':
             if not nature:
-                nature = CLOSING_PARENTHESIS
+                nature = TYPE_CLOSING_PARENTHESIS
             else:
                 index_ -= 1
         elif char.isdigit():
@@ -60,7 +60,6 @@ def parser(expr: str, debug=False) -> list[Tree]:
                 new_tree = False
             elif nature == TYPE_VARIABLE:
                 value += char
-                nature = TYPE_VARIABLE
                 new_tree = False
         elif char in OPERATORS:
             if is_nature(nature, TYPE_OPERATOR):
@@ -107,12 +106,12 @@ def find_root_or_parenthesis(tree: Tree) -> Tree:
     """
     Return root or a tree containing an opening parenthesis
     """
-    if not tree.parent or tree.parent.nature == OPENING_PARENTHESIS:
+    if not tree.parent or tree.parent.nature == TYPE_OPENING_PARENTHESIS:
         return tree
     return find_root_or_parenthesis(tree.parent)
 
 def remove_parenthesis(tree: Tree) -> Tree:
-    if tree.nature == CLOSING_PARENTHESIS:
+    if tree.nature == TYPE_CLOSING_PARENTHESIS:
         replace_tree(tree, tree.childs[0])
     for child in tree.childs:
         remove_parenthesis(child)
@@ -147,13 +146,13 @@ def to_tree(expr_list: list[Tree], debug=False) -> Tree:
                         child = child.childs[-1]
                 replace_tree(t.append_child(), child)
                 tree = replace_tree(child.parent.childs[-1], t).append_child()
-        elif t.nature == OPENING_PARENTHESIS:
+        elif t.nature == TYPE_OPENING_PARENTHESIS:
             if not TYPES[tree.nature] == 'NUL':
               tree = tree.append_child()
             replace_tree(tree, t)
             tree = tree.append_child()
-        elif t.nature == CLOSING_PARENTHESIS:
-            tree.parent.nature = CLOSING_PARENTHESIS
+        elif t.nature == TYPE_CLOSING_PARENTHESIS:
+            tree.parent.nature = TYPE_CLOSING_PARENTHESIS
             tree = find_root_or_parenthesis(tree)
         if debug:
             print('\nRoot :')

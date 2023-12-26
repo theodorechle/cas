@@ -37,6 +37,7 @@ TreeList* parser(char* expr, bool debug) {
     while (index < length) {
         createNewTree = true;
         character = expr[index];
+        printf("character : %c\n", character);
         if (isspace(character)) {
             if (debug) printf("Found type of character '%c' is space\n", character);
             if (!value->size)
@@ -83,14 +84,17 @@ TreeList* parser(char* expr, bool debug) {
                 appendCharToString(value, character);
                 createNewTree = false;
             }
+            else index --;
         }
         else {
             if (type) index--;
             else {
                 appendToString(testString, value->str);
                 appendCharToString(testString, character);
-                if (isOperator(value)) {
+                if (isOperator(testString)) {
                     type = TYPE_OPERATOR;
+                    clearString(value);
+                    appendToString(value, testString->str);
                     if (debug) printf("Found type of value '%s' is operator\n", value->str);
                 }
                 else
@@ -108,5 +112,6 @@ TreeList* parser(char* expr, bool debug) {
         }
         index++;
     }
+    exprList = addTreeByValues(exprList, value, type);
     return exprList;
 }

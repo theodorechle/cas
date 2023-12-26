@@ -5,6 +5,10 @@
         "string.h": "c",
         "constants.h": "c",
         "main.h": "c",
-        "parser.h": "c"
+        "parser.h": "c",
+        "stdbool.h": "c",
+        "stdlib.h": "c",
+        "solver.h": "c",
+        "ctype.h": "c"
     }
 }
