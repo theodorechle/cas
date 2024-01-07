@@ -15,6 +15,7 @@ bool isOperator(String* value) {
     return false;
 }
 
+
 TreeList* addTreeByValues(TreeList* exprList, String* value, int type) {
     if (type == TYPE_NULL) {
         fprintf(stderr, "Error in addTreeByValues : Unknown value '%s'\n", value->str);
@@ -35,7 +36,7 @@ TreeList* parser(char* expr, bool debug) {
     while (index < length) {
         createNewTree = true;
         character = expr[index];
-        printf("character : %c\n", character);
+        if (debug) printf("character : %c\n", character);
         if (isspace(character)) {
             if (debug) printf("Found type of character '%c' is space\n", character);
             if (isEmptyValue(value))
@@ -48,24 +49,27 @@ TreeList* parser(char* expr, bool debug) {
                 type = TYPE_VARIABLE;
                 createNewTree = false;
             }
-            else if (type == TYPE_NUMBER || type == TYPE_CLOSING_PARENTHESIS) {
-                exprList = addTreeByValues(exprList, value, type);
-                clearString(value);
-                appendToString(value, MULTIPLICATION);
+            else {
+                if (type == TYPE_NUMBER || type == TYPE_CLOSING_PARENTHESIS) {
+                    exprList = addTreeByValues(exprList, value, type);
+                    clearString(value);
+                    appendToString(value, MULTIPLICATION_SIGN);
+                    type = TYPE_OPERATOR;
+                }
+                index--;
             }
-            else index--;
         }
-        else if (character == OPENING_PARENTHESIS[0]) {
+        else if (character == OPENING_PARENTHESIS_SIGN[0]) {
             if (debug) printf("Found type of character '%c' is opening parenthesis\n", character);
             if (!type) type = TYPE_OPENING_PARENTHESIS;
             else if (type == TYPE_NUMBER || type == TYPE_VARIABLE) {
                 exprList = addTreeByValues(exprList, value, type);
                 clearString(value);
-                appendToString(value, MULTIPLICATION);
+                appendToString(value, MULTIPLICATION_SIGN);
             }
             else index--;
         }
-        else if (character == CLOSING_PARENTHESIS[0]) {
+        else if (character == CLOSING_PARENTHESIS_SIGN[0]) {
             if (debug) printf("Found type of character '%c' is closing parenthesis\n", character);
             if (!type) type = TYPE_CLOSING_PARENTHESIS;
             else index --;
@@ -83,7 +87,7 @@ TreeList* parser(char* expr, bool debug) {
             }
             else index --;
         }
-        else {
+        else
             if (type) index--;
             else {
                 appendToString(testString, value->str);
@@ -99,9 +103,7 @@ TreeList* parser(char* expr, bool debug) {
                 createNewTree = false;
                 clearString(testString);
             }
-        }
-        if (debug)
-            printf("value : %s type : %d\n", value->str, type);
+        if (debug) printf("value : %s type : %d\n", value->str, type);
         if (createNewTree) {
             exprList = addTreeByValues(exprList, value, type);
             clearString(value);
@@ -112,4 +114,54 @@ TreeList* parser(char* expr, bool debug) {
     if (!isEmptyValue(value))
         exprList = addTreeByValues(exprList, value, type);
     return exprList;
+}
+
+Tree* findRootOrParenthesis(Tree* tree) {
+    if (getParent(tree) == NULL || getType(getParent(tree)) == TYPE_OPENING_PARENTHESIS) return tree;
+    return findRootOrParenthesis(getParent(tree));
+}
+
+Tree* parsedToTree(TreeList* exprList, bool debug) {
+    Tree* tree=createTree(), *t, *child;
+    int ttype;
+    while (exprList != NULL) {
+        t = exprList->tree;
+        ttype = getType(t);
+        if (ttype == TYPE_NUMBER || ttype == TYPE_VARIABLE) {
+            replaceTree(tree, t);
+            tree = findRootOrParenthesis(tree);
+        }
+        else if (ttype == TYPE_OPERATOR) {
+            if (getType(tree) == TYPE_NULL && getValue(t) == SUBSTRACTION_SIGN)
+                replaceTree(tree, setType(setValue(createTree(), "0"), TYPE_NUMBER));
+            if (getType(tree) != TYPE_OPERATOR || priority(getValue(t)) <= priority(getValue(tree))) {
+                replaceTree(addEmptyChild(t), tree);
+                replaceTree(tree, t);
+                tree = addEmptyChild(tree);
+            }
+            else {
+                child = getChild(tree, -1);
+                while (getType(child) == TYPE_OPERATOR && priority(getValue(t)) > priority(getValue(child)))
+                    child = getChild(child, -1);
+                replaceTree(addEmptyChild(t), child);
+                tree = addEmptyChild(replaceTree(getChild(getParent(child), -1), t));
+            }
+        }
+        else if (ttype == TYPE_OPENING_PARENTHESIS) {
+            if (getType(tree) != TYPE_NULL) tree = addEmptyChild(tree);
+            replaceTree(tree, t);
+            tree = addEmptyChild(tree);
+        }
+        else if (ttype == TYPE_CLOSING_PARENTHESIS) {
+            replaceTree(getParent(tree), tree);
+            tree = findRootOrParenthesis(tree);
+        }
+        if (debug) {
+            printf("\nRoot : \n");
+            printTree(findRoot(tree));
+            printf("\n");
+        }
+        exprList = exprList->next;
+    }
+    return findRoot(tree);
 }

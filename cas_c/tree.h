@@ -37,6 +37,11 @@ String* createString();
 
 Tree* createTree();
 
+/**
+ * replace the value, the type and the childs of tree1 with the tree2 ones
+ * set tree1 the parent of his childs
+ * @return tree1
+*/
 Tree* replaceTree(Tree* tree1, Tree* tree2);
 
 TreeList* addTree(TreeList* trees, Tree* tree);
@@ -45,27 +50,29 @@ TreeList* addTree(TreeList* trees, Tree* tree);
  * Add the child at the end of the tree childs' list
  * Doesn't change child
 */
-Tree* addChild(Tree* t, Tree* tree);
+Tree* addChild(Tree* t, Tree* child);
+
+Tree* addEmptyChild(Tree* t);
 
 Tree* deleteChilds(Tree* t);
 
 Tree* deleteTree(Tree* t);
 
-void appendToString(String* value, char* str);
+String* appendToString(String* value, char* str);
 
-void appendToValue(Tree* t, char* str);
+Tree* appendToValue(Tree* t, char* str);
 
-void appendCharToString(String* value, char character);
+String* appendCharToString(String* value, char character);
 
-void clearString(String* str);
+String* clearString(String* str);
 
-void clearValue(Tree* t);
+Tree* clearValue(Tree* t);
 
-void setValue(Tree* t, char* value);
+Tree* setValue(Tree* t, char* value);
 
-void setType(Tree* t, int type);
+Tree* setType(Tree* t, int type);
 
-void setParent(Tree* t, Tree* p);
+Tree* setParent(Tree* t, Tree* p);
 
 char* getValue(Tree* t);
 
@@ -79,12 +86,16 @@ int getNbChilds(Tree* t);
 
 Tree* getChild(Tree* t, int nb);
 
-void printTree(Tree* tree, int level);
+void __printTree(Tree* tree, int level);
+
+void printTree(Tree* tree);
 
 Tree* findRoot(Tree* tree);
 
 int treeLength(Tree* tree);
 
 char* treeStr(Tree* tree);
+
+int priority(char* operator);
 
 bool isEmptyValue(String* str);

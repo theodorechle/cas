@@ -1,27 +1,34 @@
 #include "main.h"
 
-int main() {
-    char* expr="5+3*(7-3)";
-    TreeList* tl;
-    tl = parser(expr, true);
-    while (tl != NULL) {
-        printTree(tl->tree, 0);
-        tl = tl->next;
+String* getUserInput() {
+    String* expr=createString();
+    char c;
+    while (true) {
+        c = getchar();
+        if (c == EOF || c == '\n') return expr;
+        appendCharToString(expr, c);
     }
-    // Tree* tree=createTree();
-    // setValue(tree, "+");
-    // setType(tree, TYPE_OPERATOR);
-    // tree = addChild(tree, createTree());
-    // setValue(tree, "5");
-    // appendToValue(tree, "7");
-    // setType(tree, TYPE_NUMBER);
-    // tree = getParent(tree);
-    // tree = addChild(tree, createTree());
-    // setValue(tree, "7");
-    // setType(tree, TYPE_NUMBER);
-    // tree = getParent(tree);
-    // printTree(tree, 0);
-    // printf("size : %d\n", treeLength(tree));
-    // printf("%s\n", treeStr(tree));
+}
+
+int main() {
+    int debug;
+    printf("Expression : ");
+    String* expr=getUserInput();
+    TreeList* tl, *tmp;
+    Tree* tree;
+    printf("1 for debug, 0 else : ");
+    scanf("%d", &debug);
+    tl = parser(expr->str, debug);
+    if (debug) {
+        tmp = tl;
+        while (tmp != NULL) {
+            printTree(tmp->tree);
+            tmp = tmp->next;
+        }
+    }
+    tree = parsedToTree(tl, debug);
+    printf("Final tree\n");
+    printTree(tree);
+    printf("%s\n", treeStr(tree));
     return 0;
 }

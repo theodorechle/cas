@@ -53,16 +53,20 @@ TreeList* addTree(TreeList* trees, Tree* tree) {
     return trees;
 }
 
-Tree* addChild(Tree* t, Tree* tree) {
+Tree* addChild(Tree* t, Tree* child) {
     Tree* newTree;
     if (t == NULL) {
         fprintf(stderr, "error : 'addChild' : tree is NULL\n");
         exit(4);
     }
-    t->childs = addTree(t->childs, tree);
+    t->childs = addTree(t->childs, child);
     newTree = getChild(t, -1);
     setParent(newTree, t);
     return newTree;
+}
+
+Tree* addEmptyChild(Tree* t) {
+    return addChild(t, createTree());
 }
 
 Tree* deleteChilds(Tree* t) {
@@ -84,7 +88,7 @@ Tree* deleteTree(Tree* t) {
     return NULL;
 }
 
-void appendToString(String* value, char* str) {
+String* appendToString(String* value, char* str) {
     int length=strlen(value->str) + strlen(str) + 1;
     if (length >= value->size) {
         value->size = length;
@@ -95,38 +99,46 @@ void appendToString(String* value, char* str) {
         }
     }
     strcat(value->str, str);
+    return value;
 }
 
-void appendToValue(Tree* t, char* str) {
+Tree* appendToValue(Tree* t, char* str) {
     appendToString(t->value, str);
+    return t;
 }
 
-void appendCharToString(String* value, char character) {
+String* appendCharToString(String* value, char character) {
     char c[2];
     c[0] = character;
     appendToString(value, c);
+    return value;
 }
 
-void clearString(String* str) {
+String* clearString(String* str) {
     str->str[0] = '\0';
     str->size = 0;
+    return str;
 }
 
-void clearValue(Tree* t) {
+Tree* clearValue(Tree* t) {
     clearString(t->value);
+    return t;
 }
 
-void setValue(Tree* t, char* value) {
+Tree* setValue(Tree* t, char* value) {
     t->value->str[0]='\0';
     appendToValue(t, value);
+    return t;
 }
 
-void setType(Tree* t, int type) {
+Tree* setType(Tree* t, int type) {
     t->type=type;
+    return t;
 }
 
-void setParent(Tree* t, Tree* p) {
+Tree* setParent(Tree* t, Tree* p) {
     t->parent=p;
+    return t;
 }
 
 char* getValue(Tree* t) {
@@ -157,7 +169,7 @@ int getNbChilds(Tree* t) {
 Tree* getTree(TreeList* tl, int nb) {
     int l = getNbTrees(tl);
     if (nb < 0)
-        nb = l + nb;
+        nb += l;
     if (nb >= l) {
         fprintf(stderr, "error : 'getTree' : trying to access child %d of %d\n", nb, l);
         exit(2);
@@ -180,12 +192,16 @@ Tree* replaceTree(Tree* tree1, Tree* tree2) {
     return tree1;
 }
 
-void printTree(Tree* tree, int level) {
+void __printTree(Tree* tree, int level) {
     for (int i=0; i<level; i++)
         printf("\t");
     printf("%s (%s)\n", tree->value->str, TYPES[tree->type]);
     for (int i=0; i<getNbChilds(tree); i++)
-        printTree(getChild(tree, i), level+1);
+        __printTree(getChild(tree, i), level+1);
+}
+
+void printTree(Tree* tree) {
+    __printTree(tree, 0);
 }
 
 Tree* findRoot(Tree* tree) {
@@ -209,20 +225,20 @@ char* treeStr(Tree* tree) {
     bool parenthesis;
     String* str;
     str = createString();
-    if (tree->type == TYPE_OPERATOR) {
-        if (tree->parent != NULL && tree->type < tree->parent->type) {
+    if (getType(tree) == TYPE_OPERATOR) {
+        if (getParent(tree) != NULL && getType(getParent(tree)) == TYPE_OPERATOR && priority(getValue(tree)) < priority(getValue(getParent(tree)))) {
             parenthesis = true;
             appendToString(str, "(");
         }
         appendToString(str, treeStr(getChild(tree, 0)));
-        appendToString(str, tree->value->str);
+        appendToString(str, getValue(tree));
         appendToString(str, treeStr(getChild(tree, 1)));
         if (parenthesis)
             appendToString(str, ")");
     }
     else if (tree->type == TYPE_FUNCTION)
     {
-        appendToString(str, tree->value->str);
+        appendToString(str, getValue(tree));
         appendToString(str, "(");
         if (getNbChilds(tree)) {
             appendToString(str, treeStr(getChild(tree, 0)));
@@ -234,8 +250,17 @@ char* treeStr(Tree* tree) {
         appendToString(str, ")");
     }
     else
-        appendToString(str, tree->value->str);
+        appendToString(str, getValue(tree));
     return str->str;
+}
+
+int priority(char* operator) {
+    if (!strcmp(operator, ADDITION_SIGN)) return ADDITION_PRIORITY;
+    if (!strcmp(operator, SUBSTRACTION_SIGN)) return SUBSTRACTION_PRIORITY;
+    if (!strcmp(operator, MULTIPLICATION_SIGN)) return MULTIPLICATION_PRIORITY;
+    if (!strcmp(operator, DIVISION_SIGN)) return DIVISION_PRIORITY;
+    if (!strcmp(operator, EXPONANT_SIGN)) return EXPONANT_PRIORITY;
+    fprintf(stderr, "Error in priority : '%s' is not an operator\n");
 }
 
 bool isEmptyValue(String* str) {
