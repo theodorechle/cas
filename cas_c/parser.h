@@ -12,11 +12,11 @@ bool isOperator(String* value);
 
 TreeList* addTreeByValues(TreeList* exprList, String* value, int type);
 
-TreeList* parser(char* expr, bool debug);
+TreeList* parser(char* expr, bool debug, bool implicitPriority);
 
 Tree* findRootOrParenthesis(Tree* tree);
 
 /**
  * Transform a list (like the ones the parser function returns) into a tree containing the entire expression in the list
 */
-Tree* parsedToTree(TreeList* exprList, bool debug);
+Tree* parsedToTree(TreeList* exprList, bool debug, bool implicitPriority);

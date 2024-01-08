@@ -260,6 +260,7 @@ int priority(char* operator) {
     if (!strcmp(operator, MULTIPLICATION_SIGN)) return MULTIPLICATION_PRIORITY;
     if (!strcmp(operator, DIVISION_SIGN)) return DIVISION_PRIORITY;
     if (!strcmp(operator, EXPONANT_SIGN)) return EXPONANT_PRIORITY;
+    if (!strcmp(operator, IMPLICIT_MULTIPLICATION_SIGN)) return IMPLICIT_MULTIPLICATION_PRIORITY;
     fprintf(stderr, "Error in priority : '%s' is not an operator\n");
 }
 

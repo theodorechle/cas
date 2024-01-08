@@ -27,7 +27,7 @@ TreeList* addTreeByValues(TreeList* exprList, String* value, int type) {
     return addTree(exprList, tree);
 }
 
-TreeList* parser(char* expr, bool debug) {
+TreeList* parser(char* expr, bool debug, bool implicitPriority) {
     TreeList* exprList = createTreeList();
     String* value = createString(), *testString = createString();
     bool createNewTree;
@@ -53,7 +53,8 @@ TreeList* parser(char* expr, bool debug) {
                 if (type == TYPE_NUMBER || type == TYPE_CLOSING_PARENTHESIS) {
                     exprList = addTreeByValues(exprList, value, type);
                     clearString(value);
-                    appendToString(value, MULTIPLICATION_SIGN);
+                    if (implicitPriority) appendToString(value, IMPLICIT_MULTIPLICATION_SIGN);
+                    else appendToString(value, MULTIPLICATION_SIGN);
                     type = TYPE_OPERATOR;
                 }
                 index--;
@@ -62,12 +63,16 @@ TreeList* parser(char* expr, bool debug) {
         else if (character == OPENING_PARENTHESIS_SIGN[0]) {
             if (debug) printf("Found type of character '%c' is opening parenthesis\n", character);
             if (!type) type = TYPE_OPENING_PARENTHESIS;
-            else if (type == TYPE_NUMBER || type == TYPE_VARIABLE) {
-                exprList = addTreeByValues(exprList, value, type);
-                clearString(value);
-                appendToString(value, MULTIPLICATION_SIGN);
+            else {
+                if (type == TYPE_NUMBER || type == TYPE_VARIABLE) {
+                    exprList = addTreeByValues(exprList, value, type);
+                    clearString(value);
+                    if (implicitPriority) appendToString(value, IMPLICIT_MULTIPLICATION_SIGN);
+                    else appendToString(value, MULTIPLICATION_SIGN);
+                    type = TYPE_OPERATOR;
+                }
+                index--;
             }
-            else index--;
         }
         else if (character == CLOSING_PARENTHESIS_SIGN[0]) {
             if (debug) printf("Found type of character '%c' is closing parenthesis\n", character);
@@ -121,7 +126,7 @@ Tree* findRootOrParenthesis(Tree* tree) {
     return findRootOrParenthesis(getParent(tree));
 }
 
-Tree* parsedToTree(TreeList* exprList, bool debug) {
+Tree* parsedToTree(TreeList* exprList, bool debug, bool implicitPriority) {
     Tree* tree=createTree(), *t, *child;
     int ttype;
     while (exprList != NULL) {
@@ -143,6 +148,7 @@ Tree* parsedToTree(TreeList* exprList, bool debug) {
                 child = getChild(tree, -1);
                 while (getType(child) == TYPE_OPERATOR && priority(getValue(t)) > priority(getValue(child)))
                     child = getChild(child, -1);
+                if (!strcmp(getValue(t), IMPLICIT_MULTIPLICATION_SIGN)) setValue(t, MULTIPLICATION_SIGN);
                 replaceTree(addEmptyChild(t), child);
                 tree = addEmptyChild(replaceTree(getChild(getParent(child), -1), t));
             }

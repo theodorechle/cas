@@ -11,14 +11,16 @@ String* getUserInput() {
 }
 
 int main() {
-    int debug;
+    int debug, implicitPriority;
     printf("Expression : ");
     String* expr=getUserInput();
     TreeList* tl, *tmp;
     Tree* tree;
     printf("1 for debug, 0 else : ");
     scanf("%d", &debug);
-    tl = parser(expr->str, debug);
+    printf("1 for implicit priority, 0 else : ");
+    scanf("%d", &implicitPriority);
+    tl = parser(expr->str, debug, implicitPriority);
     if (debug) {
         tmp = tl;
         while (tmp != NULL) {
@@ -26,7 +28,7 @@ int main() {
             tmp = tmp->next;
         }
     }
-    tree = parsedToTree(tl, debug);
+    tree = parsedToTree(tl, debug, implicitPriority);
     printf("Final tree\n");
     printTree(tree);
     printf("%s\n", treeStr(tree));
