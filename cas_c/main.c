@@ -1,7 +1,7 @@
 #include "main.h"
 
-String* getUserInput() {
-    String* expr=createString();
+String getUserInput() {
+    String expr=createString();
     char c;
     while (true) {
         c = getchar();
@@ -13,9 +13,9 @@ String* getUserInput() {
 int main() {
     int debug, implicitPriority;
     printf("Expression : ");
-    String* expr=getUserInput();
+    String expr=getUserInput();
     TreeList* tl, *tmp;
-    Tree* tree;
+    Tree tree;
     printf("1 for debug, 0 else : ");
     scanf("%d", &debug);
     printf("1 for implicit priority, 0 else : ");
@@ -29,8 +29,16 @@ int main() {
         }
     }
     tree = parsedToTree(tl, debug, implicitPriority);
-    printf("Final tree\n");
-    printTree(tree);
-    printf("%s\n", treeStr(tree));
+    if (debug) {
+        printf("Complete tree\n");
+        printTree(tree);
+        printf("%s\n", treeStr(tree));
+    }    
+    tree = solve(tree, debug);
+    if (debug) {
+        printf("Solved tree\n");
+        printTree(tree);
+        printf("%s\n", treeStr(tree));
+    }
     return 0;
 }

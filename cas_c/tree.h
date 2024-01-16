@@ -7,7 +7,7 @@
 typedef struct {
     char* str;
     int size;
-} String;
+} str, *String;
 
 struct treeList;
 
@@ -18,84 +18,87 @@ struct treeList;
  * childIndex : The index where the tree is in the childs' list of his father
 */
 typedef struct tree {
-    String* value;
+    String value;
     int type;
     struct tree* parent;
     int childIndex;
     struct treeList* childs;
-} Tree;
+} Node, *Tree;
 
 typedef struct treeList {
-    Tree* tree;
+    Tree tree;
     struct treeList* next;
 } TreeList;
 
 
 TreeList* createTreeList();
 
-String* createString();
+String createString();
 
-Tree* createTree();
+Tree createTree();
 
 /**
  * replace the value, the type and the childs of tree1 with the tree2 ones
  * set tree1 the parent of his childs
  * @return tree1
 */
-Tree* replaceTree(Tree* tree1, Tree* tree2);
+Tree replaceTree(Tree tree1, Tree tree2);
 
-TreeList* addTree(TreeList* trees, Tree* tree);
+TreeList* addTree(TreeList* trees, Tree tree);
 
 /**
  * Add the child at the end of the tree childs' list
  * Doesn't change child
+ * @return The new child
 */
-Tree* addChild(Tree* t, Tree* child);
+Tree addChild(Tree t, Tree child);
 
-Tree* addEmptyChild(Tree* t);
+Tree addEmptyChild(Tree t);
 
-Tree* deleteChilds(Tree* t);
+Tree deleteChilds(Tree t);
 
-Tree* deleteTree(Tree* t);
+Tree deleteTree(Tree t);
 
-String* appendToString(String* value, char* str);
+String appendToString(String value, char* str);
 
-Tree* appendToValue(Tree* t, char* str);
+Tree appendToValue(Tree t, char* str);
 
-String* appendCharToString(String* value, char character);
+String appendCharToString(String value, char character);
 
-String* clearString(String* str);
+String clearString(String str);
 
-Tree* clearValue(Tree* t);
+Tree clearValue(Tree t);
 
-Tree* setValue(Tree* t, char* value);
+Tree setValue(Tree t, char* value);
 
-Tree* setType(Tree* t, int type);
+Tree setType(Tree t, int type);
 
-Tree* setParent(Tree* t, Tree* p);
+Tree setParent(Tree t, Tree p);
 
-char* getValue(Tree* t);
+char* getValue(Tree t);
 
-int getType(Tree* t);
+int getType(Tree t);
 
-Tree* getParent(Tree* t);
+Tree getParent(Tree t);
 
 int getNbTrees(TreeList* tl);
 
-int getNbChilds(Tree* t);
+int getNbChilds(Tree t);
 
-Tree* getChild(Tree* t, int nb);
+Tree getChild(Tree t, int nb);
 
-void __printTree(Tree* tree, int level);
+void __printTree(Tree tree, int level);
 
-void printTree(Tree* tree);
+void printTree(Tree tree);
 
-Tree* findRoot(Tree* tree);
+Tree findRoot(Tree tree);
 
-int treeLength(Tree* tree);
+int treeLength(Tree tree);
 
-char* treeStr(Tree* tree);
+char* treeStr(Tree tree);
 
 int priority(char* operator);
 
-bool isEmptyValue(String* str);
+bool isEmptyValue(String str);
+
+bool isEmptyTree(Tree tree);

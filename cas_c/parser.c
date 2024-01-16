@@ -8,7 +8,7 @@ bool isFunction(char* litteral) {
     return false; // to change
 }
 
-bool isOperator(String* value) {
+bool isOperator(String value) {
     for (int i=0; i < NB_OPE; i++)
         if (strcmp(value->str, OPERATORS[i]) == 0)
             return true;
@@ -16,12 +16,12 @@ bool isOperator(String* value) {
 }
 
 
-TreeList* addTreeByValues(TreeList* exprList, String* value, int type) {
+TreeList* addTreeByValues(TreeList* exprList, String value, int type) {
     if (type == TYPE_NULL) {
         fprintf(stderr, "Error in addTreeByValues : Unknown value '%s'\n", value->str);
         exit(5);
     }
-    Tree* tree = createTree();
+    Tree tree = createTree();
     setValue(tree, value->str);
     setType(tree, type);
     return addTree(exprList, tree);
@@ -29,7 +29,7 @@ TreeList* addTreeByValues(TreeList* exprList, String* value, int type) {
 
 TreeList* parser(char* expr, bool debug, bool implicitPriority) {
     TreeList* exprList = createTreeList();
-    String* value = createString(), *testString = createString();
+    String value = createString(), testString = createString();
     bool createNewTree;
     char character;
     int type = 0, length = strlen(expr), index = 0;
@@ -121,13 +121,13 @@ TreeList* parser(char* expr, bool debug, bool implicitPriority) {
     return exprList;
 }
 
-Tree* findRootOrParenthesis(Tree* tree) {
+Tree findRootOrParenthesis(Tree tree) {
     if (getParent(tree) == NULL || getType(getParent(tree)) == TYPE_OPENING_PARENTHESIS) return tree;
     return findRootOrParenthesis(getParent(tree));
 }
 
-Tree* parsedToTree(TreeList* exprList, bool debug, bool implicitPriority) {
-    Tree* tree=createTree(), *t, *child;
+Tree parsedToTree(TreeList* exprList, bool debug, bool implicitPriority) {
+    Tree tree=createTree(), t, child;
     int ttype;
     while (exprList != NULL) {
         t = exprList->tree;
