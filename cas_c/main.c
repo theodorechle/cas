@@ -38,7 +38,7 @@ int main() {
     if (debug) {
         printf("Solved tree\n");
         printTree(tree);
-        printf("%s\n", treeStr(tree));
     }
+    printf("%s\n", treeStr(tree));
     return 0;
 }
