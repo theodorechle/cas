@@ -61,6 +61,7 @@ Tree addChild(Tree t, Tree child) {
     }
     t->childs = addTree(t->childs, child);
     newTree = getChild(t, -1);
+    newTree->childIndex = getNbChilds(t)-1;
     setParent(newTree, t);
     return newTree;
 }
@@ -269,4 +270,57 @@ bool isEmptyValue(String str) {
 
 bool isEmptyTree(Tree tree) {
     return tree == NULL;
+}
+
+TreeList* deleteTreeInList(TreeList* tl, int index) {
+    int l = getNbTrees(tl);
+    if (index < 0)
+        index += l;
+    if (index >= l) {
+        fprintf(stderr, "error : 'deleteTreeInList' : trying to access child %d of %d\n", index, l);
+        exit(2);
+    }
+    if (index == 0) return tl->next;
+    for (int i=0; i < index-1; i++) {
+        tl = tl->next;
+    }
+    tl->next = tl->next->next;
+    return tl;
+}
+
+bool checkSameVars(TreeList* list, TreeList* list2) {
+    char* value;
+    bool find;
+    int i;
+    TreeList* tmp;
+    while (list != NULL) {
+        value = getValue(list->tree);
+        find = false;
+        i = 0;
+        tmp = list2;
+        while (tmp != NULL) {
+            if (getType(tmp->tree) == TYPE_VARIABLE && strcmp(getValue(tmp->tree), value) == 0) {
+                tmp = deleteTreeInList(tmp, i);
+                find = true;
+                break;
+            }
+            i++;
+            tmp = tmp->next;
+        }
+        if (!find) return false;
+        list = list->next;
+    }
+    return true;
+}
+
+Tree getMultiplicator(Tree t) {
+    if (getType(t) == TYPE_NUMBER) return t;
+    TreeList* child = t->childs;
+    Tree c;
+    while (child != NULL) {
+        c = getMultiplicator(child->tree);
+        if (!isEmptyTree(c)) return c;
+        child = child->next;
+    }
+    return NULL;
 }

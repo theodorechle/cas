@@ -48,7 +48,7 @@ TreeList* addTree(TreeList* trees, Tree tree);
 
 /**
  * Add the child at the end of the tree childs' list
- * Doesn't change child
+ * Change child's childIndex
  * @return The new child
 */
 Tree addChild(Tree t, Tree child);
@@ -102,3 +102,9 @@ int priority(char* operator);
 bool isEmptyValue(String str);
 
 bool isEmptyTree(Tree tree);
+
+TreeList* deleteTreeInList(TreeList* tl, int index);
+
+bool checkSameVars(TreeList* list, TreeList* list2);
+
+Tree getMultiplicator(Tree t);
