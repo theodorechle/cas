@@ -264,7 +264,7 @@ int priority(char* operator) {
 }
 
 bool isEmptyValue(String str) {
-    return !str->size;
+    return str->str[0] == '\0';
 }
 
 bool isEmptyTree(Tree tree) {
