@@ -97,7 +97,7 @@ int treeLength(Tree tree);
 
 char* treeStr(Tree tree);
 
-int priority(char* operator);
+int getPriority(char* operator);
 
 bool isEmptyValue(String str);
 

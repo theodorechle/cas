@@ -139,14 +139,14 @@ Tree parsedToTree(TreeList* exprList, bool debug, bool implicitPriority) {
         else if (ttype == TYPE_OPERATOR) {
             if (getType(tree) == TYPE_NULL && getValue(t) == SUBSTRACTION_SIGN)
                 replaceTree(tree, setType(setValue(createTree(), "0"), TYPE_NUMBER));
-            if (getType(tree) != TYPE_OPERATOR || priority(getValue(t)) <= priority(getValue(tree))) {
+            if (getType(tree) != TYPE_OPERATOR || getPriority(getValue(t)) <= getPriority(getValue(tree))) {
                 replaceTree(addEmptyChild(t), tree);
                 replaceTree(tree, t);
                 tree = addEmptyChild(tree);
             }
             else {
                 child = getChild(tree, -1);
-                while (getType(child) == TYPE_OPERATOR && priority(getValue(t)) > priority(getValue(child)))
+                while (getType(child) == TYPE_OPERATOR && getPriority(getValue(t)) > getPriority(getValue(child)))
                     child = getChild(child, -1);
                 if (!strcmp(getValue(t), IMPLICIT_MULTIPLICATION_SIGN)) setValue(t, MULTIPLICATION_SIGN);
                 replaceTree(addEmptyChild(t), child);

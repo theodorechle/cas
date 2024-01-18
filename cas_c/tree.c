@@ -226,7 +226,7 @@ char* treeStr(Tree tree) {
     String str;
     str = createString();
     if (getType(tree) == TYPE_OPERATOR) {
-        if (getParent(tree) != NULL && getType(getParent(tree)) == TYPE_OPERATOR && priority(getValue(tree)) < priority(getValue(getParent(tree)))) {
+        if (getParent(tree) != NULL && getType(getParent(tree)) == TYPE_OPERATOR && getPriority(getValue(tree)) < getPriority(getValue(getParent(tree)))) {
             parenthesis = true;
             appendToString(str, "(");
         }
@@ -254,7 +254,7 @@ char* treeStr(Tree tree) {
     return str->str;
 }
 
-int priority(char* operator) {
+int getPriority(char* operator) {
     if (!strcmp(operator, ADDITION_SIGN)) return ADDITION_PRIORITY;
     if (!strcmp(operator, SUBSTRACTION_SIGN)) return SUBSTRACTION_PRIORITY;
     if (!strcmp(operator, MULTIPLICATION_SIGN)) return MULTIPLICATION_PRIORITY;

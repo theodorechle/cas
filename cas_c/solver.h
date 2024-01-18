@@ -3,6 +3,9 @@
 #define importedTree
 #endif
 
+TreeList* getVars(Tree t, TreeList* vars);
+
+Tree findSuperiorGroup(Tree node, int priority);
 
 bool addition(Tree node);
 
@@ -19,6 +22,6 @@ Tree goToLeaf(Tree node);
 /**
  * Go up in the tree and returns the next child to solve (use the childIndex)
 */
-Tree goToNextChild(Tree node);
+Tree goToNextExpr(Tree node, bool* change);
 
 Tree solve(Tree expr, bool debug);
