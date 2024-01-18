@@ -1,6 +1,6 @@
 from constants import *
 from tree import *
-from parser import *
+from parser_1 import *
 from resolve import *
 
 def solve(expr, debug=False):

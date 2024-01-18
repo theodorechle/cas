@@ -124,8 +124,8 @@ def to_tree(expr_list: list[Tree], debug=False) -> Tree:
         print("Parser :")
     
     # create a tree, loop into all the trees in the given list and replace the tree with the tree found in the list (with the replace_tree function)
-    # after, create a new tree who is placed relatively to the actual tree and set it to the tree variable
-    # and loop
+    # after, create a new tree who is placed relatively to the actual one and set it to the 'tree' variable
+    # and loop again
     tree = Tree()
     for t in expr_list:
         if t.nature == TYPE_NUMBER or t.nature == TYPE_VARIABLE:
@@ -143,7 +143,7 @@ def to_tree(expr_list: list[Tree], debug=False) -> Tree:
             elif is_opr:
                 child: Tree = tree.childs[-1]
                 while child.nature == TYPE_OPERATOR and OPERATORS[t.value] > OPERATORS[child.value]:
-                        child = child.childs[-1]
+                    child = child.childs[-1]
                 replace_tree(t.append_child(), child)
                 tree = replace_tree(child.parent.childs[-1], t).append_child()
         elif t.nature == TYPE_OPENING_PARENTHESIS:
