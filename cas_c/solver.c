@@ -1,38 +1,60 @@
 #include "solver.h"
 
-TreeList* getVars(Tree t, TreeList* vars) {
+void getVars(Tree t, TreeList* vars) {
     if (getType(t) == TYPE_VARIABLE) vars = addTree(vars, t);
     TreeList* childs = t->childs;
     while (childs != NULL) {
-        vars = getVars(childs->tree, vars);
+        getVars(childs->tree, vars);
         childs = childs->next;
     }
-    return vars;
 }
 
 
-Tree findSuperiorGroup(Tree node, int priority) {
-    if (getType(node) != TYPE_OPERATOR) return node;
-    else if (getPriority(getValue(node)) > priority) return node;
+void findSuperiorGroup(Tree node, int priority, TreeList* nodes) {
+    if (getType(node) != TYPE_OPERATOR || getPriority(getValue(node)) > priority) {
+        nodes = addTree(nodes, node);
+        return;
+    }
     TreeList* child = node->childs;
-    Tree returnedTree;
     while (child != NULL) {
-        returnedTree = findSuperiorGroup(child->tree, priority);
-        if (returnedTree != NULL) return returnedTree;
+        findSuperiorGroup(child->tree, priority, nodes);
         child = child->next;
     }
-    return NULL;
 }
 
+bool getCompatible(TreeList* nodes1, TreeList* nodes2, Tree* t1, Tree* t2) {
+    TreeList* n, *vars1, *vars2;
+    printTreeList(nodes1);
+    printTreeList(nodes2);
+    while (nodes1 != NULL) {
+        n = nodes2;
+        vars1 = createTreeList();
+        getVars(nodes1->tree, vars1);
+        while (n != NULL) {
+            vars2 = createTreeList();
+            getVars(n->tree, vars2);
+            printTreeList(vars1);
+            printTreeList(vars2);
+            if (checkSameVars(vars1, vars2)) {
+                printf("true\n");
+                *t1 = nodes1->tree;
+                *t2 = n->tree;
+                return true;
+            }
+            n = n->next;
+        }
+        nodes1 = nodes1->next;
+    }
+    return false;
+}
 
 bool addition(Tree node) {
-    printf("addition\n");
-    printTree(node);
     Tree node1 = getChild(node, 0);
     Tree node2 = getChild(node, 1);
+    Tree sup1, sup2;
     int typeN1 = getType(node1), typeN2 = getType(node2);
     Tree newTree = createTree();
-    TreeList* vars1 = createTreeList(), *vars2 = createTreeList();
+    TreeList* vars1 = createTreeList(), *vars2 = createTreeList(), *nodes1=createTreeList(), *nodes2=createTreeList();
     Tree mul1, mul2, child;
     char* s = (char*)malloc(sizeof(double));
     if (typeN1 == typeN2 && typeN1 == TYPE_NUMBER) {
@@ -42,34 +64,30 @@ bool addition(Tree node) {
             replaceTree(node, newTree);
             return true;
     }
-    node1 = findSuperiorGroup(node1, ADDITION_PRIORITY);
-    node2 = findSuperiorGroup(node2, ADDITION_PRIORITY);
-    vars1 = getVars(node1, vars1);
-    vars2 = getVars(node2, vars2);
-    if (checkSameVars(vars1, vars2)) {
-        mul1 = getMultiplicator(node1);
-        mul2 = getMultiplicator(node2);
-        // if no multiplicator, set it to 1
-        // example : a*b => 1*a*b
-        if (isEmptyTree(mul1)) {
-            mul1 = setType(setValue(createTree(), "1"), TYPE_NUMBER);
-            replaceTree(addEmptyChild(newTree), node1);
-            addChild(newTree, mul1);
-            setType(newTree, TYPE_OPERATOR);
-            setValue(newTree, MULTIPLICATION_SIGN);
-            replaceTree(node1, newTree);
-        }
-        if (isEmptyTree(mul2)) mul2 = setType(setValue(createTree(), "1"), TYPE_NUMBER);
-        newTree = createTree();
-        replaceTree(addEmptyChild(newTree), mul1);
-        setValue(newTree, ADDITION_SIGN);
+    findSuperiorGroup(node1, ADDITION_PRIORITY, nodes1);
+    findSuperiorGroup(node2, ADDITION_PRIORITY, nodes2);
+    if (!getCompatible(nodes1, nodes2, &sup1, &sup2)) return false;
+    mul1 = getMultiplicator(sup1);
+    mul2 = getMultiplicator(sup2);
+    // if no multiplicator, set it to 1
+    // example : a*b => 1*a*b
+    if (isEmptyTree(mul1)) {
+        mul1 = setType(setValue(createTree(), "1"), TYPE_NUMBER);
+        replaceTree(addEmptyChild(newTree), sup1);
+        addChild(newTree, mul1);
         setType(newTree, TYPE_OPERATOR);
-        addChild(newTree, mul2);
-        replaceTree(mul1, newTree);
-        replaceTree(node, node1);
-        return true;
+        setValue(newTree, MULTIPLICATION_SIGN);
+        replaceTree(sup1, newTree);
     }
-    return false;
+    if (isEmptyTree(mul2)) mul2 = setType(setValue(createTree(), "1"), TYPE_NUMBER);
+    newTree = createTree();
+    replaceTree(addEmptyChild(newTree), mul1);
+    setValue(newTree, ADDITION_SIGN);
+    setType(newTree, TYPE_OPERATOR);
+    addChild(newTree, mul2);
+    replaceTree(mul1, newTree);
+    replaceTree(node, node1);
+    return true;
 }
 
 bool substraction(Tree node) {
@@ -104,7 +122,7 @@ Tree goToNextExpr(Tree node, bool* change) {
         return node;
     }
     *change = true;
-    if (getNbChilds(getParent(node)) - 1 > node->childIndex) return getChild(getParent(node), node->childIndex + 1);
+    if (getNbChilds(getParent(node)) - 1 > node->childIndex) return goToLeaf(getChild(getParent(node), node->childIndex + 1));
     return getParent(node);
 }
 
@@ -138,7 +156,6 @@ Tree solve(Tree expr, bool debug) {
             newExpr = goToLeaf(expr);
             if (isEmptyTree(getParent(newExpr))) return newExpr;
             if (getParent(newExpr) == expr) expr = goToNextExpr(expr, &change);
-            else newExpr = getParent(newExpr);
             expr = newExpr;
         }
         else expr = goToNextExpr(expr, &change);

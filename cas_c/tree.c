@@ -204,6 +204,15 @@ void printTree(Tree tree) {
     __printTree(tree, 0);
 }
 
+void printTreeList(TreeList* tl) {
+    printf("[ ");
+    while (tl != NULL) {
+        printf("%s (%s), ", tl->tree->value->str, TYPES[tl->tree->type]);
+        tl = tl->next;
+    }
+    printf("]\n");
+}
+
 Tree findRoot(Tree tree) {
     if (isEmptyTree(tree)) return tree;
     while (!isEmptyTree(getParent(tree))) tree = getParent(tree);

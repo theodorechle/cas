@@ -91,6 +91,8 @@ void __printTree(Tree tree, int level);
 
 void printTree(Tree tree);
 
+void printTreeList(TreeList* tl);
+
 Tree findRoot(Tree tree);
 
 int treeLength(Tree tree);

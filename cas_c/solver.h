@@ -3,9 +3,11 @@
 #define importedTree
 #endif
 
-TreeList* getVars(Tree t, TreeList* vars);
+void getVars(Tree t, TreeList* vars);
 
-Tree findSuperiorGroup(Tree node, int priority);
+void findSuperiorGroup(Tree node, int priority, TreeList* nodes);
+
+bool getCompatible(TreeList* nodes1, TreeList* nodes2, Tree* t1, Tree* t2);
 
 bool addition(Tree node);
 
