@@ -24,8 +24,6 @@ void findSuperiorGroup(Tree node, int priority, TreeList* nodes) {
 
 bool getCompatible(TreeList* nodes1, TreeList* nodes2, Tree* t1, Tree* t2) {
     TreeList* n, *vars1, *vars2;
-    printTreeList(nodes1);
-    printTreeList(nodes2);
     while (nodes1 != NULL) {
         n = nodes2;
         vars1 = createTreeList();
@@ -33,16 +31,15 @@ bool getCompatible(TreeList* nodes1, TreeList* nodes2, Tree* t1, Tree* t2) {
         while (n != NULL) {
             vars2 = createTreeList();
             getVars(n->tree, vars2);
-            printTreeList(vars1);
-            printTreeList(vars2);
             if (checkSameVars(vars1, vars2)) {
-                printf("true\n");
                 *t1 = nodes1->tree;
                 *t2 = n->tree;
                 return true;
             }
+            // deleteTreeList(vars2);
             n = n->next;
         }
+        // deleteTreeList(vars1);
         nodes1 = nodes1->next;
     }
     return false;

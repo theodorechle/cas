@@ -70,19 +70,25 @@ Tree addEmptyChild(Tree t) {
     return addChild(t, createTree());
 }
 
+void deleteTreeList(TreeList* tl) {
+    TreeList* next=tl;
+    while (tl != NULL) {
+        next = next->next;
+        deleteTree(tl->tree);
+        free(tl);
+        tl = next;
+    }
+
+}
+
 Tree deleteChilds(Tree t) {
     if (t->childs == NULL) return NULL;
-    TreeList* list=t->childs,*next=t->childs->next;
-    while (t != NULL) {
-        deleteTree(list->tree);
-        free(list);
-        list = next;
-        next = list->next;
-    }
+    deleteTreeList(t->childs);
     return t;
 }
 
 Tree deleteTree(Tree t) {
+    if (t == NULL) return NULL;
     free(t->value);
     deleteChilds(t);
     free(t);
@@ -206,7 +212,7 @@ void printTree(Tree tree) {
 
 void printTreeList(TreeList* tl) {
     printf("[ ");
-    while (tl != NULL) {
+    while (tl != NULL && !isEmptyTree(tl->tree)) {
         printf("%s (%s), ", tl->tree->value->str, TYPES[tl->tree->type]);
         tl = tl->next;
     }
@@ -299,15 +305,16 @@ TreeList* deleteTreeInList(TreeList* tl, int index) {
 
 bool checkSameVars(TreeList* list, TreeList* list2) {
     char* value;
-    bool find;
+    bool find = false;
     int i;
     TreeList* tmp;
     while (list != NULL) {
+        if (isEmptyTree(list->tree)) return false;
         value = getValue(list->tree);
         find = false;
         i = 0;
         tmp = list2;
-        while (tmp != NULL) {
+        while (tmp != NULL && !isEmptyTree(tmp->tree)) {
             if (getType(tmp->tree) == TYPE_VARIABLE && strcmp(getValue(tmp->tree), value) == 0) {
                 tmp = deleteTreeInList(tmp, i);
                 find = true;

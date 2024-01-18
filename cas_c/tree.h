@@ -55,6 +55,8 @@ Tree addChild(Tree t, Tree child);
 
 Tree addEmptyChild(Tree t);
 
+void deleteTreeList(TreeList* tl);
+
 Tree deleteChilds(Tree t);
 
 Tree deleteTree(Tree t);
