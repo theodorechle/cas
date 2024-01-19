@@ -3,6 +3,10 @@
 #define importedTree
 #endif
 
+bool checkSameVars(TreeList* list, TreeList* list2);
+
+Tree getMultiplicator(Tree t);
+
 void getVars(Tree t, TreeList* vars);
 
 void findSuperiorGroup(Tree node, int priority, TreeList* nodes);

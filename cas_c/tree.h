@@ -44,6 +44,10 @@ Tree createTree();
 */
 Tree replaceTree(Tree tree1, Tree tree2);
 
+void invertTree(Tree tree1, Tree tree2);
+
+Tree copyTree(Tree tree);
+
 TreeList* addTree(TreeList* trees, Tree tree);
 
 /**
@@ -59,7 +63,9 @@ void deleteTreeList(TreeList* tl);
 
 Tree deleteChilds(Tree t);
 
-Tree deleteTree(Tree t);
+void deleteTree(Tree t);
+
+void deleteTreeAndChilds(Tree t);
 
 String appendToString(String value, char* str);
 
@@ -108,7 +114,3 @@ bool isEmptyValue(String str);
 bool isEmptyTree(Tree tree);
 
 TreeList* deleteTreeInList(TreeList* tl, int index);
-
-bool checkSameVars(TreeList* list, TreeList* list2);
-
-Tree getMultiplicator(Tree t);

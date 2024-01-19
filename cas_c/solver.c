@@ -1,5 +1,43 @@
 #include "solver.h"
 
+bool checkSameVars(TreeList* list, TreeList* list2) {
+    char* value;
+    bool find = false;
+    int i;
+    TreeList* tmp;
+    while (list != NULL) {
+        if (isEmptyTree(list->tree)) return false;
+        value = getValue(list->tree);
+        find = false;
+        i = 0;
+        tmp = list2;
+        while (tmp != NULL && !isEmptyTree(tmp->tree)) {
+            if (getType(tmp->tree) == TYPE_VARIABLE && strcmp(getValue(tmp->tree), value) == 0) {
+                tmp = deleteTreeInList(tmp, i);
+                find = true;
+                break;
+            }
+            i++;
+            tmp = tmp->next;
+        }
+        if (!find) return false;
+        list = list->next;
+    }
+    return true;
+}
+
+Tree getMultiplicator(Tree t) {
+    if (getType(t) == TYPE_NUMBER) return t;
+    TreeList* child = t->childs;
+    Tree c;
+    while (child != NULL) {
+        c = getMultiplicator(child->tree);
+        if (!isEmptyTree(c)) return c;
+        child = child->next;
+    }
+    return NULL;
+}
+
 void getVars(Tree t, TreeList* vars) {
     if (getType(t) == TYPE_VARIABLE) vars = addTree(vars, t);
     TreeList* childs = t->childs;
@@ -9,6 +47,21 @@ void getVars(Tree t, TreeList* vars) {
     }
 }
 
+
+void sortTree(Tree t) {
+    if (getType(t) != TYPE_OPERATOR) return;
+    Tree child1 = getChild(t, 0), child2 = getChild(t, 1);
+    int type1 = getType(child1), type2 = getType(child2);
+    if ((type1 == TYPE_NUMBER && type2 == TYPE_VARIABLE && !strcmp(getValue(t), ADDITION_SIGN))
+    || (type1 == TYPE_VARIABLE && type2 == TYPE_NUMBER && !strcmp(getValue(t), MULTIPLICATION_SIGN)))
+        invertTree(child1, child2);
+    if (type1 == type2 && (type1 == TYPE_VARIABLE || type1 == TYPE_OPERATOR) && strcmp(getValue(child1), getValue(child2)) > 0)
+            invertTree(child1, child2);
+    if (type1 != TYPE_OPERATOR && type2 == TYPE_OPERATOR)
+        invertTree(child1, child2);
+    sortTree(child1);
+    sortTree(child2);
+}
 
 void findSuperiorGroup(Tree node, int priority, TreeList* nodes) {
     if (getType(node) != TYPE_OPERATOR || getPriority(getValue(node)) > priority) {
@@ -133,6 +186,7 @@ Tree solve(Tree expr, bool debug) {
     if (treeLength(expr) == 1) return expr;
     expr = getParent(goToLeaf(expr)); // go to first expression to evaluate : the father of the first leaf, because the leaf itself can't be evaluated
     while (!isEmptyTree(getParent(expr)) || change == true) {
+        sortTree(expr);
         value = getValue(expr);
         if (getType(expr) == TYPE_OPERATOR) {
             if (strcmp(value, ADDITION_SIGN) == 0) change = addition(expr);

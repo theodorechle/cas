@@ -74,7 +74,7 @@ void deleteTreeList(TreeList* tl) {
     TreeList* next=tl;
     while (tl != NULL) {
         next = next->next;
-        deleteTree(tl->tree);
+        deleteTreeAndChilds(tl->tree);
         free(tl);
         tl = next;
     }
@@ -87,12 +87,15 @@ Tree deleteChilds(Tree t) {
     return t;
 }
 
-Tree deleteTree(Tree t) {
-    if (t == NULL) return NULL;
+void deleteTree(Tree t) {
+    free(t);
+}
+
+void deleteTreeAndChilds(Tree t) {
+    if (t == NULL) return;
     free(t->value);
     deleteChilds(t);
-    free(t);
-    return NULL;
+    deleteTree(t);
 }
 
 String appendToString(String value, char* str) {
@@ -198,6 +201,23 @@ Tree replaceTree(Tree tree1, Tree tree2) {
     return tree1;
 }
 
+void invertTree(Tree tree1, Tree tree2) {
+    Tree tmp = replaceTree(createTree(), tree1);
+    replaceTree(tree1, tree2);
+    replaceTree(tree2, tmp);
+    deleteTree(tmp);
+}
+
+Tree copyTree(Tree tree) {
+    Tree newTree = createTree();
+    int l=getNbChilds(tree);
+    setValue(newTree, getValue(tree));
+    setType(newTree, getType(tree));
+    for (int i=0; i<l; i++)
+        addChild(newTree, copyTree(getChild(tree, i)));
+    return newTree;
+}
+
 void __printTree(Tree tree, int level) {
     for (int i=0; i<level; i++)
         printf("\t");
@@ -301,42 +321,4 @@ TreeList* deleteTreeInList(TreeList* tl, int index) {
     }
     tl->next = tl->next->next;
     return tl;
-}
-
-bool checkSameVars(TreeList* list, TreeList* list2) {
-    char* value;
-    bool find = false;
-    int i;
-    TreeList* tmp;
-    while (list != NULL) {
-        if (isEmptyTree(list->tree)) return false;
-        value = getValue(list->tree);
-        find = false;
-        i = 0;
-        tmp = list2;
-        while (tmp != NULL && !isEmptyTree(tmp->tree)) {
-            if (getType(tmp->tree) == TYPE_VARIABLE && strcmp(getValue(tmp->tree), value) == 0) {
-                tmp = deleteTreeInList(tmp, i);
-                find = true;
-                break;
-            }
-            i++;
-            tmp = tmp->next;
-        }
-        if (!find) return false;
-        list = list->next;
-    }
-    return true;
-}
-
-Tree getMultiplicator(Tree t) {
-    if (getType(t) == TYPE_NUMBER) return t;
-    TreeList* child = t->childs;
-    Tree c;
-    while (child != NULL) {
-        c = getMultiplicator(child->tree);
-        if (!isEmptyTree(c)) return c;
-        child = child->next;
-    }
-    return NULL;
 }
