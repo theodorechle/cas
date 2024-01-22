@@ -3,15 +3,7 @@
 #define importedTree
 #endif
 
-bool checkSameVars(TreeList* list, TreeList* list2);
-
-Tree getMultiplicator(Tree t);
-
-void getVars(Tree t, TreeList* vars);
-
 void findSuperiorGroup(Tree node, int priority, TreeList* nodes);
-
-bool getCompatible(TreeList* nodes1, TreeList* nodes2, Tree* t1, Tree* t2);
 
 bool addition(Tree node);
 

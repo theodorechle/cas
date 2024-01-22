@@ -4,7 +4,7 @@ TreeList* createTreeList() {
     TreeList* t;
     t = (TreeList*)malloc(sizeof(TreeList));
     if (t == NULL) {
-        fprintf(stderr, "error : 'createChild' : erreur malloc\n");
+        fprintf(stderr, "error in 'createTreeList', dynamic allocation failed\n");
         exit(1);
     }
     t->tree = NULL;
@@ -19,7 +19,7 @@ String createString() {
     s = (String)malloc(sizeof(String));
     str = (char*)malloc(sizeof(char) * size);
     if (s == NULL || str == NULL) {
-        fprintf(stderr, "error : 'createString' : erreur malloc");
+        fprintf(stderr, "error in 'createString', dynamic allocation failed\n");
         exit(1);
     }
     s->size = size;
@@ -31,7 +31,7 @@ Tree createTree() {
     Tree t;
     t = (Tree)malloc(sizeof(Node));
     if (t == NULL) {
-        fprintf(stderr, "error : 'createTree' : erreur malloc\n");
+        fprintf(stderr, "error in 'createTree', dynamic allocation failed\n");
         exit(1);
     }
     t->value = createString();
@@ -39,6 +39,13 @@ Tree createTree() {
     t->parent = NULL;
     t->childIndex = 0;
     t->childs = NULL;
+    return t;
+}
+
+Tree createTreeWithValues(char* value, int type) {
+    Tree t = createTree();
+    setValue(t, value);
+    setType(t, type);
     return t;
 }
 
@@ -104,7 +111,7 @@ String appendToString(String value, char* str) {
         value->size = length;
         value->str = (char*)realloc(value->str, (value->size) * sizeof(char));
         if (value->str == NULL) {
-            fprintf(stderr, "error : 'appendToValue' : erreur realloc\n");
+            fprintf(stderr, "error : 'appendToValue' : reallocation failed\n");
             exit(4);
         }
     }
@@ -175,6 +182,11 @@ int getNbChilds(Tree t) {
     return getNbTrees(t->childs);
 }
 
+Tree getNextChild(Tree t) {
+    // if (getNbChilds(getParent(t)) - 1 > t->childIndex) return goToLeaf(getChild(getParent(t), t->childIndex + 1));
+    return NULL;
+}
+
 Tree getTree(TreeList* tl, int nb) {
     int l = getNbTrees(tl);
     if (nb < 0)
@@ -219,6 +231,7 @@ Tree copyTree(Tree tree) {
 }
 
 void __printTree(Tree tree, int level) {
+    if (isEmptyTree(tree)) return;
     for (int i=0; i<level; i++)
         printf("\t");
     printf("%s (%s)\n", tree->value->str, TYPES[tree->type]);

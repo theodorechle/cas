@@ -11,6 +11,8 @@ typedef struct {
 
 struct treeList;
 
+
+
 /**
  * value : The tree value
  * type : The type of the tree, like TYPE_OPERATOR, TYPE_INT, ...
@@ -36,6 +38,8 @@ TreeList* createTreeList();
 String createString();
 
 Tree createTree();
+
+Tree createTreeWithValues(char* value, int type);
 
 /**
  * replace the value, the type and the childs of tree1 with the tree2 ones
@@ -94,6 +98,8 @@ int getNbTrees(TreeList* tl);
 int getNbChilds(Tree t);
 
 Tree getChild(Tree t, int nb);
+
+Tree getNextChild(Tree t);
 
 void __printTree(Tree tree, int level);
 
