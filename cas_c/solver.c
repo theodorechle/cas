@@ -1,11 +1,13 @@
 #include "solver.h"
 
 void sortTree(Tree t) {
-    if (getType(t) != TYPE_OPERATOR || !strcmp(getValue(t), DIVISION_SIGN) || !strcmp(getValue(t), SUBSTRACTION_SIGN)) return;
+    if (getType(t) != TYPE_OPERATOR) return;
     Tree child1 = getChild(t, 0);
     Tree child2 = getChild(t, 1);
     sortTree(child1);
     sortTree(child2);
+    if (!strcmp(getValue(t), DIVISION_SIGN) || !strcmp(getValue(t), SUBSTRACTION_SIGN)) return;
+    // sort actual tree
     int type1 = getType(child1), type2 = getType(child2);
     if ((type1 == TYPE_NUMBER && type2 == TYPE_VARIABLE && !strcmp(getValue(t), ADDITION_SIGN))
     || (type1 == TYPE_VARIABLE && type2 == TYPE_NUMBER && !strcmp(getValue(t), MULTIPLICATION_SIGN)))
@@ -41,7 +43,6 @@ bool additionable(Tree node1, Tree node2) {
         || !additionable(getChild(node1, 1), getChild(node2, 1)))
             // an operator where childs' order is important 
             if ((!strcmp(value1, DIVISION_SIGN) || !strcmp(value1, SUBSTRACTION_SIGN)) && strcmp(value1, value2)) return false;
-        // if same operator, check 
         if (!additionable(getChild(node1, 0), getChild(node2, 1))
         || !additionable(getChild(node1, 1), getChild(node2, 0)))
             return false;
@@ -86,28 +87,48 @@ bool addition(Tree node) {
         group2->tree = getChild(group2->tree, 1);
     }
     node1 = group1;
-    while (node1 != NULL && !areValid) {
+    while (node1 != NULL) {
         node2 = group2;
-        while (node2 != NULL && !areValid) {
+        while (node2 != NULL) {
             areValid = additionable(node1->tree, node2->tree);
+            if (areValid) break;
             node2 = node2->next;
         }
+        if (areValid) break;
         node1 = node1->next;
     }
     if (!areValid) return false;
+    printTreeList(node1);
+    printTreeList(node2);
+    // same type for both
+    if (getType(node1->tree) == TYPE_NUMBER) {
+        newTree = createTreeWithValues(ADDITION_SIGN, TYPE_OPERATOR);
+        replaceTree(addEmptyChild(newTree), node1->tree);
+        replaceTree(addEmptyChild(newTree), node2->tree);
+        replaceTree(node1->tree, newTree);
+        free(node1);
+        // deleteTreeInList(getParent(node2->tree)->childs, node2->tree->childIndex);
+        // deleteTreeList(node2);
+        // printTree(node);
+        // deleteTreeAndChilds(child2);
+        // printTree(node);
+        replaceTree(node, child1);
+        return true;
+    }
     if (isEmptyTree(mul1)) {
         newTree = createTreeWithValues(MULTIPLICATION_SIGN, TYPE_OPERATOR);
         mul1 = createTreeWithValues("1", TYPE_NUMBER);
-        replaceTree(addEmptyChild(newTree), group1->tree);
+        replaceTree(addEmptyChild(newTree), node1->tree);
         addChild(newTree, mul1);
-        replaceTree(group1->tree, newTree);
+        replaceTree(node1->tree, newTree);
     }
     if (isEmptyTree(mul2)) mul2 = createTreeWithValues("1", TYPE_NUMBER);
     
     newTree = createTreeWithValues(ADDITION_SIGN, TYPE_OPERATOR);
     replaceTree(addEmptyChild(newTree), mul1);
-    addChild(newTree, mul2);
+    replaceTree(addEmptyChild(newTree), mul2);
     replaceTree(mul1, newTree);
+    deleteTreeAndChilds(child2);
     replaceTree(node, child1);
     return true;
 }
@@ -155,13 +176,9 @@ Tree solve(Tree expr, bool debug) {
     bool change = true;
     char* value;
     Tree newExpr;
-    if (treeLength(expr) == 1) {
-        sortTree(expr);
-        return expr;
-    }
+    sortTree(expr);
     expr = getParent(goToLeaf(expr)); // go to first expression to evaluate : the father of the first leaf, because the leaf itself can't be evaluated
     while (!isEmptyTree(getParent(expr)) || change == true) {
-        sortTree(expr);
         value = getValue(expr);
         if (getType(expr) == TYPE_OPERATOR) {
             if (strcmp(value, ADDITION_SIGN) == 0) change = addition(expr);
@@ -188,7 +205,7 @@ Tree solve(Tree expr, bool debug) {
             expr = newExpr;
         }
         else expr = goToNextExpr(expr, &change);
+        sortTree(expr);
     }
-    sortTree(expr);
     return expr;
 }

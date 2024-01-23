@@ -23,6 +23,8 @@ String createString() {
         exit(1);
     }
     s->size = size;
+    // it happens that it's not initialized
+    str[0] = '\0';
     s->str = str;
     return s;
 }
@@ -208,6 +210,7 @@ Tree replaceTree(Tree tree1, Tree tree2) {
     tree1->value = tree2->value;
     tree1->type = tree2->type;
     tree1->childs = tree2->childs;
+    tree2->childs = createTreeList();
     for (int i=0; i<getNbChilds(tree1); i++)
         getChild(tree1, i)->parent = tree1;
     return tree1;
@@ -274,6 +277,7 @@ char* treeStr(Tree tree) {
     String str;
     str = createString();
     if (getType(tree) == TYPE_OPERATOR) {
+        // add parenthesis if father is operator and have bigger priority
         if (getParent(tree) != NULL && getType(getParent(tree)) == TYPE_OPERATOR && getPriority(getValue(tree)) < getPriority(getValue(getParent(tree)))) {
             parenthesis = true;
             appendToString(str, "(");
