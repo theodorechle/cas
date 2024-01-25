@@ -4,11 +4,6 @@
 #include <string.h>
 #include "constants.h"
 
-typedef struct {
-    char* str;
-    int size;
-} str, *String;
-
 struct treeList;
 
 
@@ -20,7 +15,7 @@ struct treeList;
  * childIndex : The index where the tree is in the childs' list of his father
 */
 typedef struct tree {
-    String value;
+    char* value;
     int type;
     struct tree* parent;
     int childIndex;
@@ -35,7 +30,7 @@ typedef struct treeList {
 
 TreeList* createTreeList();
 
-String createString();
+char* createString();
 
 Tree createTree();
 
@@ -71,13 +66,13 @@ void deleteTree(Tree t);
 
 void deleteTreeAndChilds(Tree t);
 
-String appendToString(String value, char* str);
+char* appendToString(char* value, char* str);
 
 Tree appendToValue(Tree t, char* str);
 
-String appendCharToString(String value, char character);
+char* appendCharToString(char* value, char character);
 
-String clearString(String str);
+char* clearString(char* str);
 
 Tree clearValue(Tree t);
 
@@ -115,7 +110,7 @@ char* treeStr(Tree tree);
 
 int getPriority(char* operator);
 
-bool isEmptyValue(String str);
+bool isEmptyValue(char* str);
 
 bool isEmptyTree(Tree tree);
 

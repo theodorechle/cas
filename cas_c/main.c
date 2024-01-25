@@ -1,26 +1,26 @@
 #include "main.h"
 
-String getUserInput() {
-    String expr=createString();
+char* getUserInput() {
+    char* expr=createString();
     char c;
     while (true) {
         c = getchar();
         if (c == EOF || c == '\n') return expr;
-        appendCharToString(expr, c);
+        expr = appendCharToString(expr, c);
     }
 }
 
 int main() {
     int debug, implicitPriority;
     printf("Expression : ");
-    String expr=getUserInput();
+    char* expr = getUserInput();
     TreeList* tl, *tmp;
     Tree tree;
     printf("1 for debug, 0 else : ");
     scanf("%d", &debug);
     printf("1 for implicit priority, 0 else : ");
     scanf("%d", &implicitPriority);
-    tl = parser(expr->str, debug, implicitPriority);
+    tl = parser(expr, debug, implicitPriority);
     if (debug) {
         tmp = tl;
         while (tmp != NULL) {
@@ -39,7 +39,7 @@ int main() {
         printf("Solved tree\n");
         printTree(tree);
     }
-    printf("Start expression :\n%s\n", expr->str);
+    printf("Start expression :\n%s\n", expr);
     printf("Final expression :\n%s\n", treeStr(tree));
     return 0;
 }

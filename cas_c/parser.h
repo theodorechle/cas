@@ -11,9 +11,9 @@ bool isTypeOrEmpty(int type, int checkType);
 
 bool isFunction(char* litteral);
 
-bool isOperator(String value);
+bool isOperator(char* value);
 
-TreeList* addTreeByValues(TreeList* exprList, String value, int type);
+TreeList* addTreeByValues(TreeList* exprList, char* value, int type);
 
 TreeList* parser(char* expr, bool debug, bool implicitPriority);
 

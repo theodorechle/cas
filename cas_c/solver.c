@@ -188,9 +188,7 @@ Tree solve(Tree expr, bool debug) {
     if (isEmptyTree(getParent(expr))) return expr;
     expr = getParent(expr); // go to first expression to evaluate : the father of the first leaf, because the leaf itself can't be evaluated
     while (!isEmptyTree(getParent(expr)) || change == true) {
-        printf("here\n");
         value = getValue(expr);
-        printf("value : %s\n", value);
         if (getType(expr) == TYPE_OPERATOR) {
             if (strcmp(value, ADDITION_SIGN) == 0) change = addition(expr);
             if (strcmp(value, SUBSTRACTION_SIGN) == 0) change = substraction(expr);

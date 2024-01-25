@@ -12,21 +12,15 @@ TreeList* createTreeList() {
     return t;
 }
 
-String createString() {
-    String s;
+char* createString() {
     char* str;
-    int size=5;
-    s = (String)malloc(sizeof(String));
-    str = (char*)malloc(sizeof(char) * size);
-    if (s == NULL || str == NULL) {
+    str = (char*)malloc(sizeof(char));
+    if (str == NULL) {
         fprintf(stderr, "error in 'createString', dynamic allocation failed\n");
         exit(1);
     }
-    s->size = size;
-    // it happens that it's not initialized
     str[0] = '\0';
-    s->str = str;
-    return s;
+    return str;
 }
 
 Tree createTree() {
@@ -107,39 +101,41 @@ void deleteTreeAndChilds(Tree t) {
     deleteTree(t);
 }
 
-String appendToString(String value, char* str) {
-    int length=strlen(value->str) + strlen(str) + 1;
-    if (length >= value->size) {
-        value->size = length;
-        value->str = (char*)realloc(value->str, (value->size) * sizeof(char));
-        if (value->str == NULL) {
-            fprintf(stderr, "error : 'appendToValue' : reallocation failed\n");
-            exit(4);
-        }
+char* appendToString(char* value, char* str) {
+    int length = strlen(value) + strlen(str) + 1;
+    value = (char*)realloc(value, length * sizeof(char));
+    if (value == NULL) {
+        fprintf(stderr, "error : 'appendToValue' : reallocation failed\n");
+        exit(4);
     }
-    strcat(value->str, str);
+    strcat(value, str);
     return value;
 }
 
 Tree appendToValue(Tree t, char* str) {
-    appendToString(t->value, str);
+    t->value = appendToString(t->value, str);
     return t;
 }
 
-String appendCharToString(String value, char character) {
+char* appendCharToString(char* value, char character) {
     char c[2];
     c[0] = character;
-    appendToString(value, c);
+    value = appendToString(value, c);
     return value;
 }
 
-String clearString(String str) {
-    str->str[0] = '\0';
+char* clearString(char* str) {
+    str = (char*)realloc(str, sizeof(char));
+    if (str == NULL) {
+        fprintf(stderr, "error : 'appendToValue' : reallocation failed\n");
+        exit(4);
+    }
+    str[0] = '\0';
     return str;
 }
 
 Tree clearValue(Tree t) {
-    clearString(t->value);
+    t->value = clearString(t->value);
     return t;
 }
 
@@ -160,7 +156,7 @@ Tree setParent(Tree t, Tree p) {
 }
 
 char* getValue(Tree t) {
-    return t->value->str;
+    return t->value;
 }
 
 int getType(Tree t) {
@@ -237,7 +233,7 @@ void __printTree(Tree tree, int level) {
     if (isEmptyTree(tree)) return;
     for (int i=0; i<level; i++)
         printf("\t");
-    printf("%s (%s)\n", tree->value->str, TYPES[tree->type]);
+    printf("%s (%s)\n", tree->value, TYPES[tree->type]);
     for (int i=0; i<getNbChilds(tree); i++)
         __printTree(getChild(tree, i), level+1);
 }
@@ -249,7 +245,7 @@ void printTree(Tree tree) {
 void printTreeList(TreeList* tl) {
     printf("[ ");
     while (tl != NULL && !isEmptyTree(tl->tree)) {
-        printf("%s (%s), ", tl->tree->value->str, TYPES[tl->tree->type]);
+        printf("%s (%s), ", tl->tree->value, TYPES[tl->tree->type]);
         tl = tl->next;
     }
     printf("]\n");
@@ -275,36 +271,33 @@ int treeLength(Tree tree) {
 char* treeStr(Tree tree) {
     if (isEmptyTree(tree)) return "";
     bool parenthesis;
-    String str;
-    str = createString();
+    char* str = createString();
     if (getType(tree) == TYPE_OPERATOR) {
         // add parenthesis if father is operator and have bigger priority
         if (getParent(tree) != NULL && getType(getParent(tree)) == TYPE_OPERATOR && getPriority(getValue(tree)) < getPriority(getValue(getParent(tree)))) {
             parenthesis = true;
-            appendToString(str, "(");
+            str = appendToString(str, "(");
         }
-        appendToString(str, treeStr(getChild(tree, 0)));
-        appendToString(str, getValue(tree));
-        appendToString(str, treeStr(getChild(tree, 1)));
-        if (parenthesis)
-            appendToString(str, ")");
+        str = appendToString(str, treeStr(getChild(tree, 0)));
+        str = appendToString(str, getValue(tree));
+        str = appendToString(str, treeStr(getChild(tree, 1)));
+        if (parenthesis) str = appendToString(str, ")");
     }
     else if (tree->type == TYPE_FUNCTION)
     {
-        appendToString(str, getValue(tree));
-        appendToString(str, "(");
+        str = appendToString(str, getValue(tree));
+        str = appendToString(str, "(");
         if (getNbChilds(tree)) {
-            appendToString(str, treeStr(getChild(tree, 0)));
+            str = appendToString(str, treeStr(getChild(tree, 0)));
             for (int i=1; i<getNbChilds(tree); i++) {
-                appendToString(str, ", ");
-                appendToString(str, treeStr(getChild(tree, i)));
+                str = appendToString(str, ", ");
+                str = appendToString(str, treeStr(getChild(tree, i)));
             }
         }
-        appendToString(str, ")");
+        str = appendToString(str, ")");
     }
-    else
-        appendToString(str, getValue(tree));
-    return str->str;
+    else str = appendToString(str, getValue(tree));
+    return str;
 }
 
 int getPriority(char* operator) {
@@ -317,8 +310,8 @@ int getPriority(char* operator) {
     fprintf(stderr, "Error in priority : '%s' is not an operator\n");
 }
 
-bool isEmptyValue(String str) {
-    return str->str[0] == '\0';
+bool isEmptyValue(char* str) {
+    return str[0] == '\0';
 }
 
 bool isEmptyTree(Tree tree) {

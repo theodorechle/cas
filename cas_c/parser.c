@@ -8,28 +8,28 @@ bool isFunction(char* litteral) {
     return false; // to change
 }
 
-bool isOperator(String value) {
+bool isOperator(char* value) {
     for (int i=0; i < NB_OPE; i++)
-        if (strcmp(value->str, OPERATORS[i]) == 0)
+        if (strcmp(value, OPERATORS[i]) == 0)
             return true;
     return false;
 }
 
 
-TreeList* addTreeByValues(TreeList* exprList, String value, int type) {
+TreeList* addTreeByValues(TreeList* exprList, char* value, int type) {
     if (type == TYPE_NULL) {
-        fprintf(stderr, "Error in addTreeByValues : Unknown value '%s'\n", value->str);
+        fprintf(stderr, "Error in addTreeByValues : Unknown value '%s'\n", value);
         exit(5);
     }
     Tree tree = createTree();
-    setValue(tree, value->str);
+    setValue(tree, value);
     setType(tree, type);
     return addTree(exprList, tree);
 }
 
 TreeList* parser(char* expr, bool debug, bool implicitPriority) {
     TreeList* exprList = createTreeList();
-    String value = createString(), testString = createString();
+    char* value = createString(), *testString = createString();
     bool createNewTree;
     char character;
     int type = 0, length = strlen(expr), index = 0;
@@ -45,16 +45,16 @@ TreeList* parser(char* expr, bool debug, bool implicitPriority) {
         else if (isalpha(character)) {
             if (debug) printf("Found type of character '%c' is alpha\n", character);
             if (isTypeOrEmpty(type, TYPE_VARIABLE)) {
-                appendCharToString(value, character);
+                value = appendCharToString(value, character);
                 type = TYPE_VARIABLE;
                 createNewTree = false;
             }
             else {
                 if (type == TYPE_NUMBER || type == TYPE_CLOSING_PARENTHESIS) {
                     exprList = addTreeByValues(exprList, value, type);
-                    clearString(value);
-                    if (implicitPriority) appendToString(value, IMPLICIT_MULTIPLICATION_SIGN);
-                    else appendToString(value, MULTIPLICATION_SIGN);
+                    value = clearString(value);
+                    if (implicitPriority) value = appendToString(value, IMPLICIT_MULTIPLICATION_SIGN);
+                    else value = appendToString(value, MULTIPLICATION_SIGN);
                     type = TYPE_OPERATOR;
                 }
                 index--;
@@ -66,9 +66,9 @@ TreeList* parser(char* expr, bool debug, bool implicitPriority) {
             else {
                 if (type == TYPE_NUMBER || type == TYPE_VARIABLE) {
                     exprList = addTreeByValues(exprList, value, type);
-                    clearString(value);
-                    if (implicitPriority) appendToString(value, IMPLICIT_MULTIPLICATION_SIGN);
-                    else appendToString(value, MULTIPLICATION_SIGN);
+                    value = clearString(value);
+                    if (implicitPriority) value = appendToString(value, IMPLICIT_MULTIPLICATION_SIGN);
+                    else value = appendToString(value, MULTIPLICATION_SIGN);
                     type = TYPE_OPERATOR;
                 }
                 index--;
@@ -82,12 +82,12 @@ TreeList* parser(char* expr, bool debug, bool implicitPriority) {
         else if (isdigit(character) || character == '.') {
             if (debug) printf("Found type of character '%c' is number\n", character);
             if (isTypeOrEmpty(type, TYPE_NUMBER)) {
-                appendCharToString(value, character);
+                value = appendCharToString(value, character);
                 type = TYPE_NUMBER;
                 createNewTree = false;
             }
             else if (type == TYPE_VARIABLE) {
-                appendCharToString(value, character);
+                value = appendCharToString(value, character);
                 createNewTree = false;
             }
             else index --;
@@ -95,23 +95,23 @@ TreeList* parser(char* expr, bool debug, bool implicitPriority) {
         else
             if (type) index--;
             else {
-                appendToString(testString, value->str);
-                appendCharToString(testString, character);
+                testString = appendToString(testString, value);
+                testString = appendCharToString(testString, character);
                 if (isOperator(testString)) {
                     type = TYPE_OPERATOR;
-                    clearString(value);
-                    appendToString(value, testString->str);
-                    if (debug) printf("Found type of value '%s' is operator\n", value->str);
+                    value = clearString(value);
+                    value = appendToString(value, testString);
+                    if (debug) printf("Found type of value '%s' is operator\n", value);
                 }
                 else
                     if (debug) printf("Type of character '%c' not found\n", character);
                 createNewTree = false;
-                clearString(testString);
+                testString = clearString(testString);
             }
-        if (debug) printf("value : %s type : %d\n", value->str, type);
+        if (debug) printf("value : %s type : %d\n", value, type);
         if (createNewTree) {
             exprList = addTreeByValues(exprList, value, type);
-            clearString(value);
+            value = clearString(value);
             type = TYPE_NULL;
         }
         index++;
