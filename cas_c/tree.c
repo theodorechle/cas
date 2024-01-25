@@ -273,6 +273,7 @@ int treeLength(Tree tree) {
 }
 
 char* treeStr(Tree tree) {
+    if (isEmptyTree(tree)) return "";
     bool parenthesis;
     String str;
     str = createString();

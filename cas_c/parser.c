@@ -129,6 +129,7 @@ Tree findRootOrParenthesis(Tree tree) {
 Tree parsedToTree(TreeList* exprList, bool debug, bool implicitPriority) {
     Tree tree=createTree(), t, child;
     int ttype;
+    if (exprList == NULL || exprList->tree == NULL) return tree;
     while (exprList != NULL) {
         t = exprList->tree;
         ttype = getType(t);
@@ -137,7 +138,7 @@ Tree parsedToTree(TreeList* exprList, bool debug, bool implicitPriority) {
             tree = findRootOrParenthesis(tree);
         }
         else if (ttype == TYPE_OPERATOR) {
-            if (getType(tree) == TYPE_NULL && getValue(t) == SUBSTRACTION_SIGN)
+            if (!strcmp(getValue(t), SUBSTRACTION_SIGN) && (tree->childs == NULL || getType(tree) == TYPE_OPENING_PARENTHESIS))
                 replaceTree(tree, setType(setValue(createTree(), "0"), TYPE_NUMBER));
             if (getType(tree) != TYPE_OPERATOR || getPriority(getValue(t)) <= getPriority(getValue(tree))) {
                 replaceTree(addEmptyChild(t), tree);

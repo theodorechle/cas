@@ -78,18 +78,18 @@ bool addition(Tree node) {
     findSuperiorGroup(child1, ADDITION_PRIORITY, group1);
     findSuperiorGroup(child2, ADDITION_PRIORITY, group2);
     if (group1->tree == NULL || group2->tree == NULL) return false;
-    if (getType(group1->tree) == TYPE_OPERATOR && getType(getChild(group1->tree, 0)) == TYPE_NUMBER) {
-        mul1 = getChild(group1->tree, 0);
-        group1->tree = getChild(group1->tree, 1);
-    }
-    if (getType(group2->tree) == TYPE_OPERATOR && getType(getChild(group2->tree, 0)) == TYPE_NUMBER) {
-        mul2 = getChild(group2->tree, 0);
-        group2->tree = getChild(group2->tree, 1);
-    }
     node1 = group1;
     while (node1 != NULL) {
         node2 = group2;
         while (node2 != NULL) {
+            if (getType(node1->tree) == TYPE_OPERATOR && getType(getChild(node1->tree, 0)) == TYPE_NUMBER) {
+                mul1 = getChild(node1->tree, 0);
+                node1->tree = getChild(node1->tree, 1);
+            }
+            if (getType(node2->tree) == TYPE_OPERATOR && getType(getChild(node2->tree, 0)) == TYPE_NUMBER) {
+                mul2 = getChild(node2->tree, 0);
+                node2->tree = getChild(node2->tree, 1);
+            }
             areValid = additionable(node1->tree, node2->tree);
             if (areValid) break;
             node2 = node2->next;
@@ -98,8 +98,6 @@ bool addition(Tree node) {
         node1 = node1->next;
     }
     if (!areValid) return false;
-    printTreeList(node1);
-    printTreeList(node2);
     // same type for both
     if (getType(node1->tree) == TYPE_NUMBER) {
         newTree = createTreeWithValues(ADDITION_SIGN, TYPE_OPERATOR);
@@ -128,8 +126,17 @@ bool addition(Tree node) {
     replaceTree(addEmptyChild(newTree), mul1);
     replaceTree(addEmptyChild(newTree), mul2);
     replaceTree(mul1, newTree);
-    deleteTreeAndChilds(child2);
-    replaceTree(node, child1);
+    newTree = node2->tree;
+    int index;
+    if (newTree->childIndex) index = 0;
+    else index = 1;
+    Tree child = getChild(getParent(newTree), index);
+    if (child == mul2) newTree = getParent(newTree);
+    Tree zero_tree = createTreeWithValues("0", TYPE_NUMBER);
+    replaceTree(newTree, zero_tree);
+    deleteTree(zero_tree);
+    free(node1);
+    free(node2);
     return true;
 }
 
@@ -177,9 +184,13 @@ Tree solve(Tree expr, bool debug) {
     char* value;
     Tree newExpr;
     sortTree(expr);
-    expr = getParent(goToLeaf(expr)); // go to first expression to evaluate : the father of the first leaf, because the leaf itself can't be evaluated
+    expr = goToLeaf(expr);
+    if (isEmptyTree(getParent(expr))) return expr;
+    expr = getParent(expr); // go to first expression to evaluate : the father of the first leaf, because the leaf itself can't be evaluated
     while (!isEmptyTree(getParent(expr)) || change == true) {
+        printf("here\n");
         value = getValue(expr);
+        printf("value : %s\n", value);
         if (getType(expr) == TYPE_OPERATOR) {
             if (strcmp(value, ADDITION_SIGN) == 0) change = addition(expr);
             if (strcmp(value, SUBSTRACTION_SIGN) == 0) change = substraction(expr);

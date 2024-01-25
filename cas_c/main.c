@@ -39,6 +39,7 @@ int main() {
         printf("Solved tree\n");
         printTree(tree);
     }
-    printf("%s\n", treeStr(tree));
+    printf("Start expression :\n%s\n", expr->str);
+    printf("Final expression :\n%s\n", treeStr(tree));
     return 0;
 }
