@@ -30,22 +30,23 @@ void findSuperiorGroup(Tree node, int priority, TreeList* nodes) {
     }
 }
 
-bool additionable(Tree node1, Tree node2) {
+bool areSameNodes(Tree node1, Tree node2) {
     int type = getType(node1);
     char* value1, *value2;
     if (type != getType(node2) || type == TYPE_FUNCTION) return false;
     value1 = getValue(node1);
     value2 = getValue(node2);
-    if (type == TYPE_VARIABLE && strcmp(value1, value2)) return false; // diferents variables
+    if ((type == TYPE_VARIABLE || type == TYPE_NUMBER) && strcmp(value1, value2)) return false; // diferents variables
     if (type == TYPE_OPERATOR) {
         // childs are not the sames
-        if (!additionable(getChild(node1, 0), getChild(node2, 0))
-        || !additionable(getChild(node1, 1), getChild(node2, 1)))
+        if (!areSameNodes(getChild(node1, 0), getChild(node2, 0))
+        || !areSameNodes(getChild(node1, 1), getChild(node2, 1))) {
             // an operator where childs' order is important 
-            if ((!strcmp(value1, DIVISION_SIGN) || !strcmp(value1, SUBSTRACTION_SIGN)) && strcmp(value1, value2)) return false;
-        if (!additionable(getChild(node1, 0), getChild(node2, 1))
-        || !additionable(getChild(node1, 1), getChild(node2, 0)))
-            return false;
+            if (!strcmp(value1, DIVISION_SIGN) || !strcmp(value1, SUBSTRACTION_SIGN)) return false;
+            if (!areSameNodes(getChild(node1, 0), getChild(node2, 1))
+            || !areSameNodes(getChild(node1, 1), getChild(node2, 0)))
+                return false;
+        }
     }
     return true;
 }
@@ -102,7 +103,7 @@ bool addition(Tree node) {
                 mul2 = getChild(node2->tree, 0);
                 node2->tree = getChild(node2->tree, 1);
             }
-            areValid = additionable(node1->tree, node2->tree);
+            areValid = areSameNodes(node1->tree, node2->tree);
             if (areValid) break;
             node2 = node2->next;
         }
@@ -183,7 +184,7 @@ bool substraction(Tree node) {
     if (typeN1 == typeN2 && typeN1 == TYPE_NUMBER) {
             tmpChar = (char*)malloc(sizeof(double));
             if (tmpChar == NULL) {
-                fprintf(stderr, "error in 'addition', dynamic allocation of string failed\n");
+                fprintf(stderr, "error in 'substraction', dynamic allocation of string failed\n");
                 exit(1);
             }
             sprintf(tmpChar, "%f", atof(getValue(child1)) - atof(getValue(child2)));
