@@ -122,9 +122,25 @@ bool addition(Tree node) {
     }
     if (isEmptyTree(mul2)) mul2 = createTreeWithValues("1", TYPE_NUMBER);
     
-    newTree = createTreeWithValues(ADDITION_SIGN, TYPE_OPERATOR);
-    replaceTree(addEmptyChild(newTree), mul1);
-    replaceTree(addEmptyChild(newTree), mul2);
+    int isParentSub1 = !strcmp(getValue(getParent(getParent(mul1))), SUBSTRACTION_SIGN);
+    int isParentSub2;
+    // if mul2 have not parent, it was created by the addition function
+    if (isEmptyTree(getParent(mul2))) isParentSub2 = false;
+    else isParentSub2 = !strcmp(getValue(getParent(getParent(mul2))), SUBSTRACTION_SIGN);
+    char* sign = createString();
+    if (isParentSub1 && !isParentSub2) {
+        sign = appendToString(sign, SUBSTRACTION_SIGN);
+        newTree = createTreeWithValues(sign, TYPE_OPERATOR);
+        replaceTree(addEmptyChild(newTree), mul2);
+        replaceTree(addEmptyChild(newTree), mul1);
+    }
+    else {
+        if (isParentSub2) sign = appendToString(sign, SUBSTRACTION_SIGN);
+        else sign = appendToString(sign, ADDITION_SIGN);
+        newTree = createTreeWithValues(sign, TYPE_OPERATOR);
+        replaceTree(addEmptyChild(newTree), mul1);
+        replaceTree(addEmptyChild(newTree), mul2);
+    }
     replaceTree(mul1, newTree);
     newTree = node2->tree;
     int index;
