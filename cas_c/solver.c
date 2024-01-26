@@ -54,6 +54,18 @@ bool addition(Tree node) {
     Tree child1 = getChild(node, 0);
     Tree child2 = getChild(node, 1);
     int typeN1 = getType(child1), typeN2 = getType(child2);
+    if (typeN1 == TYPE_NUMBER && !strcmp(getValue(child1), "0")) {
+        replaceTree(node, child2);
+        deleteTree(child1);
+        deleteTree(child2);
+        return true;
+    }
+    if (typeN2 == TYPE_NUMBER && !strcmp(getValue(child2), "0")) {
+        replaceTree(node, child1);
+        deleteTree(child1);
+        deleteTree(child2);
+        return true;
+    }
     Tree newTree;
     TreeList* group1, *group2;
     TreeList* node1, *node2;
@@ -157,6 +169,30 @@ bool addition(Tree node) {
 }
 
 bool substraction(Tree node) {
+    Tree child1 = getChild(node, 0);
+    Tree child2 = getChild(node, 1);
+    int typeN1 = getType(child1), typeN2 = getType(child2);
+    if (typeN2 == TYPE_NUMBER && !strcmp(getValue(child2), "0")) {
+        replaceTree(node, child1);
+        deleteTree(child1);
+        deleteTree(child2);
+        return true;
+    }
+    Tree newTree;
+    char* tmpChar;
+    if (typeN1 == typeN2 && typeN1 == TYPE_NUMBER) {
+            tmpChar = (char*)malloc(sizeof(double));
+            if (tmpChar == NULL) {
+                fprintf(stderr, "error in 'addition', dynamic allocation of string failed\n");
+                exit(1);
+            }
+            sprintf(tmpChar, "%f", atof(getValue(child1)) - atof(getValue(child2)));
+            newTree = createTree();
+            setValue(newTree, tmpChar);
+            setType(newTree, TYPE_NUMBER);
+            replaceTree(node, newTree);
+            return true;
+    }
     return false;
 }
 
