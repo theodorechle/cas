@@ -1,0 +1,14 @@
+Remove childIndex
+
+Change the tree structure to remove treelists :
+
+typedef struct {
+    Node *child;
+    Node *next;
+    Node *parent;
+    char *value;
+    int type;
+} Node;
+
+
+Go to C++
