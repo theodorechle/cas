@@ -42,4 +42,10 @@ public :
     char* str() const;
 };
 
+Node* getLastChild(Node* n) {
+    if (n == nullptr) return n;
+    while (n->getChild()) n = n->getChild();
+    return n;
+}
+
 #endif // TREE_HPP

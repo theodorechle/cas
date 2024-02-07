@@ -102,7 +102,7 @@ Node* parser(string expr, bool debug, bool implicitPriority) {
                 else
                     if (debug) cout << "Type of character '" << character << "' not found" << endl;
                 createNewTree = false;
-                testString->empty();
+                testString->clear();
             }
         if (debug) cout << "value : " << *value << " type : " << type << endl;
         if (createNewTree) {
@@ -123,39 +123,42 @@ Node* findRootOrParenthesis(Node* tree) {
 }
 
 Node* parsedToTree(Node* exprList, bool debug, bool implicitPriority) {
-    Node* tree{}, t, child;
+    Node* tree{}, *t, *child;
     Types ttype = Types::NUL;
     if (exprList == nullptr || exprList == nullptr) return tree;
     while (exprList != nullptr) {
-        ttype = exprList.getType();
+        ttype = exprList->getType();
         if (ttype == Types::NBR || ttype == Types::VAR) {
             replaceTree(tree, exprList);
             tree = findRootOrParenthesis(tree);
         }
         else if (ttype == Types::OPT) {
-            if (exprList.getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || getType(tree) == Types::OPA))
-                replaceTree(tree, setType(setValue(createTree(), "0"), Types::NBR));
-            if (getType(tree) != Types::OPT || getPriority(getValue(exprList)) <= getPriority(getValue(tree))) {
+            Node* tmpNode{};
+            if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OPA))
+                tmpNode->setValue("0");
+                tmpNode->setType(Types::NBR);
+                replaceTree(tree, tmpNode);
+            if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
                 replaceTree(addEmptyChild(exprList), tree);
                 replaceTree(tree, t);
                 tree = addEmptyChild(tree);
             }
             else {
-                child = getChild(tree, -1);
-                while (getType(child) == Types::OPT && getPriority(getValue(t)) > getPriority(getValue(child)))
-                    child = getChild(child, -1);
-                if (!strcmp(getValue(exprList), IMPLICIT_MULTIPLICATION_SIGN)) setValue(exprList, MULTIPLICATION_SIGN);
+                child = getLastChild(tree);
+                while (child->getType() == Types::OPT && getPriority(t->getValue()) > getPriority(child->getValue()))
+                    child = getLastChild(child);
+                if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
                 replaceTree(addEmptyChild(exprList), child);
-                tree = addEmptyChild(replaceTree(getChild(getParent(child), -1), exprList));
+                tree = addEmptyChild(replaceTree(getLastChild(child->getParent()), exprList));
             }
         }
         else if (ttype == Types::OPA) {
-            if (getType(tree) != Types::NUL) tree = addEmptyChild(tree);
+            if (tree->getType() != Types::NUL) tree = addEmptyChild(tree);
             replaceTree(tree, exprList);
             tree = addEmptyChild(tree);
         }
         else if (ttype == Types::CPA) {
-            replaceTree(getParent(tree), tree);
+            replaceTree(tree->getParent(), tree);
             tree = findRootOrParenthesis(tree);
         }
         if (debug) {
