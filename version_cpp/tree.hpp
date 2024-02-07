@@ -5,7 +5,7 @@
 #include <string>
 
 class Node {
-    std::string value;
+    std::string* value;
     int type;
     Node* parent;
     Node* next = NULL;
@@ -15,7 +15,7 @@ class Node {
 public :
     Node(int type=0, Node* parent=nullptr);
 
-    std::string getValue();
+    std::string* getValue();
     int getType();
     Node* getParent();
     Node* setParent(Node* parent);
@@ -35,9 +35,9 @@ public :
      * Return the parent who don't have a parent
     */
     Node* root();
-    char* str();
+    std::string str();
 };
 
-char* createString();
+std::string* createString();
 
 #endif // TREE_HPP

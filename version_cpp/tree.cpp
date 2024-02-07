@@ -2,13 +2,18 @@
 
 using namespace std;
 
+string* createString() {
+    string* s = new string("");
+    return s;
+}
+
 Node::Node(int type, Node* parent)
 : type{type}, parent{parent}
 {
     value = createString();
 }
 
-string Node::getValue() {
+string* Node::getValue() {
     return value;
 }
 

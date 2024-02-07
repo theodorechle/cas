@@ -307,7 +307,7 @@ int getPriority(char* operator) {
     if (!strcmp(operator, DIVISION_SIGN)) return DIVISION_PRIORITY;
     if (!strcmp(operator, POWER_SIGN)) return POWER_PRIORITY;
     if (!strcmp(operator, IMPLICIT_MULTIPLICATION_SIGN)) return IMPLICIT_MULTIPLICATION_PRIORITY;
-    fprintf(stderr, "Error in priority : '%s' is not an operator\n");
+    fprintf(stderr, "Error in priority : '%s' is not an operator\n", operator);
 }
 
 bool isEmptyValue(char* str) {
