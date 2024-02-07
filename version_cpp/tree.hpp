@@ -4,40 +4,45 @@
 #include <iostream>
 #include <string>
 
+#include "constants.hpp"
+
+std::string* createString();
+
+
 class Node {
-    std::string value;
-    int type;
+    std::string* value;
+    constants::Types type;
     Node* parent;
     Node* next = NULL;
     Node* child = NULL;
 
-    void displayTree(int level);
+    void displayTree(int level) const;
 public :
-    Node(int type=0, Node* parent=nullptr);
+    Node(constants::Types type=constants::Types::NUL, Node* parent=nullptr): type{type}, parent{parent} {value = createString();};
 
-    std::string getValue();
-    int getType();
-    Node* getParent();
-    Node* setParent(Node* parent);
-    Node* getNext();
-    void setNext(Node* next);
-    void removeNext();
-    Node* getChild();
-    void setChild(Node* child);
-    void removeChild();
+    void setValue(std::string* s) {value = s;};
+    const std::string* getValue() const {return value;};
+    void setType(constants::Types t) {type = t;};
+    constants::Types getType() const {return type;};
+    Node* getParent() const {return parent;};
+    void setParent(Node* parent) {this->parent = parent;};
+    Node* getNext() const {return next;};
+    void setNext(Node* next) {this->next = next;};
+    void removeNext() {setValue(nullptr);};
+    Node* getChild() const {return child;};
+    void setChild(Node* child) {this->child = child;};
+    void removeChild() {setChild(nullptr);};
 
     /**
      * Copy self node and childs
     */
-    Node* copyNode();
-    void display();
+    Node* copyNode() const;
+    void display() const;
     /**
      * Return the parent who don't have a parent
     */
-    Node* root();
-    char* str();
+    Node* root() const;
+    char* str() const;
 };
-
-char* createString();
 
 #endif // TREE_HPP
