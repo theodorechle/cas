@@ -6,11 +6,8 @@
 
 #include "constants.hpp"
 
-std::string* createString();
-
-
 class Node {
-    std::string* value;
+    std::string value;
     constants::Types type;
     Node* parent;
     Node* next = NULL;
@@ -18,10 +15,10 @@ class Node {
 
     void displayTree(int level) const;
 public :
-    Node(constants::Types type=constants::Types::NUL, Node* parent=nullptr): type{type}, parent{parent} {value = createString();};
+    Node(constants::Types type=constants::Types::NUL, std::string value="", Node* parent=nullptr): type{type}, parent{parent}, value{value} {};
 
-    void setValue(std::string* s) {value = s;};
-    const std::string* getValue() const {return value;};
+    void setValue(std::string s) {value = s;};
+    const std::string& getValue() const {return value;};
     void setType(constants::Types t) {type = t;};
     constants::Types getType() const {return type;};
     Node* getParent() const {return parent;};

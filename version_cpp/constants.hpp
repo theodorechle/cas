@@ -1,6 +1,9 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
+#include <iostream>
+#include <string>
+
 using namespace std;
 
 namespace constants {
@@ -12,8 +15,10 @@ enum class Types {
     OPT,
     OPA,
     CPA,
-    FUC,
+    FUC
 };
+
+ostream& operator<<(ostream& o, const Types type);
 
 const string ADDITION_SIGN = "+";
 const string SUBSTRACTION_SIGN = "-";

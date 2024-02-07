@@ -14,9 +14,9 @@ public:
     const char* what() const noexcept override {string m = "Unknown value '"+msg+"'"; return m.c_str();};
 };
 
-bool isTypeOrEmpty(Types type, int checkType);
+bool isTypeOrEmpty(Types type, Types checkType);
 
-bool isperator(string value);
+bool isperator(string* value);
 
 
 Node& addTreeByValues(Node& t, string* value, Types type);
