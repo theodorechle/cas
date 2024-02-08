@@ -27,25 +27,27 @@ public :
     void setNext(Node* next) {this->next = next;};
     void removeNext() {setValue(nullptr);};
     Node* getChild() const {return child;};
-    void setChild(Node* child) {this->child = child;};
+    void setChild(Node* child);
     void removeChild() {setChild(nullptr);};
 
+    /**
+     * Replace the data of the node (value, type and childs)
+     * by the ones of the given tree.
+    */
+    void replaceData(Node* tree);
     /**
      * Copy self node and childs
     */
     Node* copyNode() const;
     void display() const;
-    /**
-     * Return the parent who don't have a parent
-    */
-    Node* root() const;
-    char* str() const;
+    string* str() const;
 };
 
-Node* getLastChild(Node* n) {
-    if (n == nullptr) return n;
-    while (n->getChild()) n = n->getChild();
-    return n;
-}
+/**
+ * Return the parent who don't have a parent
+*/
+Node* root(Node* node);
+
+Node* getLastChild(Node* n);
 
 #endif // TREE_HPP

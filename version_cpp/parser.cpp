@@ -129,7 +129,7 @@ Node* parsedToTree(Node* exprList, bool debug, bool implicitPriority) {
     while (exprList != nullptr) {
         ttype = exprList->getType();
         if (ttype == Types::NBR || ttype == Types::VAR) {
-            replaceTree(tree, exprList);
+            tree->replaceData(exprList);
             tree = findRootOrParenthesis(tree);
         }
         else if (ttype == Types::OPT) {
@@ -137,10 +137,10 @@ Node* parsedToTree(Node* exprList, bool debug, bool implicitPriority) {
             if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OPA))
                 tmpNode->setValue("0");
                 tmpNode->setType(Types::NBR);
-                replaceTree(tree, tmpNode);
+                tree->replaceData(tmpNode);
             if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
-                replaceTree(addEmptyChild(exprList), tree);
-                replaceTree(tree, t);
+                addEmptyChild(exprList)->replaceData(tree);
+                tree->replaceData(t);
                 tree = addEmptyChild(tree);
             }
             else {
@@ -148,25 +148,25 @@ Node* parsedToTree(Node* exprList, bool debug, bool implicitPriority) {
                 while (child->getType() == Types::OPT && getPriority(t->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
                 if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
-                replaceTree(addEmptyChild(exprList), child);
+                addEmptyChild(exprList)->replaceData(child);
                 tree = addEmptyChild(replaceTree(getLastChild(child->getParent()), exprList));
             }
         }
         else if (ttype == Types::OPA) {
             if (tree->getType() != Types::NUL) tree = addEmptyChild(tree);
-            replaceTree(tree, exprList);
+            tree->replaceData(exprList);
             tree = addEmptyChild(tree);
         }
         else if (ttype == Types::CPA) {
-            replaceTree(tree->getParent(), tree);
+            tree->getParent()->replaceData(tree);
             tree = findRootOrParenthesis(tree);
         }
         if (debug) {
             printf("\nRoot : \n");
-            printTree(findRoot(tree));
+            printTree(root(tree));
             printf("\n");
         }
         exprList = exprList->getNext();
     }
-    return findRoot(tree);
+    return root(tree);
 }
