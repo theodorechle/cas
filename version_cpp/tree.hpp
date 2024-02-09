@@ -50,4 +50,6 @@ Node* root(Node* node);
 
 Node* getLastChild(Node* n);
 
+int getPriority(string operator);
+
 #endif // TREE_HPP

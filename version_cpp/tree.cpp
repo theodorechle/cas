@@ -38,3 +38,15 @@ Node* getLastChild(Node* n) {
     while (n->getChild()) n = n->getChild();
     return n;
 }
+
+int getPriority(string operator) {
+    switch (operator) {
+        case ADDITION_SIGN: return ADDITION_PRIORITY;
+        case SUBSTRACTION_SIGN: return SUBSTRACTION_PRIORITY;
+        case MULTIPLICATION_SIGN: return MULTIPLICATION_PRIORITY;
+        case DIVISION_SIGN: return DIVISION_PRIORITY;
+        case POWER_SIGN: return POWER_PRIORITY;
+        case IMPLICIT_MULTIPLICATION_SIGN: return IMPLICIT_MULTIPLICATION_PRIORITY;
+        default: fprintf(stderr, "Error in priority : '%s' is not an operator\n", operator);
+    }
+}

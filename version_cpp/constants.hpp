@@ -29,6 +29,13 @@ const string OPENING_PARENTHESIS_SIGN = "(";
 const string CLOSING_PARENTHESIS_SIGN = ")";
 const string IMPLICIT_MULTIPLICATION_SIGN = "";
 
+const int ADDITION_PRIORITY = 1;
+const int SUBSTRACTION_PRIORITY = 1;
+const int MULTIPLICATION_PRIORITY = 2;
+const int DIVISION_PRIORITY = 2;
+const int POWER_PRIORITY = 3;
+const int IMPLICIT_MULTIPLICATION_PRIORITY = 4;
+
 constexpr int NB_OPE = 8;
 
 const string MULTIPLE_CHARS_OPERATORS[] = {POWER_SIGN};

@@ -12,3 +12,8 @@ typedef struct {
 
 
 Go to C++
+
+Set doubles instead of floats
+Refactor files
+
+Change types for enum
