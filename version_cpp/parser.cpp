@@ -4,27 +4,28 @@ bool isTypeOrEmpty(Types type, Types checkType) {
     return (type == Types::NUL || type == checkType);
 }
 
-bool isOperator(string* value) {
+bool isOperator(string *value) {
     for (int i=0; i < NB_OPE; i++)
         if (*value == OPERATORS[i])
             return true;
     return false;
 }
 
-Node* addTreeByValues(Node* t, string* value, Types type) {
+Node *addTreeByValues(Node *t, string *value, Types type) {
     if (type == Types::NUL) {
         throw NullError(*value);
     }
-    Node* tree{};
+    Node *tree = new Node;
     tree->setValue(*value);
     tree->setType(type);
     t->setNext(tree);
     return tree;
 }
 
-Node* parser(string expr, bool debug, bool implicitPriority) {
-    Node* exprList{};
-    string* value{}, *testString{};
+Node *parser(string expr, bool debug, bool implicitPriority) {
+    Node *exprList = new Node;
+    string *value = new string;
+    string *testString = new string;
     bool createNewTree;
     char character;
     int len = expr.length(), index = 0;
@@ -117,13 +118,16 @@ Node* parser(string expr, bool debug, bool implicitPriority) {
     return exprList;
 }
 
-Node* findRootOrParenthesis(Node* tree) {
+Node *findRootOrParenthesis(Node *tree) {
     if (tree->getParent() == nullptr || tree->getParent()->getType() == Types::OPA) return tree;
     return findRootOrParenthesis(tree->getParent());
 }
 
-Node* parsedToTree(Node* exprList, bool debug, bool implicitPriority) {
-    Node* tree{}, *t, *child;
+Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
+    Node *tree = new Node;
+    Node *t = new Node;
+    Node *child = new Node;
+    Node *tmpNode = new Node;
     Types ttype = Types::NUL;
     if (exprList == nullptr || exprList == nullptr) return tree;
     while (exprList != nullptr) {
@@ -133,29 +137,29 @@ Node* parsedToTree(Node* exprList, bool debug, bool implicitPriority) {
             tree = findRootOrParenthesis(tree);
         }
         else if (ttype == Types::OPT) {
-            Node* tmpNode{};
             if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OPA))
                 tmpNode->setValue("0");
                 tmpNode->setType(Types::NBR);
                 tree->replaceData(tmpNode);
             if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
-                addEmptyChild(exprList)->replaceData(tree);
+                exprList->addEmptyChild()->replaceData(tree);
                 tree->replaceData(t);
-                tree = addEmptyChild(tree);
+                tree = tree->addEmptyChild();
             }
             else {
                 child = getLastChild(tree);
                 while (child->getType() == Types::OPT && getPriority(t->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
                 if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
-                addEmptyChild(exprList)->replaceData(child);
-                tree = addEmptyChild(replaceTree(getLastChild(child->getParent()), exprList));
+                exprList->addEmptyChild()->replaceData(child);
+                tree = getLastChild(child->getParent()->addEmptyChild());
+                tree->replaceData(exprList);
             }
         }
         else if (ttype == Types::OPA) {
-            if (tree->getType() != Types::NUL) tree = addEmptyChild(tree);
+            if (tree->getType() != Types::NUL) tree = tree->addEmptyChild();
             tree->replaceData(exprList);
-            tree = addEmptyChild(tree);
+            tree = tree->addEmptyChild();
         }
         else if (ttype == Types::CPA) {
             tree->getParent()->replaceData(tree);
@@ -163,7 +167,7 @@ Node* parsedToTree(Node* exprList, bool debug, bool implicitPriority) {
         }
         if (debug) {
             printf("\nRoot : \n");
-            printTree(root(tree));
+            root(tree)->display();
             printf("\n");
         }
         exprList = exprList->getNext();

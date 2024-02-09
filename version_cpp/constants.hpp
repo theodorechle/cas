@@ -20,14 +20,14 @@ enum class Types {
 
 ostream& operator<<(ostream& o, const Types type);
 
-const string ADDITION_SIGN = "+";
-const string SUBSTRACTION_SIGN = "-";
-const string MULTIPLICATION_SIGN = "*";
-const string DIVISION_SIGN = "/";
-const string POWER_SIGN = "**";
-const string OPENING_PARENTHESIS_SIGN = "(";
-const string CLOSING_PARENTHESIS_SIGN = ")";
-const string IMPLICIT_MULTIPLICATION_SIGN = "";
+const string ADDITION_SIGN{"+"};
+const string SUBSTRACTION_SIGN = {"-"};
+const string MULTIPLICATION_SIGN = {"*"};
+const string DIVISION_SIGN = {"/"};
+const string POWER_SIGN = {"**"};
+const string OPENING_PARENTHESIS_SIGN = {"("};
+const string CLOSING_PARENTHESIS_SIGN = {")"};
+const string IMPLICIT_MULTIPLICATION_SIGN = {""};
 
 const int ADDITION_PRIORITY = 1;
 const int SUBSTRACTION_PRIORITY = 1;
