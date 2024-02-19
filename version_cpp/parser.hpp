@@ -19,13 +19,13 @@ bool isTypeOrEmpty(Types type, Types checkType);
 bool isperator(string *value);
 
 
-Node& addTreeByValues(Node& t, string *value, Types type);
+void addTreeByValues(Node &t, string *value, Types type);
 
-Node *parser(string expr, bool debug, bool implicitPriority);
+Node *parser(string &expr, bool debug, bool implicitPriority);
 
 Node *findRootOrParenthesis(Node *tree);
 
 /**
-  *Transform a list (like the ones the parser function returns) into a tree containing the entire expression in the list
+  *Transform a chain of trees (no childs) like the one the parser function returns into a tree containing the entire expression
 */
-Node parsedToTree(Node& exprList, bool debug, bool implicitPriority);
+Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority);

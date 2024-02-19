@@ -4,11 +4,11 @@ bool isTypeOrEmpty(int type, int checkType) {
     return (!type || type == checkType);
 }
 
-bool isFunction(char* litteral) {
+bool isFunction(char *litteral) {
     return false; // to change
 }
 
-bool isOperator(char* value) {
+bool isOperator(char *value) {
     for (int i=0; i < NB_OPE; i++)
         if (strcmp(value, OPERATORS[i]) == 0)
             return true;
@@ -16,7 +16,7 @@ bool isOperator(char* value) {
 }
 
 
-TreeList* addTreeByValues(TreeList* exprList, char* value, int type) {
+TreeList *addTreeByValues(TreeList *exprList, char *value, int type) {
     if (type == TYPE_NULL) {
         fprintf(stderr, "Error in addTreeByValues : Unknown value '%s'\n", value);
         exit(5);
@@ -27,9 +27,9 @@ TreeList* addTreeByValues(TreeList* exprList, char* value, int type) {
     return addTree(exprList, tree);
 }
 
-TreeList* parser(char* expr, bool debug, bool implicitPriority) {
-    TreeList* exprList = createTreeList();
-    char* value = createString(), *testString = createString();
+TreeList *parser(char *expr, bool debug, bool implicitPriority) {
+    TreeList *exprList = createTreeList();
+    char *value = createString(), *testString = createString();
     bool createNewTree;
     char character;
     int type = 0, length = strlen(expr), index = 0;
@@ -126,7 +126,7 @@ Tree findRootOrParenthesis(Tree tree) {
     return findRootOrParenthesis(getParent(tree));
 }
 
-Tree parsedToTree(TreeList* exprList, bool debug, bool implicitPriority) {
+Tree parsedToTree(TreeList *exprList, bool debug, bool implicitPriority) {
     Tree tree=createTree(), t, child;
     int ttype;
     if (exprList == NULL || exprList->tree == NULL) return tree;

@@ -1,7 +1,7 @@
 #include "main.h"
 
-char* getUserInput() {
-    char* expr=createString();
+char *getUserInput() {
+    string expr{""};
     char c;
     while (true) {
         c = getchar();
@@ -13,8 +13,8 @@ char* getUserInput() {
 int main() {
     int debug, implicitPriority;
     printf("Expression : ");
-    char* expr = getUserInput();
-    TreeList* tl, *tmp;
+    char *expr = getUserInput();
+    TreeList *tl, *tmp;
     Tree tree;
     printf("1 for debug, 0 else : ");
     scanf("%d", &debug);

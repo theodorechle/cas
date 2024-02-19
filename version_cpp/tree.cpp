@@ -1,7 +1,7 @@
 #include "tree.hpp"
 
 Node *Node::copyNodeAndChilds() {
-    Node *n = new Node;
+    Node *n;
     Node *child = getChild();
     Node *next = getNext();
     n->setType(getType());
@@ -12,7 +12,7 @@ Node *Node::copyNodeAndChilds() {
 }
 
 Node *Node::copyNode() const {
-    Node *n = new Node;
+    Node *n;
     Node *child = getChild();
     n->setType(getType());
     n->setValue(getValue());
@@ -20,18 +20,33 @@ Node *Node::copyNode() const {
     return n;
 }
 
+void Node::displayTree(int level) const {
+    for (int i=0; i<level; i++)
+        cout << "\t";
+    cout << getValue() << " (" << getType() << ")" << endl;
+    Node * child = getChild();
+    while (child != nullptr) {
+        child->displayTree(level+1);
+        child = child->next;
+    }
+}
 
 void Node::display() const {
+    displayTree();
+}
 
+void Node::setParent(Node *parent) {
+    this->parent = parent;
+    parent->appendChild(this);
 }
 
 string *Node::str() const {
     bool parenthesis;
-    Node *child = new Node{};
-    string *s = new string{};
+    Node *child;
+    string *s = new string{""};
     if (getType() == Types::OPT) {
-        // add parenthesis if father is operator and have bigger priority
-        if (getParent() != NULL && getParent()->getType() == Types::OPT && getPriority(getValue()) < getPriority(getParent()->getValue())) {
+        // add parenthesis if father is operator and has bigger priority
+        if (getParent() != nullptr && getParent()->getType() == Types::OPT && getPriority(getValue()) < getPriority(getParent()->getValue())) {
             parenthesis = true;
             *s += "(";
         }
@@ -63,26 +78,32 @@ string *Node::str() const {
 void Node::setChild(Node *child)  {
     delete getChild();
     this->child = child;
-    while (child != NULL) {
-        child->setParent(this);
-        child = child->getNext();
-    }
 }
 
-Node* Node::appendChild(Node *child) {
-    Node* c = getChild();
+void Node::setNext(Node *next) {
+    delete getNext();
+    this->next = next;
+}
+
+void Node::appendNext(Node *next) {
+    Node *c = this;
+    while (c->getNext() != nullptr) c = c->getNext();
+    c->setNext(next);
+}
+
+Node *Node::appendChild(Node *child) {
+    Node *c = getChild();
     if (c == nullptr) {
         setChild(child);
-        return c;
+        return child;
     }
-    while (c->getNext() != nullptr) c = c->getNext();
-    c->setNext(child);
-    child->setParent(this);
-    return c;
+    c->appendNext(child);
+    child->parent = this;
+    return child;
 }
 
 Node *Node::addEmptyChild() {
-    Node *child = new Node;
+    Node *child = new Node{};
     return appendChild(child);
 }
 
@@ -99,6 +120,9 @@ Node::~Node() {
 }
 
 Node *root(Node *node) {
+    node->display();
+    cout << node << endl;;
+    cout << node->getParent() << endl;
     if (node == nullptr || node->getParent() == nullptr) return node;
     return root(node);
 }

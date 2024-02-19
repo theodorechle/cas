@@ -11,21 +11,25 @@ bool isOperator(string *value) {
     return false;
 }
 
-Node *addTreeByValues(Node *t, string *value, Types type) {
+void addTreeByValues(Node &t, string *value, Types type) {
     if (type == Types::NUL) {
         throw NullError(*value);
     }
-    Node *tree = new Node;
+    if (t.getType() == Types::NUL) {
+        t.setValue(*value);
+        t.setType(type);
+        return;
+    }
+    Node *tree = new Node{};
     tree->setValue(*value);
     tree->setType(type);
-    t->setNext(tree);
-    return tree;
+    t.appendNext(tree);
 }
 
-Node *parser(string expr, bool debug, bool implicitPriority) {
-    Node *exprList = new Node;
-    string *value = new string;
-    string *testString = new string;
+Node *parser(string &expr, bool debug, bool implicitPriority) {
+    Node *exprList = new Node{};
+    string *value = new string{""};
+    string *testString = new string{""};
     bool createNewTree;
     char character;
     int len = expr.length(), index = 0;
@@ -48,7 +52,7 @@ Node *parser(string expr, bool debug, bool implicitPriority) {
             }
             else {
                 if (type == Types::NBR || type == Types::CPA) {
-                    exprList = addTreeByValues(exprList, value, type);
+                    addTreeByValues(*exprList, value, type);
                     value->clear();
                     if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
                     else *value += MULTIPLICATION_SIGN;
@@ -62,7 +66,7 @@ Node *parser(string expr, bool debug, bool implicitPriority) {
             if (type == Types::NUL) type = Types::OPA;
             else {
                 if (type == Types::NBR || type == Types::VAR) {
-                    exprList = addTreeByValues(exprList, value, type);
+                    addTreeByValues(*exprList, value, type);
                     value->clear();
                     if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
                     else *value += MULTIPLICATION_SIGN;
@@ -107,14 +111,13 @@ Node *parser(string expr, bool debug, bool implicitPriority) {
             }
         if (debug) cout << "value : " << *value << " type : " << type << endl;
         if (createNewTree) {
-            exprList = addTreeByValues(exprList, value, type);
+            addTreeByValues(*exprList, value, type);
             value->clear();
             type = Types::NUL;
         }
         index++;
     }
-    if (value)
-        exprList = addTreeByValues(exprList, value, type);
+    if (!value->empty()) addTreeByValues(*exprList, value, type);
     return exprList;
 }
 
@@ -124,51 +127,54 @@ Node *findRootOrParenthesis(Node *tree) {
 }
 
 Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
-    Node *tree = new Node;
-    Node *t = new Node;
-    Node *child = new Node;
-    Node *tmpNode = new Node;
-    Types ttype = Types::NUL;
+    Node *tree = new Node{};
+    Node *treeCopy = new Node{};
+    Node *child;
+    Node *tmpNode = new Node{};
+    Types treeType = Types::NUL;
     if (exprList == nullptr || exprList == nullptr) return tree;
     while (exprList != nullptr) {
-        ttype = exprList->getType();
-        if (ttype == Types::NBR || ttype == Types::VAR) {
-            tree->replaceData(exprList);
+        treeCopy->setType(exprList->getType());
+        treeCopy->setValue(exprList->getValue());
+        treeType = exprList->getType();
+        if (treeType == Types::NBR || treeType == Types::VAR) {
+            tree->replaceData(treeCopy);
             tree = findRootOrParenthesis(tree);
         }
-        else if (ttype == Types::OPT) {
-            if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OPA))
+        else if (treeType == Types::OPT) {
+            if ((treeCopy->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
                 tmpNode->setValue("0");
                 tmpNode->setType(Types::NBR);
                 tree->replaceData(tmpNode);
-            if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
-                exprList->addEmptyChild()->replaceData(tree);
-                tree->replaceData(t);
+            }
+            if (tree->getType() != Types::OPT || getPriority(treeCopy->getValue()) <= getPriority(tree->getValue())) {
+                treeCopy->addEmptyChild()->replaceData(tree);
+                tree->replaceData(treeCopy);
                 tree = tree->addEmptyChild();
             }
             else {
                 child = getLastChild(tree);
-                while (child->getType() == Types::OPT && getPriority(t->getValue()) > getPriority(child->getValue()))
+                while (child->getType() == Types::OPT && getPriority(treeCopy->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
-                if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
-                exprList->addEmptyChild()->replaceData(child);
-                tree = getLastChild(child->getParent()->addEmptyChild());
-                tree->replaceData(exprList);
+                if (treeCopy->getValue() == IMPLICIT_MULTIPLICATION_SIGN) treeCopy->setValue(MULTIPLICATION_SIGN);
+                treeCopy->addEmptyChild()->replaceData(child);
+                tree = getLastChild(child->getParent())->addEmptyChild();
             }
         }
-        else if (ttype == Types::OPA) {
+        else if (treeType == Types::OPA) {
             if (tree->getType() != Types::NUL) tree = tree->addEmptyChild();
             tree->replaceData(exprList);
             tree = tree->addEmptyChild();
         }
-        else if (ttype == Types::CPA) {
+        else if (treeType == Types::CPA) {
             tree->getParent()->replaceData(tree);
             tree = findRootOrParenthesis(tree);
         }
         if (debug) {
-            printf("\nRoot : \n");
+            tree->display();
+            cout << endl << "Root : " << endl;
             root(tree)->display();
-            printf("\n");
+            cout << endl;
         }
         exprList = exprList->getNext();
     }

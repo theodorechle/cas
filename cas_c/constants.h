@@ -25,5 +25,5 @@
 #define NB_OPE 5
 
 extern const unsigned char TYPES[7][4];
-extern const unsigned char* MULTIPLE_CHARS_OPERATORS[];
-extern const unsigned char* OPERATORS[];
+extern const unsigned char *MULTIPLE_CHARS_OPERATORS[];
+extern const unsigned char *OPERATORS[];

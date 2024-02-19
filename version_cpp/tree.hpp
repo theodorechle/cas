@@ -16,31 +16,32 @@ public:
 };
 
 class Node {
-        std::string value;
-        constants::Types type;
-        Node *parent;
-        Node *next = NULL;
-        Node *child = NULL;
+        std::string value{""};
+        constants::Types type = constants::Types::NUL;
+        Node *parent = nullptr;
+        Node *next = nullptr;
+        Node *child = nullptr;
         Node *copyNodeAndChilds();
-        void displayTree(int level) const;
+        void displayTree(int level=0) const;
 public :
         Node(constants::Types type=constants::Types::NUL, std::string value="", Node *parent=nullptr): type{type}, parent{parent}, value{value} {};
 
-        void setValue(std::string s) {value = s;};
+        void setValue(const std::string& s) {value = s;};
         const std::string& getValue() const {return value;};
-        void setType(constants::Types t) {type = t;};
-        constants::Types getType() const {return type;};
+        void setType(const constants::Types& t) {type = t;};
+        const constants::Types& getType() const {return type;};
         Node *getParent() const {return parent;};
-        void setParent(Node *parent) {this->parent = parent;};
+        void setParent(Node *parent);
         Node *getNext() const {return next;};
-        void setNext(Node *next) {this->next = next;};
+        void setNext(Node *next);
         void removeNext() {setValue(nullptr);};
         Node *getChild() const {return child;};
         /*Set the first child (the one who is directly pointed by the instance)*/
         void setChild(Node *child);
         void removeChild() {setChild(nullptr);};
+        void appendNext(Node *next);
         /*Add a child at the end of them*/
-        Node *appendChild(Node *);
+        Node *appendChild(Node *child);
         Node *addEmptyChild();
         /**
             *Replace the data of the node (value, type and childs)

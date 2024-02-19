@@ -43,7 +43,7 @@ def print_tree(tree: Tree, level: int=0):
     
     is represented like this :
     
-    \* (opt)
+    \ *(opt)
 
         + (opt)
 

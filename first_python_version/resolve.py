@@ -127,7 +127,7 @@ def multiply(tree: Tree) -> Tree:
     t = operate_on_right_litteral(tree)
     if t != None: return t
     child1, child2 = tree.childs
-    replace_tree(tree, Tree(str(float(child1.value) * float(child2.value)), TYPE_NUMBER))
+    replace_tree(tree, Tree(str(float(child1.value)  *float(child2.value)), TYPE_NUMBER))
     return find_last_parent(tree)
 
 def divide(tree: Tree) -> Tree:
@@ -146,7 +146,7 @@ def power(tree: Tree) -> Tree:
     t = operate_on_right_litteral(tree)
     if t != None: return t
     child1, child2 = tree.childs
-    replace_tree(tree, Tree(str(float(child1.value) ** float(child2.value)), TYPE_NUMBER))
+    replace_tree(tree, Tree(str(float(child1.value) * *float(child2.value)), TYPE_NUMBER))
     return find_last_parent(tree)
 
 def round_nbr_tree(tree: Tree) -> None:

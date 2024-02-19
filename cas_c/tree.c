@@ -1,7 +1,7 @@
 #include "tree.h"
 
-TreeList* createTreeList() {
-    TreeList* t;
+TreeList *createTreeList() {
+    TreeList *t;
     t = (TreeList*)malloc(sizeof(TreeList));
     if (t == NULL) {
         fprintf(stderr, "error in 'createTreeList', dynamic allocation failed\n");
@@ -12,8 +12,8 @@ TreeList* createTreeList() {
     return t;
 }
 
-char* createString() {
-    char* str;
+char *createString() {
+    char *str;
     str = (char*)malloc(sizeof(char));
     if (str == NULL) {
         fprintf(stderr, "error in 'createString', dynamic allocation failed\n");
@@ -38,14 +38,14 @@ Tree createTree() {
     return t;
 }
 
-Tree createTreeWithValues(char* value, int type) {
+Tree createTreeWithValues(char *value, int type) {
     Tree t = createTree();
     setValue(t, value);
     setType(t, type);
     return t;
 }
 
-TreeList* addTree(TreeList* trees, Tree tree) {
+TreeList *addTree(TreeList *trees, Tree tree) {
     if (trees == NULL)
         trees = createTreeList();
     if (trees->tree == NULL) {
@@ -73,8 +73,8 @@ Tree addEmptyChild(Tree t) {
     return addChild(t, createTree());
 }
 
-void deleteTreeList(TreeList* tl) {
-    TreeList* next=tl;
+void deleteTreeList(TreeList *tl) {
+    TreeList *next=tl;
     while (tl != NULL) {
         next = next->next;
         deleteTreeAndChilds(tl->tree);
@@ -101,9 +101,9 @@ void deleteTreeAndChilds(Tree t) {
     deleteTree(t);
 }
 
-char* appendToString(char* value, char* str) {
+char *appendToString(char *value, char *str) {
     int length = strlen(value) + strlen(str) + 1;
-    value = (char*)realloc(value, length * sizeof(char));
+    value = (char*)realloc(value, length  *sizeof(char));
     if (value == NULL) {
         fprintf(stderr, "error : 'appendToValue' : reallocation failed\n");
         exit(4);
@@ -112,19 +112,19 @@ char* appendToString(char* value, char* str) {
     return value;
 }
 
-Tree appendToValue(Tree t, char* str) {
+Tree appendToValue(Tree t, char *str) {
     t->value = appendToString(t->value, str);
     return t;
 }
 
-char* appendCharToString(char* value, char character) {
+char *appendCharToString(char *value, char character) {
     char c[2];
     c[0] = character;
     value = appendToString(value, c);
     return value;
 }
 
-char* clearString(char* str) {
+char *clearString(char *str) {
     str = (char*)realloc(str, sizeof(char));
     if (str == NULL) {
         fprintf(stderr, "error : 'appendToValue' : reallocation failed\n");
@@ -139,7 +139,7 @@ Tree clearValue(Tree t) {
     return t;
 }
 
-Tree setValue(Tree t, char* value) {
+Tree setValue(Tree t, char *value) {
     clearValue(t);
     appendToValue(t, value);
     return t;
@@ -155,7 +155,7 @@ Tree setParent(Tree t, Tree p) {
     return t;
 }
 
-char* getValue(Tree t) {
+char *getValue(Tree t) {
     return t->value;
 }
 
@@ -167,7 +167,7 @@ Tree getParent(Tree t) {
     return t->parent;
 }
 
-int getNbTrees(TreeList* tl) {
+int getNbTrees(TreeList *tl) {
     int nb=0;
     while (tl != NULL) {
         nb++;
@@ -185,7 +185,7 @@ Tree getNextChild(Tree t) {
     return NULL;
 }
 
-Tree getTree(TreeList* tl, int nb) {
+Tree getTree(TreeList *tl, int nb) {
     int l = getNbTrees(tl);
     if (nb < 0)
         nb += l;
@@ -242,7 +242,7 @@ void printTree(Tree tree) {
     __printTree(tree, 0);
 }
 
-void printTreeList(TreeList* tl) {
+void printTreeList(TreeList *tl) {
     printf("[ ");
     while (tl != NULL && !isEmptyTree(tl->tree)) {
         printf("%s (%s), ", tl->tree->value, TYPES[tl->tree->type]);
@@ -268,10 +268,10 @@ int treeLength(Tree tree) {
     return nb + 1;
 }
 
-char* treeStr(Tree tree) {
+char *treeStr(Tree tree) {
     if (isEmptyTree(tree)) return "";
     bool parenthesis;
-    char* str = createString();
+    char *str = createString();
     if (getType(tree) == TYPE_OPERATOR) {
         // add parenthesis if father is operator and have bigger priority
         if (getParent(tree) != NULL && getType(getParent(tree)) == TYPE_OPERATOR && getPriority(getValue(tree)) < getPriority(getValue(getParent(tree)))) {
@@ -300,7 +300,7 @@ char* treeStr(Tree tree) {
     return str;
 }
 
-int getPriority(char* operator) {
+int getPriority(char *operator) {
     if (!strcmp(operator, ADDITION_SIGN)) return ADDITION_PRIORITY;
     if (!strcmp(operator, SUBSTRACTION_SIGN)) return SUBSTRACTION_PRIORITY;
     if (!strcmp(operator, MULTIPLICATION_SIGN)) return MULTIPLICATION_PRIORITY;
@@ -310,7 +310,7 @@ int getPriority(char* operator) {
     fprintf(stderr, "Error in priority : '%s' is not an operator\n", operator);
 }
 
-bool isEmptyValue(char* str) {
+bool isEmptyValue(char *str) {
     return str[0] == '\0';
 }
 
@@ -318,7 +318,7 @@ bool isEmptyTree(Tree tree) {
     return tree == NULL;
 }
 
-TreeList* deleteTreeInList(TreeList* tl, int index) {
+TreeList *deleteTreeInList(TreeList *tl, int index) {
     int l = getNbTrees(tl);
     if (index < 0)
         index += l;

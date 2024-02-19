@@ -3,7 +3,7 @@
 #define importedTree
 #endif
 
-void findSuperiorGroup(Tree node, int priority, TreeList* nodes);
+void findSuperiorGroup(Tree node, int priority, TreeList *nodes);
 
 bool addition(Tree node);
 
@@ -18,8 +18,8 @@ bool power(Tree node);
 Tree goToLeaf(Tree node);
 
 /**
- * Go up in the tree and returns the next child to solve (use the childIndex)
+  *Go up in the tree and returns the next child to solve (use the childIndex)
 */
-Tree goToNextExpr(Tree node, bool* change);
+Tree goToNextExpr(Tree node, bool *change);
 
 Tree solve(Tree expr, bool debug);

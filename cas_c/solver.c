@@ -18,12 +18,12 @@ void sortTree(Tree t) {
         invertTree(child1, child2);
 }
 
-void findSuperiorGroup(Tree node, int priority, TreeList* nodes) {
+void findSuperiorGroup(Tree node, int priority, TreeList *nodes) {
     if (getType(node) != TYPE_OPERATOR || getPriority(getValue(node)) > priority) {
         nodes = addTree(nodes, node);
         return;
     }
-    TreeList* child = node->childs;
+    TreeList *child = node->childs;
     while (child != NULL) {
         findSuperiorGroup(child->tree, priority, nodes);
         child = child->next;
@@ -32,7 +32,7 @@ void findSuperiorGroup(Tree node, int priority, TreeList* nodes) {
 
 bool areSameNodes(Tree node1, Tree node2) {
     int type = getType(node1);
-    char* value1, *value2;
+    char *value1, *value2;
     if (type != getType(node2) || type == TYPE_FUNCTION) return false;
     value1 = getValue(node1);
     value2 = getValue(node2);
@@ -68,11 +68,11 @@ bool addition(Tree node) {
         return true;
     }
     Tree newTree;
-    TreeList* group1, *group2;
-    TreeList* node1, *node2;
+    TreeList *group1, *group2;
+    TreeList *node1, *node2;
     Tree mul1 = NULL, mul2 = NULL;
     bool areValid = false;
-    char* tmpChar;
+    char *tmpChar;
     if (typeN1 == typeN2 && typeN1 == TYPE_NUMBER) {
             tmpChar = (char*)malloc(sizeof(double));
             if (tmpChar == NULL) {
@@ -140,7 +140,7 @@ bool addition(Tree node) {
     // if mul2 have not parent, it was created by the addition function
     if (isEmptyTree(getParent(mul2))) isParentSub2 = false;
     else isParentSub2 = !strcmp(getValue(getParent(getParent(mul2))), SUBSTRACTION_SIGN);
-    char* sign = createString();
+    char *sign = createString();
     if (isParentSub1 && !isParentSub2) {
         sign = appendToString(sign, SUBSTRACTION_SIGN);
         newTree = createTreeWithValues(sign, TYPE_OPERATOR);
@@ -180,7 +180,7 @@ bool substraction(Tree node) {
         return true;
     }
     Tree newTree;
-    char* tmpChar;
+    char *tmpChar;
     if (typeN1 == typeN2 && typeN1 == TYPE_NUMBER) {
             tmpChar = (char*)malloc(sizeof(double));
             if (tmpChar == NULL) {
@@ -219,7 +219,7 @@ Tree goToLeaf(Tree node) {
     return child;
 }
 
-Tree goToNextExpr(Tree node, bool* change) {
+Tree goToNextExpr(Tree node, bool *change) {
     if (isEmptyTree(node) || isEmptyTree(getParent(node))) {
         *change = false;
         return node;
@@ -231,10 +231,10 @@ Tree goToNextExpr(Tree node, bool* change) {
 
 Tree solve(Tree expr, bool debug) {
     /**
-     * Go to the parent of the first leaf, solve it, if not modified, solve it's parent, else solve his first leaf's parent
+      *Go to the parent of the first leaf, solve it, if not modified, solve it's parent, else solve his first leaf's parent
     */
     bool change = true;
-    char* value;
+    char *value;
     Tree newExpr;
     sortTree(expr);
     expr = goToLeaf(expr);
