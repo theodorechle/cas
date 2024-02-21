@@ -128,37 +128,33 @@ Node *findRootOrParenthesis(Node *tree) {
 
 Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
     Node *tree = new Node{};
-    Node *treeCopy = new Node{};
     Node *child;
-    Node *tmpNode = new Node{};
     Types treeType = Types::NUL;
-    if (exprList == nullptr || exprList == nullptr) return tree;
+    if (exprList == nullptr) return tree;
     while (exprList != nullptr) {
-        treeCopy->setType(exprList->getType());
-        treeCopy->setValue(exprList->getValue());
         treeType = exprList->getType();
         if (treeType == Types::NBR || treeType == Types::VAR) {
-            tree->replaceData(treeCopy);
+            tree->replaceData(exprList);
             tree = findRootOrParenthesis(tree);
         }
         else if (treeType == Types::OPT) {
-            if ((treeCopy->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
-                tmpNode->setValue("0");
-                tmpNode->setType(Types::NBR);
-                tree->replaceData(tmpNode);
+            if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
+                tree->replaceData(new Node{Types::NBR, "0"});
             }
-            if (tree->getType() != Types::OPT || getPriority(treeCopy->getValue()) <= getPriority(tree->getValue())) {
-                treeCopy->addEmptyChild()->replaceData(tree);
-                tree->replaceData(treeCopy);
+            if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
+                exprList->addEmptyChild()->replaceData(tree);
+                tree->replaceData(exprList);
                 tree = tree->addEmptyChild();
             }
             else {
                 child = getLastChild(tree);
-                while (child->getType() == Types::OPT && getPriority(treeCopy->getValue()) > getPriority(child->getValue()))
+                while (child->getType() == Types::OPT && getPriority(exprList->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
-                if (treeCopy->getValue() == IMPLICIT_MULTIPLICATION_SIGN) treeCopy->setValue(MULTIPLICATION_SIGN);
-                treeCopy->addEmptyChild()->replaceData(child);
-                tree = getLastChild(child->getParent())->addEmptyChild();
+                if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
+                exprList->addEmptyChild()->replaceData(child);
+                tree = getLastChild(child->getParent());
+                tree->replaceData(exprList);
+                tree = tree->addEmptyChild();
             }
         }
         else if (treeType == Types::OPA) {
