@@ -128,7 +128,6 @@ Node *findRootOrParenthesis(Node *tree) {
 
 Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
     Node *tree = new Node{};
-    Node *child;
     Types treeType = Types::NUL;
     if (exprList == nullptr) return tree;
     while (exprList != nullptr) {
@@ -147,11 +146,13 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
                 tree = tree->addEmptyChild();
             }
             else {
+                Node *child;
                 child = getLastChild(tree);
                 while (child->getType() == Types::OPT && getPriority(exprList->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
                 if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
                 exprList->addEmptyChild()->replaceData(child);
+                delete child;
                 tree = getLastChild(child->getParent());
                 tree->replaceData(exprList);
                 tree = tree->addEmptyChild();

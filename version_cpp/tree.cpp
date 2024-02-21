@@ -1,5 +1,7 @@
 #include "tree.hpp"
 
+using namespace constants;
+
 Node *Node::copyNodeAndChilds() {
     Node *n;
     Node *child = getChild();
@@ -114,17 +116,13 @@ void Node::replaceData(Node *tree) {
 }
 
 Node::~Node() {
-    delete parent;
     delete next;
     delete child;
 }
 
 Node *root(Node *node) {
-    node->display();
-    cout << node << endl;;
-    cout << node->getParent() << endl;
     if (node == nullptr || node->getParent() == nullptr) return node;
-    return root(node);
+    return root(node->getParent());
 }
 
 Node *getLastChild(Node *n) {

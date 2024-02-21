@@ -24,10 +24,24 @@ int main() {
         }
     }
     tree = parsedToTree(tl, debug, implicitPriority);
+    cout << "tree " << tree << endl;
+    cout << "tree child 1 " << tree->getChild() << endl;
+    cout << "tree child 2 " << tree->getChild()->getNext() << endl;
+    cout << "tree list " << tl << endl;
+    cout << "tree list 2 " << tl->getNext() << endl;
+    cout << "tree list 3 " << tl->getNext()->getNext() << endl;
+    delete tl;
+    cout << "-------------------------" << endl;
+    cout << "tree " << tree << endl;
+    cout << "tree child 1 " << tree->getChild() << endl;
+    cout << "tree child 2 " << tree->getChild()->getNext() << endl;
+    cout << "tree list " << tl << endl;
+    cout << "tree list 2 " << tl->getNext() << endl;
+    cout << "tree list 3 " << tl->getNext()->getNext() << endl;
     if (debug) {
         cout << "Parsed tree" << endl;
         tree->display();
-        cout << *tree->str() << endl;
+        cout << tree->str() << endl;
     }    
     // tree = solve(tree, debug);
     // if (debug) {

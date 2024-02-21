@@ -6,7 +6,6 @@
 
 #include "constants.hpp"
 
-using namespace constants;
 
 class TypeError: public std::exception {
     std::string msg;
