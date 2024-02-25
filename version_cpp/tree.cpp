@@ -38,12 +38,15 @@ void Node::display() const {
 }
 
 void Node::setParent(Node *parent) {
-    this->parent = parent;
-    parent->appendChild(this);
+    Node * node = this;
+    while (node != nullptr) {
+        node->parent = parent;
+        node = node->getNext();
+    }
 }
 
 string *Node::str() const {
-    bool parenthesis;
+    bool parenthesis = false;
     Node *child;
     string *s = new string{""};
     if (getType() == Types::OPT) {
@@ -113,11 +116,13 @@ void Node::replaceData(Node *tree) {
     setValue(tree->getValue());
     setType(tree->getType());
     setChild(tree->getChild());
+    getChild()->setParent(this);
+    tree->child = nullptr;
 }
 
 Node::~Node() {
-    delete next;
-    delete child;
+    if (next != nullptr) delete next;
+    if (child != nullptr) delete child;
 }
 
 Node *root(Node *node) {
