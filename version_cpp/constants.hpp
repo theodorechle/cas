@@ -4,8 +4,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 namespace constants {
 
 enum class Types {
@@ -18,16 +16,16 @@ enum class Types {
     FUC
 };
 
-ostream& operator<<(ostream& o, const Types type);
+std::ostream& operator<<(std::ostream& o, const Types type);
 
-const string ADDITION_SIGN{"+"};
-const string SUBSTRACTION_SIGN{"-"};
-const string MULTIPLICATION_SIGN{"*"};
-const string DIVISION_SIGN{"/"};
-const string POWER_SIGN{"**"};
-const string OPENING_PARENTHESIS_SIGN{"("};
-const string CLOSING_PARENTHESIS_SIGN{")"};
-const string IMPLICIT_MULTIPLICATION_SIGN{""};
+const std::string ADDITION_SIGN{"+"};
+const std::string SUBSTRACTION_SIGN{"-"};
+const std::string MULTIPLICATION_SIGN{"*"};
+const std::string DIVISION_SIGN{"/"};
+const std::string POWER_SIGN{"**"};
+const std::string OPENING_PARENTHESIS_SIGN{"("};
+const std::string CLOSING_PARENTHESIS_SIGN{")"};
+const std::string IMPLICIT_MULTIPLICATION_SIGN{""};
 
 const int ADDITION_PRIORITY = 1;
 const int SUBSTRACTION_PRIORITY = 1;
@@ -38,8 +36,8 @@ const int IMPLICIT_MULTIPLICATION_PRIORITY = 4;
 
 constexpr int NB_OPE = 8;
 
-const string MULTIPLE_CHARS_OPERATORS[] = {POWER_SIGN};
-const string OPERATORS[NB_OPE] = {ADDITION_SIGN, SUBSTRACTION_SIGN, MULTIPLICATION_SIGN, DIVISION_SIGN, POWER_SIGN};
+const std::string MULTIPLE_CHARS_OPERATORS[] = {POWER_SIGN};
+const std::string OPERATORS[NB_OPE] = {ADDITION_SIGN, SUBSTRACTION_SIGN, MULTIPLICATION_SIGN, DIVISION_SIGN, POWER_SIGN};
 
 }
 

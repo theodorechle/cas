@@ -19,23 +19,24 @@ int main() {
     if (debug) {
         Node *tmp = tl;
         while (tmp != NULL) {
-            tmp->display();
+            tmp->display(cerr);
             tmp = tmp->getNext();
         }
     }
     tree = parsedToTree(tl, debug, implicitPriority);
     delete tl;
     if (debug) {
-        cout << "Parsed tree" << endl;
-        tree->display();
-        cout << *tree->str() << endl;
-    }    
+        cerr << "Parsed tree" << endl;
+        tree->display(cerr);
+        cerr << *tree->str() << endl;
+    }
     // tree = solve(tree, debug);
     // if (debug) {
-    //     cout << "Solved tree" << endl);
+    //     cerr << "Solved tree" << endl);
     //     printTree(tree);
     // }
     // cout << "Start expression : " << endl << expr << endl;
     // cout << "Final expression : " << endl << treeStr(tree) < endl;
+    delete tree;
     return 0;
 }

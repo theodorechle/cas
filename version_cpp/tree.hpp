@@ -1,7 +1,6 @@
 #ifndef TREE_HPP
 #define TREE_HPP
 
-#include <iostream>
 #include <string>
 
 #include "constants.hpp"
@@ -21,7 +20,7 @@ class Node {
         Node *next = nullptr;
         Node *child = nullptr;
         Node *copyNodeAndChilds();
-        void displayTree(int level=0) const;
+        void displayTree(std::ostream &flow = std::cout, int level=0) const;
 public :
         Node(constants::Types type=constants::Types::NUL, std::string value="", Node *parent=nullptr): type{type}, parent{parent}, value{value} {};
 
@@ -51,8 +50,8 @@ public :
             *Copy self node and childs, not brothers
         */
         Node *copyNode() const;
-        void display() const;
-        string *str() const;
+        void display(std::ostream &flow = std::cout) const;
+        std::string *str() const;
 
         ~Node();
 };
@@ -64,6 +63,6 @@ Node *root(Node *node);
 
 Node *getLastChild(Node *n);
 
-int getPriority(const string &ope);
+int getPriority(const std::string &ope);
 
 #endif // TREE_HPP

@@ -37,14 +37,14 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
     while (index < len) {
         createNewTree = true;
         character = expr[index];
-        if (debug) cout << "character : " << character << endl;
+        if (debug) cerr << "character : " << character << endl;
         if (isspace(character)) {
-            if (debug) cout << "Found type of character '" << character << "' is space" << endl;
+            if (debug) cerr << "Found type of character '" << character << "' is space" << endl;
             if (!value)
                 createNewTree = false;
         }
         else if (isalpha(character)) {
-            if (debug) cout << "Found type of character '" << character << "' is alpha" << endl;
+            if (debug) cerr << "Found type of character '" << character << "' is alpha" << endl;
             if (isTypeOrEmpty(type, Types::VAR)) {
                 *value += character;
                 type = Types::VAR;
@@ -62,7 +62,7 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
             }
         }
         else if (character == OPENING_PARENTHESIS_SIGN[0]) {
-            if (debug) cout << "Found type of character '" << character << "' is opening parenthesis" << endl;
+            if (debug) cerr << "Found type of character '" << character << "' is opening parenthesis" << endl;
             if (type == Types::NUL) type = Types::OPA;
             else {
                 if (type == Types::NBR || type == Types::VAR) {
@@ -76,12 +76,12 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
             }
         }
         else if (character == CLOSING_PARENTHESIS_SIGN[0]) {
-            if (debug) cout << "Found type of character '" << character << "' is closing parenthesis" << endl;
+            if (debug) cerr << "Found type of character '" << character << "' is closing parenthesis" << endl;
             if (type == Types::NUL) type = Types::CPA;
             else index --;
         }
         else if (isdigit(character) || character == '.') {
-            if (debug) cout << "Found type of character '" << character << "' is number" << endl;
+            if (debug) cerr << "Found type of character '" << character << "' is number" << endl;
             if (isTypeOrEmpty(type, Types::NBR)) {
                 *value += character;
                 type = Types::NBR;
@@ -102,14 +102,14 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
                     type = Types::OPT;
                     value->clear();
                     *value += *testString;
-                    if (debug) cout << "Found type of value '" << *value << "' is operator" << endl;
+                    if (debug) cerr << "Found type of value '" << *value << "' is operator" << endl;
                 }
                 else
-                    if (debug) cout << "Type of character '" << character << "' not found" << endl;
+                    if (debug) cerr << "Type of character '" << character << "' not found" << endl;
                 createNewTree = false;
                 testString->clear();
             }
-        if (debug) cout << "value : " << *value << " type : " << type << endl;
+        if (debug) cerr << "value : " << *value << " type : " << type << endl;
         if (createNewTree) {
             addTreeByValues(*exprList, value, type);
             value->clear();
@@ -167,10 +167,10 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree = findRootOrParenthesis(tree);
         }
         if (debug) {
-            tree->display();
-            cout << endl << "Root : " << endl;
-            root(tree)->display();
-            cout << endl;
+            tree->display(cerr);
+            cerr << endl << "Root : " << endl;
+            root(tree)->display(cerr);
+            cerr << endl;
         }
         exprList = exprList->getNext();
     }

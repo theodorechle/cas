@@ -3,7 +3,7 @@
 namespace constants {
 
 std::ostream& operator<<(std::ostream& o, const Types type) {
-    string value;
+    std::string value;
     switch (type) {
         case Types::NUL: value = "NUL";break;
         case Types::VAR: value = "VAR";break;

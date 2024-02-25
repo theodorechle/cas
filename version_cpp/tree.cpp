@@ -1,6 +1,10 @@
+#include <iostream>
+using namespace std;
+
 #include "tree.hpp"
 
 using namespace constants;
+
 
 Node *Node::copyNodeAndChilds() {
     Node *n;
@@ -22,19 +26,18 @@ Node *Node::copyNode() const {
     return n;
 }
 
-void Node::displayTree(int level) const {
-    for (int i=0; i<level; i++)
-        cout << "\t";
-    cout << getValue() << " (" << getType() << ")" << endl;
+void Node::displayTree(ostream &flow, int level) const {
+    for (int i=0; i<level; i++) flow << "\t";
+    flow << getValue() << " (" << getType() << ")" << endl;
     Node * child = getChild();
     while (child != nullptr) {
-        child->displayTree(level+1);
+        child->displayTree(flow, level+1);
         child = child->next;
     }
 }
 
-void Node::display() const {
-    displayTree();
+void Node::display(ostream &flow) const {
+    displayTree(flow);
 }
 
 void Node::setParent(Node *parent) {
