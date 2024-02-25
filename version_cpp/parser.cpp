@@ -152,8 +152,7 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
                     child = getLastChild(child);
                 if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
                 exprList->addEmptyChild()->replaceData(child);
-                delete child;
-                tree = getLastChild(child->getParent());
+                tree = child;
                 tree->replaceData(exprList);
                 tree = tree->addEmptyChild();
             }
