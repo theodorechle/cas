@@ -1,4 +1,8 @@
+using namespace std;
+
 #include "parser.hpp"
+
+using namespace constants;
 
 bool isTypeOrEmpty(Types type, Types checkType) {
     return (type == Types::NUL || type == checkType);
