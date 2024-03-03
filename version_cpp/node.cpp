@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-#include "tree.hpp"
+#include "node.hpp"
 
 using namespace constants;
 
@@ -48,38 +48,38 @@ void Node::setParent(Node *parent) {
     }
 }
 
-string *Node::str() const {
+string Node::str() const {
     bool parenthesis = false;
     Node *child;
-    string *s = new string{""};
+    string s;
     if (getType() == Types::OPT) {
         // add parenthesis if father is operator and has bigger priority
         if (getParent() != nullptr && getParent()->getType() == Types::OPT && getPriority(getValue()) < getPriority(getParent()->getValue())) {
             parenthesis = true;
-            *s += "(";
+            s += "(";
         }
-        *s += *getChild()->str();
-        *s += getValue();
-        *s += *getChild()->getNext()->str();
-        if (parenthesis) *s += ")";
+        s += getChild()->str();
+        s += getValue();
+        s += getChild()->getNext()->str();
+        if (parenthesis) s += ")";
     }
     else if (getType() == Types::FUC)
     {
-        *s += getValue();
-        *s += "(";
+        s += getValue();
+        s += "(";
         child = getChild();
         if (child != nullptr) {
-            *s += *child->str();
+            s += child->str();
             child = child->getNext();
             while (child != nullptr) {
-                *s += ", ";
-                *s += *child->str();
+                s += ", ";
+                s += child->str();
                 child = child->getNext();
             }
         }
-        *s += ")";
+        s += ")";
     }
-    else *s += getValue();
+    else s += getValue();
     return s;
 }
 

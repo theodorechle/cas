@@ -122,6 +122,8 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
         index++;
     }
     if (!value->empty()) addTreeByValues(*exprList, value, type);
+    delete value;
+    delete testString;
     return exprList;
 }
 

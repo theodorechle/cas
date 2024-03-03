@@ -5,7 +5,7 @@
 #include <exception>
 
 #include "constants.hpp"
-#include "tree.hpp"
+#include "node.hpp"
 
 class NullError : public std::exception {
     std::string msg;

@@ -1,7 +1,7 @@
 #ifndef SOLVER_HPP
 #define SOLVER_HPP
 
-#include "tree.hpp"
+#include "node.hpp"
 
 void findSuperiorGroup(Node *node, int priority, Node *nodes);
 

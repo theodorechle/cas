@@ -51,7 +51,7 @@ public :
         */
         Node *copyNode() const;
         void display(std::ostream &flow = std::cout) const;
-        std::string *str() const;
+        std::string str() const;
 
         ~Node();
 };

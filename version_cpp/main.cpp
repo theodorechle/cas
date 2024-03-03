@@ -1,7 +1,9 @@
 #include <string>
 #include <iostream>
 
-#include "main.hpp"
+#include "node.hpp"
+#include "parser.hpp"
+#include "solver.hpp"
 
 using namespace std;
 
@@ -28,7 +30,7 @@ int main() {
     if (debug) {
         cerr << "Parsed tree" << endl;
         tree->display(cerr);
-        cerr << *tree->str() << endl;
+        cerr << tree->str() << endl;
     }
     // tree = solve(tree, debug);
     // if (debug) {
