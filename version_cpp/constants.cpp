@@ -8,7 +8,6 @@ std::ostream& operator<<(std::ostream& o, const Types type) {
         case Types::NUL: value = "NUL";break;
         case Types::VAR: value = "VAR";break;
         case Types::NBR: value = "NBR";break;
-        case Types::OPT: value = "OPT";break;
         case Types::OPA: value = "OPA";break;
         case Types::CPA: value = "CPA";break;
         case Types::FUC: value = "FUC";break;
