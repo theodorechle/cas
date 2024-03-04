@@ -1,7 +1,7 @@
 #include "main.h"
 
 char *getUserInput() {
-    string expr{""};
+    char* expr = createString();
     char c;
     while (true) {
         c = getchar();
