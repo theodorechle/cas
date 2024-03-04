@@ -2,6 +2,8 @@
 #define FUNCTIONS_HPP
 
 #include <unordered_map>
+#include <map>
+#include <set>
 #include <string>
 #include <bits/stdc++.h>
 
@@ -14,22 +16,30 @@ bool multiply(Node *node);
 bool divide(Node *node);
 bool power(Node *node);
 
-std::unordered_map<std::string, std::function<bool(Node *)>> FUNCTIONS {
-    {"+", add},
-    {"-", substract},
-    {"*", multiply},
-    {"/", divide},
-    {"**", power},
+const std::unordered_map<std::string, std::function<bool(Node *)>> FUNCTIONS {
+    {constants::ADDITION_SIGN, add},
+    {constants::SUBSTRACTION_SIGN, substract},
+    {constants::MULTIPLICATION_SIGN, multiply},
+    {constants::DIVISION_SIGN, divide},
+    {constants::POWER_SIGN, power},
 };
 
+// OPERATORS is only for the display to remove parenthesis
+const std::set<std::string> OPERATORS {
+    constants::ADDITION_SIGN,
+    constants::SUBSTRACTION_SIGN,
+    constants::MULTIPLICATION_SIGN,
+    constants::DIVISION_SIGN,
+    constants::POWER_SIGN
+};
 
-std::unordered_map<std::string, int> PRIORITIES {
+const std::map<std::string, int> PRIORITIES {
     {"+", 1},
     {"-", 1},
     {"*", 2},
     {"/", 2},
     {"**", 3},
-    {IMPLICIT_MULTIPLICATION_SIGN, 4}
+    {constants::IMPLICIT_MULTIPLICATION_SIGN, 4}
 };
 
 constexpr int DEFAULT_PRIORITY = 25; // must be greater than all the other priorities

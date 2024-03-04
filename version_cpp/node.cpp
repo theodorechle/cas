@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "node.hpp"
+#include "functions.hpp"
 
 using namespace constants;
 
@@ -52,9 +53,9 @@ string Node::str() const {
     bool parenthesis = false;
     Node *child;
     string s;
-    if (getType() == Types::OPT) {
+    if (OPERATORS.find(getValue()) != OPERATORS.end()) {
         // add parenthesis if father is operator and has bigger priority
-        if (getParent() != nullptr && getParent()->getType() == Types::OPT && getPriority(getValue()) < getPriority(getParent()->getValue())) {
+        if (getParent() != nullptr && OPERATORS.find(getParent()->getValue()) != OPERATORS.end() && getPriority(getValue()) < getPriority(getParent()->getValue())) {
             parenthesis = true;
             s += "(";
         }
@@ -140,11 +141,7 @@ Node *getLastChild(Node *n) {
 }
 
 int getPriority(const string &ope) {
-    if (ope == ADDITION_SIGN) return ADDITION_PRIORITY;
-    if (ope == SUBSTRACTION_SIGN) return SUBSTRACTION_PRIORITY;
-    if (ope == MULTIPLICATION_SIGN) return MULTIPLICATION_PRIORITY;
-    if (ope == DIVISION_SIGN) return DIVISION_PRIORITY;
-    if (ope == POWER_SIGN) return POWER_PRIORITY;
-    if (ope == IMPLICIT_MULTIPLICATION_SIGN) return IMPLICIT_MULTIPLICATION_PRIORITY;
-    else throw TypeError("Error in priority : '" + ope + "' is not an operator");
+    map<string, int>::const_iterator iter = PRIORITIES.find(ope);
+    if (iter != PRIORITIES.cend()) return iter->second;
+    return DEFAULT_PRIORITY;
 }

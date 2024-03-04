@@ -1,6 +1,7 @@
 using namespace std;
 
 #include "parser.hpp"
+#include "functions.hpp"
 
 using namespace constants;
 
@@ -8,12 +9,10 @@ bool isTypeOrEmpty(Types type, Types checkType) {
     return (type == Types::NUL || type == checkType);
 }
 
-bool isOperator(string *value) {
-    for (int i=0; i < NB_OPE; i++)
-        if (*value == OPERATORS[i])
-            return true;
-    return false;
+bool isOperator(string &value) {
+    return OPERATORS.find(value) != OPERATORS.end();
 }
+
 
 void addTreeByValues(Node &t, string *value, Types type) {
     if (type == Types::NUL) {
@@ -60,7 +59,7 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
                     value->clear();
                     if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
                     else *value += MULTIPLICATION_SIGN;
-                    type = Types::OPT;
+                    type = Types::FUC;
                 }
                 index--;
             }
@@ -74,7 +73,7 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
                     value->clear();
                     if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
                     else *value += MULTIPLICATION_SIGN;
-                    type = Types::OPT;
+                    type = Types::FUC;
                 }
                 index--;
             }
@@ -102,8 +101,8 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
             else {
                 *testString += *value;
                 *testString += character;
-                if (isOperator(testString)) {
-                    type = Types::OPT;
+                if (isOperator(*testString)) {
+                    type = Types::FUC;
                     value->clear();
                     *value += *testString;
                     if (debug) cerr << "Found type of value '" << *value << "' is operator" << endl;
@@ -142,11 +141,11 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree->replaceData(exprList);
             tree = findRootOrParenthesis(tree);
         }
-        else if (treeType == Types::OPT) {
+        else if (treeType == Types::FUC) {
             if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
                 tree->replaceData(new Node{Types::NBR, "0"});
             }
-            if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
+            if (tree->getType() != Types::FUC || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
                 exprList->addEmptyChild()->replaceData(tree);
                 tree->replaceData(exprList);
                 tree = tree->addEmptyChild();
@@ -154,7 +153,7 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             else {
                 Node *child;
                 child = getLastChild(tree);
-                while (child->getType() == Types::OPT && getPriority(exprList->getValue()) > getPriority(child->getValue()))
+                while (child->getType() == Types::FUC && getPriority(exprList->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
                 if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
                 exprList->addEmptyChild()->replaceData(child);

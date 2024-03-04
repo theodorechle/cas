@@ -16,7 +16,7 @@ public:
 
 bool isTypeOrEmpty(constants::Types type, constants::Types checkType);
 
-bool isperator(std::string *value);
+bool isperator(std::string &value);
 
 
 void addTreeByValues(Node &t, std::string *value, constants::Types type);
