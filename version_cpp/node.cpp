@@ -135,8 +135,10 @@ Node *root(Node *node) {
 }
 
 Node *getLastChild(Node *n) {
-    if (n == nullptr) return n;
-    while (n->getChild()) n = n->getChild();
+    if (n == nullptr) return nullptr;
+    n = n->getChild();
+    if (n == nullptr) return nullptr;
+    while (n->getNext() != nullptr) n = n->getNext();
     return n;
 }
 
