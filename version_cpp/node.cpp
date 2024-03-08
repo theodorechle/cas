@@ -42,8 +42,10 @@ void Node::display(ostream &flow) const {
 }
 
 void Node::setParent(Node *parent) {
-    Node * node = this;
+    Node *node = this;
     while (node != nullptr) {
+        cerr << node << endl;
+        cerr << node->getValue() << endl;
         node->parent = parent;
         node = node->getNext();
     }
@@ -85,7 +87,6 @@ string Node::str() const {
 }
 
 void Node::setChild(Node *child)  {
-    delete getChild();
     this->child = child;
 }
 
@@ -102,11 +103,8 @@ void Node::appendNext(Node *next) {
 
 Node *Node::appendChild(Node *child) {
     Node *c = getChild();
-    if (c == nullptr) {
-        setChild(child);
-        return child;
-    }
-    c->appendNext(child);
+    if (c == nullptr) setChild(child);
+    else c->appendNext(child);
     child->parent = this;
     return child;
 }
