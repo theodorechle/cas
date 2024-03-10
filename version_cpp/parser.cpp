@@ -167,7 +167,6 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree = tree->addEmptyChild();
         }
         else if (treeType == Types::CPA) {
-            tree->display(cerr);
             tree->getParent()->replaceData(tree);
             tree = findRootOrParenthesis(tree);
         }

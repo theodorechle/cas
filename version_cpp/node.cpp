@@ -116,8 +116,6 @@ void Node::replaceData(Node *tree) {
     setValue(tree->getValue());
     setType(tree->getType());
     setChild(tree->getChild());
-    cerr << "tree" << endl;
-    tree->display(cerr);
     if (getChild() != nullptr) {
         getChild()->setParent(this);   
         tree->setChild(nullptr);
