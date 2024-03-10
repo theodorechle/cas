@@ -156,7 +156,6 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
                 while (child->getType() == Types::FUC && getPriority(exprList->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
                 if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
-                cout << "child value : " << child->getValue() << endl;
                 exprList->addEmptyChild()->replaceData(child);
                 child->replaceData(exprList);
                 tree = child->addEmptyChild();
@@ -168,7 +167,6 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree = tree->addEmptyChild();
         }
         else if (treeType == Types::CPA) {
-            cerr << "TREE" << endl;
             tree->display(cerr);
             tree->getParent()->replaceData(tree);
             tree = findRootOrParenthesis(tree);

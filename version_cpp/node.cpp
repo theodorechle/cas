@@ -42,7 +42,7 @@ void Node::display(ostream &flow) const {
 }
 
 void Node::setParent(Node *parent) {
-    Node * node = this;
+    Node *node = this;
     while (node != nullptr) {
         node->parent = parent;
         node = node->getNext();
@@ -85,7 +85,6 @@ string Node::str() const {
 }
 
 void Node::setChild(Node *child)  {
-    delete getChild();
     this->child = child;
 }
 
