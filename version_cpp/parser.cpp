@@ -168,11 +168,12 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree = tree->addEmptyChild();
         }
         else if (treeType == Types::CPA) {
+            cerr << "TREE" << endl;
+            tree->display(cerr);
             tree->getParent()->replaceData(tree);
             tree = findRootOrParenthesis(tree);
         }
         if (debug) {
-            tree->display(cerr);
             cerr << endl << "Root : " << endl;
             root(tree)->display(cerr);
             cerr << endl;

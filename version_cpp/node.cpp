@@ -102,11 +102,8 @@ void Node::appendNext(Node *next) {
 
 Node *Node::appendChild(Node *child) {
     Node *c = getChild();
-    if (c == nullptr) {
-        setChild(child);
-        return child;
-    }
-    c->appendNext(child);
+    if (c == nullptr) setChild(child);
+    else c->appendNext(child);
     child->parent = this;
     return child;
 }
@@ -120,8 +117,12 @@ void Node::replaceData(Node *tree) {
     setValue(tree->getValue());
     setType(tree->getType());
     setChild(tree->getChild());
-    getChild()->setParent(this);
-    tree->child = nullptr;
+    cerr << "tree" << endl;
+    tree->display(cerr);
+    if (getChild() != nullptr) {
+        getChild()->setParent(this);   
+        tree->setChild(nullptr);
+    }
 }
 
 Node::~Node() {
