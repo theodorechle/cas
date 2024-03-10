@@ -1,3 +1,5 @@
 Set doubles instead of floats
 
 Modify functions like sortTree and areSameNodes to allow any number of childs
+
+Change parser to treat operators and functions differently

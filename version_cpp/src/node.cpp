@@ -8,7 +8,7 @@ using namespace constants;
 
 
 Node *Node::copyNodeAndChilds() {
-    Node *n;
+    Node *n = new Node;
     Node *child = getChild();
     Node *next = getNext();
     n->setType(getType());
@@ -19,7 +19,7 @@ Node *Node::copyNodeAndChilds() {
 }
 
 Node *Node::copyNode() const {
-    Node *n;
+    Node *n = new Node;
     Node *child = getChild();
     n->setType(getType());
     n->setValue(getValue());

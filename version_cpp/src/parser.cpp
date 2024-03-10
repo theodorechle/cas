@@ -9,30 +9,30 @@ bool isTypeOrEmpty(Types type, Types checkType) {
     return (type == Types::NUL || type == checkType);
 }
 
-bool isOperator(string &value) {
+bool isOperator(const string &value) {
     return OPERATORS.find(value) != OPERATORS.end();
 }
 
 
-void addTreeByValues(Node &t, string *value, Types type) {
+void addTreeByValues(Node &t, const string &value, Types type) {
     if (type == Types::NUL) {
-        throw NullError(*value);
+        throw NullError(value);
     }
     if (t.getType() == Types::NUL) {
-        t.setValue(*value);
+        t.setValue(value);
         t.setType(type);
         return;
     }
     Node *tree = new Node{};
-    tree->setValue(*value);
+    tree->setValue(value);
     tree->setType(type);
     t.appendNext(tree);
 }
 
 Node *parser(string &expr, bool debug, bool implicitPriority) {
     Node *exprList = new Node{};
-    string *value = new string{""};
-    string *testString = new string{""};
+    string value{""};
+    string testString{""};
     bool createNewTree;
     char character;
     int len = expr.length(), index = 0;
@@ -43,22 +43,22 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
         if (debug) cerr << "character : " << character << endl;
         if (isspace(character)) {
             if (debug) cerr << "Found type of character '" << character << "' is space" << endl;
-            if (!value)
+            if (value.empty())
                 createNewTree = false;
         }
         else if (isalpha(character)) {
             if (debug) cerr << "Found type of character '" << character << "' is alpha" << endl;
             if (isTypeOrEmpty(type, Types::VAR)) {
-                *value += character;
+                value += character;
                 type = Types::VAR;
                 createNewTree = false;
             }
             else {
                 if (type == Types::NBR || type == Types::CPA) {
                     addTreeByValues(*exprList, value, type);
-                    value->clear();
-                    if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
-                    else *value += MULTIPLICATION_SIGN;
+                    value.clear();
+                    if (implicitPriority) value += IMPLICIT_MULTIPLICATION_SIGN;
+                    else value += MULTIPLICATION_SIGN;
                     type = Types::FUC;
                 }
                 index--;
@@ -70,9 +70,9 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
             else {
                 if (type == Types::NBR || type == Types::VAR) {
                     addTreeByValues(*exprList, value, type);
-                    value->clear();
-                    if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
-                    else *value += MULTIPLICATION_SIGN;
+                    value.clear();
+                    if (implicitPriority) value += IMPLICIT_MULTIPLICATION_SIGN;
+                    else value += MULTIPLICATION_SIGN;
                     type = Types::FUC;
                 }
                 index--;
@@ -86,12 +86,12 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
         else if (isdigit(character) || character == '.') {
             if (debug) cerr << "Found type of character '" << character << "' is number" << endl;
             if (isTypeOrEmpty(type, Types::NBR)) {
-                *value += character;
+                value += character;
                 type = Types::NBR;
                 createNewTree = false;
             }
             else if (type == Types::VAR) {
-                *value += character;
+                value += character;
                 createNewTree = false;
             }
             else index --;
@@ -99,30 +99,27 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
         else
             if (type != Types::NUL) index--;
             else {
-                *testString += *value;
-                *testString += character;
-                if (isOperator(*testString)) {
+                testString += value;
+                testString += character;
+                if (isOperator(testString)) {
                     type = Types::FUC;
-                    value->clear();
-                    *value += *testString;
-                    if (debug) cerr << "Found type of value '" << *value << "' is operator" << endl;
+                    value.clear();
+                    value += testString;
+                    if (debug) cerr << "Found type of value '" << value << "' is operator" << endl;
                 }
-                else
-                    if (debug) cerr << "Type of character '" << character << "' not found" << endl;
+                else if (debug) cerr << "Type of value '" << value << "' not found" << endl;
                 createNewTree = false;
-                testString->clear();
+                testString.clear();
             }
-        if (debug) cerr << "value : " << *value << " type : " << type << endl;
+        if (debug) cerr << "value : " << value << " type : " << type << endl;
         if (createNewTree) {
             addTreeByValues(*exprList, value, type);
-            value->clear();
+            value.clear();
             type = Types::NUL;
         }
         index++;
     }
-    if (!value->empty()) addTreeByValues(*exprList, value, type);
-    delete value;
-    delete testString;
+    if (!value.empty()) addTreeByValues(*exprList, value, type);
     return exprList;
 }
 
@@ -141,9 +138,9 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree->replaceData(exprList);
             tree = findRootOrParenthesis(tree);
         }
-        else if (treeType == Types::FUC) {
-            if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
-                tree->replaceData(new Node{Types::NBR, "0"});
+        else if (treeType == Types::FUC) { // functions (operators are functions)
+            if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) { // if -x, replace with 0-x for the solver
+                tree->replaceData(new Node{Types::NBR, "0"}); // to change
             }
             if (tree->getType() != Types::FUC || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
                 exprList->addEmptyChild()->replaceData(tree);

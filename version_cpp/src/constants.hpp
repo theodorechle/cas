@@ -22,6 +22,7 @@ const std::string SUBSTRACTION_SIGN{"-"};
 const std::string MULTIPLICATION_SIGN{"*"};
 const std::string DIVISION_SIGN{"/"};
 const std::string POWER_SIGN{"^"};
+const std::string POWER_SIGN_2{"**"};
 const std::string OPENING_PARENTHESIS_SIGN{"("};
 const std::string CLOSING_PARENTHESIS_SIGN{")"};
 const std::string IMPLICIT_MULTIPLICATION_SIGN{""};
