@@ -32,7 +32,7 @@ void addTreeByValues(Node &t, string *value, Types type) {
 Node *parser(string &expr, bool debug, bool implicitPriority) {
     Node *exprList = new Node{};
     string *value = new string{""};
-    string *testString = new string{""};
+    string testString{""};
     bool createNewTree;
     char character;
     int len = expr.length(), index = 0;
@@ -59,7 +59,7 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
                     value->clear();
                     if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
                     else *value += MULTIPLICATION_SIGN;
-                    type = Types::FUC;
+                    type = Types::OPT;
                 }
                 index--;
             }
@@ -73,7 +73,7 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
                     value->clear();
                     if (implicitPriority) *value += IMPLICIT_MULTIPLICATION_SIGN;
                     else *value += MULTIPLICATION_SIGN;
-                    type = Types::FUC;
+                    type = Types::OPT;
                 }
                 index--;
             }
@@ -97,23 +97,25 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
             else index --;
         }
         else
-            if (type != Types::NUL) index--;
+            if (type != Types::NUL && type != Types::OPT) index--;
             else {
-                *testString += *value;
-                *testString += character;
-                if (isOperator(*testString)) {
-                    type = Types::FUC;
+                testString += *value;
+                testString += character;
+                if (isOperator(testString)) {
+                    type = Types::OPT;
                     value->clear();
-                    *value += *testString;
+                    *value += testString;
                     if (debug) cerr << "Found type of value '" << *value << "' is operator" << endl;
                 }
                 else
                     if (debug) cerr << "Type of character '" << character << "' not found" << endl;
                 createNewTree = false;
-                testString->clear();
+                testString.clear();
             }
         if (debug) cerr << "value : " << *value << " type : " << type << endl;
         if (createNewTree) {
+            std::map<std::string, std::string>::const_iterator index = REPLACE_OPERATORS.find(*value);
+            if (index != REPLACE_OPERATORS.cend()) *value = index->second;
             addTreeByValues(*exprList, value, type);
             value->clear();
             type = Types::NUL;
@@ -122,7 +124,6 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
     }
     if (!value->empty()) addTreeByValues(*exprList, value, type);
     delete value;
-    delete testString;
     return exprList;
 }
 
@@ -141,11 +142,11 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree->replaceData(exprList);
             tree = findRootOrParenthesis(tree);
         }
-        else if (treeType == Types::FUC) {
+        else if (treeType == Types::OPT) {
             if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
                 tree->replaceData(new Node{Types::NBR, "0"});
             }
-            if (tree->getType() != Types::FUC || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
+            if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
                 exprList->addEmptyChild()->replaceData(tree);
                 tree->replaceData(exprList);
                 tree = tree->addEmptyChild();
@@ -153,7 +154,7 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             else {
                 Node *child;
                 child = getLastChild(tree);
-                while (child->getType() == Types::FUC && getPriority(exprList->getValue()) > getPriority(child->getValue()))
+                while (child->getType() == Types::OPT && getPriority(exprList->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
                 if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
                 exprList->addEmptyChild()->replaceData(child);
