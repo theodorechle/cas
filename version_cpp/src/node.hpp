@@ -14,15 +14,15 @@ public:
 };
 
 class Node {
-        std::string value{""};
         constants::Types type = constants::Types::NUL;
-        Node *parent = nullptr;
+        std::string value;
         Node *next = nullptr;
         Node *child = nullptr;
+        Node *parent;
         Node *copyNodeAndChilds();
         void displayTree(std::ostream &flow = std::cout, int level=0) const;
 public :
-        Node(constants::Types type=constants::Types::NUL, std::string value="", Node *parent=nullptr): type{type}, parent{parent}, value{value} {};
+        Node(constants::Types type=constants::Types::NUL, std::string value="", Node *parent=nullptr): type{type}, value{value}, parent{parent} {};
 
         void setValue(const std::string& s) {value = s;};
         const std::string& getValue() const {return value;};

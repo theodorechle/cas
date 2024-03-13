@@ -10,7 +10,7 @@
 class NullError : public std::exception {
     std::string msg;
 public:
-    NullError(std::string msg): msg{msg} {};
+    NullError(const std::string &msg): msg{msg} {};
     const char *what() const noexcept override {std::string m = "Unknown value '"+msg+"'"; return m.c_str();};
 };
 

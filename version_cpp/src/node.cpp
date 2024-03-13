@@ -8,7 +8,7 @@ using namespace constants;
 
 
 Node *Node::copyNodeAndChilds() {
-    Node *n;
+    Node *n = new Node;
     Node *child = getChild();
     Node *next = getNext();
     n->setType(getType());
@@ -19,7 +19,7 @@ Node *Node::copyNodeAndChilds() {
 }
 
 Node *Node::copyNode() const {
-    Node *n;
+    Node *n = new Node;
     Node *child = getChild();
     n->setType(getType());
     n->setValue(getValue());
@@ -44,8 +44,6 @@ void Node::display(ostream &flow) const {
 void Node::setParent(Node *parent) {
     Node *node = this;
     while (node != nullptr) {
-        cerr << node << endl;
-        cerr << node->getValue() << endl;
         node->parent = parent;
         node = node->getNext();
     }
@@ -118,8 +116,10 @@ void Node::replaceData(Node *tree) {
     setValue(tree->getValue());
     setType(tree->getType());
     setChild(tree->getChild());
-    getChild()->setParent(this);
-    tree->child = nullptr;
+    if (getChild() != nullptr) {
+        getChild()->setParent(this);   
+        tree->setChild(nullptr);
+    }
 }
 
 Node::~Node() {
