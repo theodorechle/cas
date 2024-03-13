@@ -10,7 +10,7 @@ bool isTypeOrEmpty(Types type, Types checkType) {
 }
 
 bool isOperator(const string &value) {
-    return OPERATORS.find(value) != OPERATORS.end();
+    return OPERATORS.find(value) != OPERATORS.end() || REPLACE_OPERATORS.find(value) != REPLACE_OPERATORS.end();
 }
 
 
@@ -102,7 +102,7 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
                 testString += value;
                 testString += character;
                 if (isOperator(testString)) {
-                    type = Types::FUC;
+                    type = Types::OPT;
                     value.clear();
                     value += testString;
                     if (debug) cerr << "Found type of value '" << value << "' is operator" << endl;

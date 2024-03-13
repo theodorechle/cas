@@ -22,7 +22,6 @@ const std::unordered_map<std::string, std::function<bool(Node *)>> FUNCTIONS {
     {constants::MULTIPLICATION_SIGN, multiply},
     {constants::DIVISION_SIGN, divide},
     {constants::POWER_SIGN, power},
-    {constants::POWER_SIGN_2, power},
 };
 
 // OPERATORS is only for the display to remove parenthesis
@@ -32,7 +31,6 @@ const std::set<std::string> OPERATORS {
     constants::MULTIPLICATION_SIGN,
     constants::DIVISION_SIGN,
     constants::POWER_SIGN,
-    constants::POWER_SIGN_2
 };
 
 const std::map<std::string, int> PRIORITIES {
@@ -41,7 +39,6 @@ const std::map<std::string, int> PRIORITIES {
     {constants::MULTIPLICATION_SIGN, 2},
     {constants::DIVISION_SIGN, 2},
     {constants::POWER_SIGN, 3},
-    {constants::POWER_SIGN_2, 3},
     {constants::IMPLICIT_MULTIPLICATION_SIGN, 4}
 };
 
