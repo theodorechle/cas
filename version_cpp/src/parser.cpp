@@ -13,6 +13,14 @@ bool isOperator(const string &value) {
     return OPERATORS.find(value) != OPERATORS.end() || REPLACE_OPERATORS.find(value) != REPLACE_OPERATORS.end();
 }
 
+void removeParenthesis(Node *t) {
+    if (t->getType() == Types::CPA) t->replaceData(t->getChild());
+    Node *child = t->getChild();
+    while (child != nullptr) {
+        removeParenthesis(child);
+        child = child->getNext();
+    }
+}
 
 void addTreeByValues(Node &t, const string &value, Types type) {
     if (type == Types::NUL) {
@@ -166,8 +174,8 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             tree = tree->addEmptyChild();
         }
         else if (treeType == Types::CPA) {
-            tree->getParent()->replaceData(tree);
             tree = findRootOrParenthesis(tree);
+            if (tree->getParent() != nullptr) tree = tree->getParent();
         }
         if (debug) {
             cerr << endl << "Root : " << endl;
@@ -176,5 +184,6 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
         }
         exprList = exprList->getNext();
     }
+    removeParenthesis(tree);
     return root(tree);
 }
