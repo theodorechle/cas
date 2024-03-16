@@ -175,6 +175,10 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
         }
         else if (treeType == Types::CPA) {
             tree = findRootOrParenthesis(tree);
+            if (tree->getParent() != nullptr) {
+                tree = tree->getParent();
+                tree->setType(Types::CPA);
+            }
             if (tree->getParent() != nullptr) tree = tree->getParent();
         }
         if (debug) {
