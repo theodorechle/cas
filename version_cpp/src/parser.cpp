@@ -37,26 +37,17 @@ void addTreeByValues(Node &t, const string &value, Types type) {
     t.appendNext(tree);
 }
 
-Node *parser(string &expr, bool debug, bool implicitPriority) {
-    Node *exprList = new Node{};
-    string value{""};
-    string testString{""};
-    bool createNewTree;
-    char character;
-    int len = expr.length(), index = 0;
-    Types type = Types::NUL;
-    while (index < len) {
-        createNewTree = true;
-        character = expr[index];
-        if (debug) cerr << "character : " << character << endl;
-        if (isspace(character)) {
-            if (debug) cerr << "Found type of character '" << character << "' is space" << endl;
-            if (value.empty())
-                createNewTree = false;
-        }
-        else if (isalpha(character)) {
-            if (debug) cerr << "Found type of character '" << character << "' is alpha" << endl;
-            if (isTypeOrEmpty(type, Types::VAR)) {
+bool tokenizeSpace(char character, string &value, bool &createNewTree) {
+    if (isspace(character)) {
+        if (value.empty()) createNewTree = false;
+        return true;
+    }
+    return false;
+}
+
+bool tokenizeAlpha(char character, string &value, bool &createNewTree, int &index, Types &type, Node *exprList, bool implicitPriority) {
+    if (isalpha(character)) {
+        if (isTypeOrEmpty(type, Types::VAR)) {
                 value += character;
                 type = Types::VAR;
                 createNewTree = false;
@@ -71,53 +62,106 @@ Node *parser(string &expr, bool debug, bool implicitPriority) {
                 }
                 index--;
             }
-        }
-        else if (character == OPENING_PARENTHESIS_SIGN[0]) {
-            if (debug) cerr << "Found type of character '" << character << "' is opening parenthesis" << endl;
-            if (type == Types::NUL) type = Types::OPA;
-            else {
-                if (type == Types::NBR || type == Types::VAR) {
-                    addTreeByValues(*exprList, value, type);
-                    value.clear();
-                    if (implicitPriority) value += IMPLICIT_MULTIPLICATION_SIGN;
-                    else value += MULTIPLICATION_SIGN;
-                    type = Types::OPT;
-                }
-                index--;
+            return true;
+    }
+    return false;
+}
+
+bool tokenizeOpeningParenthesis(char character, string &value, bool &createNewTree, int &index, Types &type, Node *exprList, bool implicitPriority) {
+    if (character == OPENING_PARENTHESIS_SIGN[0]) {
+        if (type == Types::NUL) type = Types::OPA;
+        else {
+            if (type == Types::NBR || type == Types::VAR) {
+                addTreeByValues(*exprList, value, type);
+                value.clear();
+                if (implicitPriority) value += IMPLICIT_MULTIPLICATION_SIGN;
+                else value += MULTIPLICATION_SIGN;
+                type = Types::OPT;
             }
+            index--;
         }
-        else if (character == CLOSING_PARENTHESIS_SIGN[0]) {
-            if (debug) cerr << "Found type of character '" << character << "' is closing parenthesis" << endl;
-            if (type == Types::NUL) type = Types::CPA;
-            else index --;
-        }
-        else if (isdigit(character) || character == '.') {
-            if (debug) cerr << "Found type of character '" << character << "' is number" << endl;
-            if (isTypeOrEmpty(type, Types::NBR)) {
+        return true;
+    }
+    return false;
+}
+
+bool tokenizeClosingParenthesis(char character, string &value, int &index, Types &type) {
+    if (character == CLOSING_PARENTHESIS_SIGN[0]) {
+        if (type == Types::NUL) type = Types::CPA;
+        else index --;
+        return true;
+    }
+    return false;
+}
+
+bool tokenizeNumber(char character, string &value, bool &createNewTree, int &index, Types &type) {
+    if (isdigit(character) || character == '.') {
+        if (isTypeOrEmpty(type, Types::NBR)) {
                 value += character;
                 type = Types::NBR;
                 createNewTree = false;
-            }
-            else if (type == Types::VAR) {
-                value += character;
-                createNewTree = false;
-            }
-            else index --;
         }
-        else
-            if (type != Types::NUL && type != Types::OPT) index--;
-            else {
-                testString += value;
-                testString += character;
-                if (isOperator(testString)) {
-                    type = Types::OPT;
-                    value.clear();
-                    value += testString;
-                    if (debug) cerr << "Found type of value '" << value << "' is operator" << endl;
-                }
-                else if (debug) cerr << "Type of value '" << value << "' not found" << endl;
-                createNewTree = false;
-                testString.clear();
+        else if (type == Types::VAR) {
+            value += character;
+            createNewTree = false;
+        }
+        else index --;
+        return true;
+    }
+    return false;
+}
+
+bool tokenizeOperator(char character, string &value, bool &createNewTree, int &index, Types &type, string &testString) {
+    if (type != Types::NUL && type != Types::OPT) index--;
+    else {
+        testString += value;
+        testString += character;
+        if (isOperator(testString)) {
+            type = Types::OPT;
+            value.clear();
+            value += testString;
+            createNewTree = false;
+            testString.clear();
+            return true;
+        }
+        createNewTree = false;
+        testString.clear();
+    }
+    return false;
+}
+
+Node *tokenizer(string &expr, bool debug, bool implicitPriority) {
+    Node *exprList = new Node{};
+    string value{""};
+    string testString{""};
+    bool createNewTree;
+    char character;
+    int len = expr.length(), index = 0;
+    Types type = Types::NUL;
+    while (index < len) {
+        createNewTree = true;
+        character = expr[index];
+        if (debug) cerr << "character : " << character << endl;
+        if (tokenizeSpace(character, value, createNewTree)) {
+            if (debug) cerr << "Found type of character '" << character << "' is space" << endl;
+        }
+        else if (tokenizeAlpha(character, value, createNewTree, index, type, exprList, implicitPriority)) {
+            if (debug) cerr << "Found type of character '" << character << "' is alpha" << endl;
+        }
+        else if (tokenizeOpeningParenthesis(character, value, createNewTree, index, type, exprList, implicitPriority)) {
+            if (debug) cerr << "Found type of character '" << character << "' is opening parenthesis" << endl;
+        }
+        else if (tokenizeClosingParenthesis(character, value, index, type)) {
+            if (debug) cerr << "Found type of character '" << character << "' is closing parenthesis" << endl;
+        }
+        else if (tokenizeNumber(character, value, createNewTree, index, type)) {
+            if (debug) cerr << "Found type of character '" << character << "' is number" << endl;
+        }
+        else {
+            if (tokenizeOperator(character, value, createNewTree, index, type, testString)) {
+                if (debug) cerr << "Found type of value '" << value << "' is operator" << endl;
+            }
+            else if (debug) cerr << "Type of value '" << value << "' not found" << endl;
             }
         if (debug) cerr << "value : " << value << " type : " << type << endl;
         if (createNewTree) {
@@ -138,7 +182,7 @@ Node *findRootOrParenthesis(Node *tree) {
     return findRootOrParenthesis(tree->getParent());
 }
 
-Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
+Node *parser(Node *exprList, bool debug, bool implicitPriority) {
     Node *tree = new Node{};
     Types treeType = Types::NUL;
     if (exprList == nullptr) return tree;
@@ -152,6 +196,7 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
             if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
                 tree->replaceData(new Node{Types::NBR, "0"});
             }
+            if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
             if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
                 exprList->addEmptyChild()->replaceData(tree);
                 tree->replaceData(exprList);
@@ -162,7 +207,6 @@ Node *parsedToTree(Node *exprList, bool debug, bool implicitPriority) {
                 child = getLastChild(tree);
                 while (child->getType() == Types::OPT && getPriority(exprList->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
-                if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
                 exprList->addEmptyChild()->replaceData(child);
                 child->replaceData(exprList);
                 tree = child->addEmptyChild();

@@ -17,7 +17,7 @@ int main() {
     cin >> debug;
     cout << "1 for implicit priority, 0 else : ";
     cin >> implicitPriority;
-    tl = parser(expr, debug, implicitPriority);
+    tl = tokenizer(expr, debug, implicitPriority);
     if (debug) {
         Node *tmp = tl;
         while (tmp != NULL) {
@@ -25,7 +25,7 @@ int main() {
             tmp = tmp->getNext();
         }
     }
-    tree = parsedToTree(tl, debug, implicitPriority);
+    tree = parser(tl, debug, implicitPriority);
     delete tl;
     if (debug) {
         cerr << "Parsed tree" << endl;

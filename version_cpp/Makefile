@@ -23,4 +23,4 @@ obj/%.o: src/%.cpp src/%.hpp
 
 #nettoyage : destruction des .o et de l'exécutable
 clean:
-		rm obj/*.o bin/exe
+		rm version_cpp/obj/*.o version_cpp/bin/exe
