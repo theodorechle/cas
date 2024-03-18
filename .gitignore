@@ -1,4 +1,6 @@
 __pycache__/
 .vscode
 cas_c/compiled_cas
-version_cpp/compiled_cas_cpp
+version_cpp/bin/exe
+version_cpp/bin/*
+version_cpp/obj/*
