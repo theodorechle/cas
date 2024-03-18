@@ -55,7 +55,7 @@ string Node::str() const {
     string s;
     if (OPERATORS.find(getValue()) != OPERATORS.end()) {
         // add parenthesis if father is operator and has bigger priority
-        if (getParent() != nullptr && OPERATORS.find(getParent()->getValue()) != OPERATORS.end() && getPriority(getValue()) < getPriority(getParent()->getValue())) {
+        if (getParent() != nullptr && OPERATORS.find(getParent()->getValue()) != OPERATORS.end() && getPriority(getValue()) <= getPriority(getParent()->getValue())) {
             parenthesis = true;
             s += "(";
         }
