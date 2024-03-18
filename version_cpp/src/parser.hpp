@@ -16,6 +16,8 @@ public:
 
 bool isTypeOrEmpty(constants::Types type, constants::Types checkType);
 
+void removeParenthesis(Node *t);
+
 bool isperator(std::string &value);
 
 

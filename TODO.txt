@@ -3,5 +3,3 @@ Set doubles instead of floats
 Modify functions like sortTree and areSameNodes to allow any number of childs
 
 Refactor parser
-
-Fix 3**x^5
