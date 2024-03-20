@@ -8,4 +8,4 @@ Addition is complete.
 
 Basics of substraction are done yet: number - number, anything - 0
 
-C++ version is in work in progress
+C++ version is in progress
