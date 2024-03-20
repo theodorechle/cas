@@ -28,7 +28,7 @@ void addTreeByValues(Node &t, const string &value, Types type) {
 
 bool tokenizeSpace(char character, string &value, bool &createNewTree) {
     if (isspace(character)) {
-        if (value.empty()) createNewTree = false;
+        createNewTree = false;
         return true;
     }
     return false;
