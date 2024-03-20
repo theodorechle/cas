@@ -32,6 +32,6 @@ bool tokenizeNumber(char character, std::string &value, bool &createNewTree, int
 
 bool tokenizeOperator(char character, std::string &value, bool &createNewTree, int &index, constants::Types &yytype, std::string &testString);
 
-Node *tokenizer(std::string &expr, bool debug, bool implicitPriority);
+Node *tokenizer(const std::string &expr, bool debug, bool implicitPriority);
 
 #endif // TOKENIZER_HPP

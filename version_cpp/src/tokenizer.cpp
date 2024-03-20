@@ -119,7 +119,7 @@ bool tokenizeOperator(char character, string &value, bool &createNewTree, int &i
     return false;
 }
 
-Node *tokenizer(string &expr, bool debug, bool implicitPriority) {
+Node *tokenizer(const string &expr, bool debug, bool implicitPriority) {
     Node *exprList = new Node{};
     string value{""};
     string testString{""};

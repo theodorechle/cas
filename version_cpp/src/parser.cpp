@@ -19,39 +19,39 @@ Node *findRootOrParenthesis(Node *tree) {
     return findRootOrParenthesis(tree->getParent());
 }
 
-Node *parser(Node *exprList, bool debug, bool implicitPriority) {
+Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
     Node *tree = new Node{};
     Types treeType = Types::NUL;
-    if (exprList == nullptr) return tree;
-    while (exprList != nullptr) {
-        treeType = exprList->getType();
+    if (tokenList == nullptr) return tree;
+    while (tokenList != nullptr) {
+        treeType = tokenList->getType();
         if (treeType == Types::NBR || treeType == Types::VAR) {
-            tree->replaceData(exprList);
+            tree->replaceData(tokenList);
             tree = findRootOrParenthesis(tree);
         }
         else if (treeType == Types::OPT) {
-            if ((exprList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
+            if ((tokenList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
                 tree->replaceData(new Node{Types::NBR, "0"});
             }
-            if (exprList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) exprList->setValue(MULTIPLICATION_SIGN);
-            if (tree->getType() != Types::OPT || getPriority(exprList->getValue()) <= getPriority(tree->getValue())) {
-                exprList->addEmptyChild()->replaceData(tree);
-                tree->replaceData(exprList);
+            if (tokenList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) tokenList->setValue(MULTIPLICATION_SIGN);
+            if (tree->getType() != Types::OPT || getPriority(tokenList->getValue()) <= getPriority(tree->getValue())) {
+                tokenList->addEmptyChild()->replaceData(tree);
+                tree->replaceData(tokenList);
                 tree = tree->addEmptyChild();
             }
             else {
                 Node *child;
                 child = getLastChild(tree);
-                while (child->getType() == Types::OPT && getPriority(exprList->getValue()) > getPriority(child->getValue()))
+                while (child->getType() == Types::OPT && getPriority(tokenList->getValue()) > getPriority(child->getValue()))
                     child = getLastChild(child);
-                exprList->addEmptyChild()->replaceData(child);
-                child->replaceData(exprList);
+                tokenList->addEmptyChild()->replaceData(child);
+                child->replaceData(tokenList);
                 tree = child->addEmptyChild();
             }
         }
         else if (treeType == Types::OPA) {
             if (tree->getType() != Types::NUL) tree = tree->addEmptyChild();
-            tree->replaceData(exprList);
+            tree->replaceData(tokenList);
             tree = tree->addEmptyChild();
         }
         else if (treeType == Types::CPA) {
@@ -67,7 +67,7 @@ Node *parser(Node *exprList, bool debug, bool implicitPriority) {
             root(tree)->display(cerr);
             cerr << endl;
         }
-        exprList = exprList->getNext();
+        tokenList = tokenList->getNext();
     }
     removeParenthesis(tree);
     return root(tree);
