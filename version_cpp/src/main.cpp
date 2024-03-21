@@ -21,7 +21,8 @@ int main() {
     tl = tokenizer(expr, debug, implicitPriority);
     if (debug) {
         Node *tmp = tl;
-        while (tmp != NULL) {
+        cerr << "Tokens" << endl;
+        while (tmp != nullptr) {
             tmp->display(cerr);
             tmp = tmp->getNext();
         }

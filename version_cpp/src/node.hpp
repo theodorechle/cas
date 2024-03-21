@@ -14,46 +14,49 @@ public:
 };
 
 class Node {
-        constants::Types type = constants::Types::NUL;
-        std::string value;
-        Node *next = nullptr;
-        Node *child = nullptr;
-        Node *parent;
-        Node *copyNodeAndChilds();
-        void displayTree(std::ostream &flow = std::cout, int level=0) const;
+    constants::Types type;
+    std::string value;
+    Node *next;
+    Node *child;
+    Node *parent;
+    Node *copyNodeAndChilds();
+    void displayTree(std::ostream &flow = std::cout, int level=0) const;
 public :
-        Node(constants::Types type=constants::Types::NUL, std::string value="", Node *parent=nullptr): type{type}, value{value}, parent{parent} {};
+    Node(constants::Types type=constants::Types::NUL, std::string value="", Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
 
-        void setValue(const std::string& s) {value = s;};
-        const std::string& getValue() const {return value;};
-        void setType(const constants::Types& t) {type = t;};
-        const constants::Types& getType() const {return type;};
-        Node *getParent() const {return parent;};
-        void setParent(Node *parent);
-        Node *getNext() const {return next;};
-        void setNext(Node *next);
-        void removeNext() {setValue(nullptr);};
-        Node *getChild() const {return child;};
-        /*Set the first child (the one who is directly pointed by the instance)*/
-        void setChild(Node *child);
-        void removeChild() {setChild(nullptr);};
-        void appendNext(Node *next);
-        /*Add a child at the end of them*/
-        Node *appendChild(Node *child);
-        Node *addEmptyChild();
-        /**
-            *Replace the data of the node (value, type and childs)
-            *by the ones of the given tree.
-        */
-        void replaceData(Node *tree);
-        /**
-            *Copy self node and childs, not brothers
-        */
-        Node *copyNode() const;
-        void display(std::ostream &flow = std::cout) const;
-        std::string str() const;
+    void setValue(const std::string& s) {value = s;};
+    const std::string& getValue() const {return value;};
+    void setType(const constants::Types& t) {type = t;};
+    const constants::Types& getType() const {return type;};
+    Node *getParent() const {return parent;};
+    void setParent(Node *parent);
+    Node *getNext() const {return next;};
+    void setNext(Node *next);
+    void removeNext() {setValue(nullptr);};
+    Node *getChild() const {return child;};
+    /*Set the first child (the one who is directly pointed by the instance)*/
+    void setChild(Node *child);
+    void removeChild() {setChild(nullptr);};
+    void appendNext(Node *next);
+    /*Add a child at the end of them*/
+    Node *appendChild(Node *child);
+    Node *appendChild(Node &child);
+    Node *addEmptyChild();
+    /**
+        *Replace the data of the node (value, type and childs)
+        *by the ones of the given tree.
+    */
+    void replaceData(Node *tree);
+    /**
+        *Copy self node and childs, not brothers
+    */
+    Node *copyNode() const;
+    void display(std::ostream &flow = std::cout) const;
+    std::string str() const;
 
-        ~Node();
+    ~Node();
+
+    friend bool operator==(const Node &, const Node &);
 };
 
 /**
@@ -64,5 +67,9 @@ Node *root(Node *node);
 Node *getLastChild(Node *n);
 
 int getPriority(const std::string &ope);
+
+bool operator==(const Node &, const Node &);
+
+bool areSameNodes(const Node *node1, const Node *node2);
 
 #endif // TREE_HPP

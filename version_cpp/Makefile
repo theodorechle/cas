@@ -12,8 +12,8 @@ OBJ=$(patsubst src/%.cpp,obj/%.o,$(SRC))
 
 
 #edition des liens : génération de l'exécutable à partir des .o
-bin/exe: $(OBJ)
-		$(CC) $(OBJ) -o $@
+bin/exe: obj/main.o $(filter-out obj/tests.o, $(OBJ))
+		$(CC) $^ -o $@
 
 # génération des .o à partir des .cpp et .hpp correspondants :
 obj/main.o : src/main.cpp

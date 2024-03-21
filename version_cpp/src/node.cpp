@@ -95,7 +95,9 @@ void Node::setNext(Node *next) {
 
 void Node::appendNext(Node *next) {
     Node *c = this;
-    while (c->getNext() != nullptr) c = c->getNext();
+    while (c->getNext() != nullptr) {
+        c = c->getNext();
+    }
     c->setNext(next);
 }
 
@@ -105,6 +107,14 @@ Node *Node::appendChild(Node *child) {
     else c->appendNext(child);
     child->parent = this;
     return child;
+}
+
+Node *Node::appendChild(Node &child) {
+    Node *c = getChild();
+    if (c == nullptr) setChild(&child);
+    else c->appendNext(&child);
+    child.parent = this;
+    return &child;
 }
 
 Node *Node::addEmptyChild() {
@@ -144,4 +154,21 @@ int getPriority(const string &ope) {
     map<string, int>::const_iterator iter = PRIORITIES.find(ope);
     if (iter != PRIORITIES.cend()) return iter->second;
     return DEFAULT_PRIORITY;
+}
+
+bool operator==(const Node &n1, const Node &n2) {
+    return (n1.getValue() == n2.getValue() || n1.getType() == n2.getType());
+}
+
+bool areSameNodes(const Node *node1, const Node *node2) {
+    if (!(node1 == node2)) return false;
+    Node *child1 = node1->getChild();
+    Node *child2 = node2->getChild();
+    while (child1 != nullptr) {
+        if (child2 == nullptr) return false;
+        if (!areSameNodes(child1, child2)) return false;
+        child1 = child1->getNext();
+        child2 = child2->getNext();
+    }
+    return (child2 == nullptr);
 }
