@@ -1,0 +1,1199 @@
+src/parser.cpp: In function ‘void addTreeByValues(Node&, const string&, constants::Types)’:
+src/parser.cpp:20:15: error: ‘NullError’ was not declared in this scope
+   20 |         throw NullError(value);
+      |               ^~~~~~~~~
+src/parser.cpp: In function ‘bool tokenizeAlpha(char, std::string&, bool&, int&, constants::Types&, Node*, bool)’:
+src/parser.cpp:43:13: error: ‘isTypeOrEmpty’ was not declared in this scope
+   43 |         if (isTypeOrEmpty(type, Types::VAR)) {
+      |             ^~~~~~~~~~~~~
+src/parser.cpp: In function ‘bool tokenizeNumber(char, std::string&, bool&, int&, constants::Types&)’:
+src/parser.cpp:92:13: error: ‘isTypeOrEmpty’ was not declared in this scope
+   92 |         if (isTypeOrEmpty(type, Types::NBR)) {
+      |             ^~~~~~~~~~~~~
+src/parser.cpp: In function ‘bool tokenizeOperator(char, std::string&, bool&, int&, constants::Types&, std::string&)’:
+src/parser.cpp:112:13: error: ‘isOperator’ was not declared in this scope
+  112 |         if (isOperator(testString)) {
+      |             ^~~~~~~~~~
+src/parser.cpp: In function ‘Node* tokenizer(std::string&, bool, bool)’:
+src/parser.cpp:161:63: error: expected unqualified-id before ‘}’ token
+  161 |             std::map<std::string, std::string>::const_iterator} index = REPLACE_OPERATORS.find(value);
+      |                                                               ^
+src/parser.cpp:161:95: error: cannot convert ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} to ‘int’ in assignment
+  161 |             std::map<std::string, std::string>::const_iterator} index = REPLACE_OPERATORS.find(value);
+      |                                                                         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      |                                                                                               |
+      |                                                                                               std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator {aka std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator}
+src/parser.cpp:162:23: error: no match for ‘operator!=’ (operand types are ‘int’ and ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’})
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                 ~~~~~ ^~ ~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 |                              |
+      |                 int                            std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator {aka std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator}
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:1064:5: note: candidate: ‘template<class _BiIter> bool std::__cxx11::operator!=(const std::__cxx11::sub_match<_BiIter>&, const std::__cxx11::sub_match<_BiIter>&)’
+ 1064 |     operator!=(const sub_match<_BiIter>& __lhs, const sub_match<_BiIter>& __rhs)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:1064:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::sub_match<_BiIter>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:1144:5: note: candidate: ‘template<class _Bi_iter, class _Ch_traits, class _Ch_alloc> bool std::__cxx11::operator!=(std::__cxx11::__sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>&, const std::__cxx11::sub_match<_BiIter>&)’
+ 1144 |     operator!=(const __sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:1144:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘std::__cxx11::__sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:1237:5: note: candidate: ‘template<class _Bi_iter, class _Ch_traits, class _Ch_alloc> bool std::__cxx11::operator!=(const std::__cxx11::sub_match<_BiIter>&, std::__cxx11::__sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>&)’
+ 1237 |     operator!=(const sub_match<_Bi_iter>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:1237:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::sub_match<_BiIter>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:1311:5: note: candidate: ‘template<class _Bi_iter> bool std::__cxx11::operator!=(const typename std::iterator_traits<_Iter>::value_type*, const std::__cxx11::sub_match<_BiIter>&)’
+ 1311 |     operator!=(typename iterator_traits<_Bi_iter>::value_type const* __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:1311:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:1405:5: note: candidate: ‘template<class _Bi_iter> bool std::__cxx11::operator!=(const std::__cxx11::sub_match<_BiIter>&, const typename std::iterator_traits<_Iter>::value_type*)’
+ 1405 |     operator!=(const sub_match<_Bi_iter>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:1405:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::sub_match<_BiIter>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:1479:5: note: candidate: ‘template<class _Bi_iter> bool std::__cxx11::operator!=(const typename std::iterator_traits<_Iter>::value_type&, const std::__cxx11::sub_match<_BiIter>&)’
+ 1479 |     operator!=(typename iterator_traits<_Bi_iter>::value_type const& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:1479:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:1579:5: note: candidate: ‘template<class _Bi_iter> bool std::__cxx11::operator!=(const std::__cxx11::sub_match<_BiIter>&, const typename std::iterator_traits<_Iter>::value_type&)’
+ 1579 |     operator!=(const sub_match<_Bi_iter>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:1579:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::sub_match<_BiIter>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/regex:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:110,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/regex.h:2126:5: note: candidate: ‘template<class _Bi_iter, class _Alloc> bool std::__cxx11::operator!=(const std::__cxx11::match_results<_BiIter, _Alloc>&, const std::__cxx11::match_results<_BiIter, _Alloc>&)’
+ 2126 |     operator!=(const match_results<_Bi_iter, _Alloc>& __m1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/regex.h:2126:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::match_results<_BiIter, _Alloc>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/stl_algobase.h:64,
+                 from /usr/include/c++/10/bits/char_traits.h:39,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_pair.h:496:5: note: candidate: ‘template<class _T1, class _T2> constexpr bool std::operator!=(const std::pair<_T1, _T2>&, const std::pair<_T1, _T2>&)’
+  496 |     operator!=(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_pair.h:496:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::pair<_T1, _T2>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/stl_algobase.h:67,
+                 from /usr/include/c++/10/bits/char_traits.h:39,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_iterator.h:397:5: note: candidate: ‘template<class _Iterator> constexpr bool std::operator!=(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_Iterator>&)’
+  397 |     operator!=(const reverse_iterator<_Iterator>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_iterator.h:397:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::reverse_iterator<_Iterator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/stl_algobase.h:67,
+                 from /usr/include/c++/10/bits/char_traits.h:39,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_iterator.h:435:5: note: candidate: ‘template<class _IteratorL, class _IteratorR> constexpr bool std::operator!=(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_IteratorR>&)’
+  435 |     operator!=(const reverse_iterator<_IteratorL>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_iterator.h:435:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::reverse_iterator<_Iterator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/stl_algobase.h:67,
+                 from /usr/include/c++/10/bits/char_traits.h:39,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_iterator.h:1477:5: note: candidate: ‘template<class _IteratorL, class _IteratorR> constexpr bool std::operator!=(const std::move_iterator<_IteratorL>&, const std::move_iterator<_IteratorR>&)’
+ 1477 |     operator!=(const move_iterator<_IteratorL>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_iterator.h:1477:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::move_iterator<_IteratorL>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/stl_algobase.h:67,
+                 from /usr/include/c++/10/bits/char_traits.h:39,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_iterator.h:1534:5: note: candidate: ‘template<class _Iterator> constexpr bool std::operator!=(const std::move_iterator<_IteratorL>&, const std::move_iterator<_IteratorL>&)’
+ 1534 |     operator!=(const move_iterator<_Iterator>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_iterator.h:1534:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::move_iterator<_IteratorL>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/char_traits.h:40,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/postypes.h:227:5: note: candidate: ‘template<class _StateT> bool std::operator!=(const std::fpos<_StateT>&, const std::fpos<_StateT>&)’
+  227 |     operator!=(const fpos<_StateT>& __lhs, const fpos<_StateT>& __rhs)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/postypes.h:227:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::fpos<_StateT>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/string:41,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/allocator.h:213:5: note: candidate: ‘template<class _T1, class _T2> bool std::operator!=(const std::allocator<_CharT>&, const std::allocator<_T2>&)’
+  213 |     operator!=(const allocator<_T1>&, const allocator<_T2>&)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/allocator.h:213:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::allocator<_CharT>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/basic_string.h:48,
+                 from /usr/include/c++/10/string:55,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/string_view:522:5: note: candidate: ‘template<class _CharT, class _Traits> constexpr bool std::operator!=(std::basic_string_view<_CharT, _Traits>, std::basic_string_view<_CharT, _Traits>)’
+  522 |     operator!=(basic_string_view<_CharT, _Traits> __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/string_view:522:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘std::basic_string_view<_CharT, _Traits>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/basic_string.h:48,
+                 from /usr/include/c++/10/string:55,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/string_view:528:5: note: candidate: ‘template<class _CharT, class _Traits> constexpr bool std::operator!=(std::basic_string_view<_CharT, _Traits>, std::__type_identity_t<std::basic_string_view<_CharT, _Traits> >)’
+  528 |     operator!=(basic_string_view<_CharT, _Traits> __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/string_view:528:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘std::basic_string_view<_CharT, _Traits>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/basic_string.h:48,
+                 from /usr/include/c++/10/string:55,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/string_view:535:5: note: candidate: ‘template<class _CharT, class _Traits> constexpr bool std::operator!=(std::__type_identity_t<std::basic_string_view<_CharT, _Traits> >, std::basic_string_view<_CharT, _Traits>)’
+  535 |     operator!=(__type_identity_t<basic_string_view<_CharT, _Traits>> __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/string_view:535:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::_Rb_tree_const_iterator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >’ is not derived from ‘std::basic_string_view<_CharT, _Traits>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/string:55,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/basic_string.h:6239:5: note: candidate: ‘template<class _CharT, class _Traits, class _Alloc> bool std::operator!=(const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>&, const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>&)’
+ 6239 |     operator!=(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/basic_string.h:6239:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/string:55,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/basic_string.h:6252:5: note: candidate: ‘template<class _CharT, class _Traits, class _Alloc> bool std::operator!=(const _CharT*, const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>&)’
+ 6252 |     operator!=(const _CharT* __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/basic_string.h:6252:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const _CharT*’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/string:55,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/basic_string.h:6264:5: note: candidate: ‘template<class _CharT, class _Traits, class _Alloc> bool std::operator!=(const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>&, const _CharT*)’
+ 6264 |     operator!=(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/basic_string.h:6264:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/ios_base.h:46,
+                 from /usr/include/c++/10/ios:42,
+                 from /usr/include/c++/10/ostream:38,
+                 from /usr/include/c++/10/iostream:39,
+                 from src/constants.hpp:4,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/system_error:398:3: note: candidate: ‘bool std::operator!=(const std::error_code&, const std::error_code&)’
+  398 |   operator!=(const error_code& __lhs, const error_code& __rhs) noexcept
+      |   ^~~~~~~~
+/usr/include/c++/10/system_error:398:32: note:   no known conversion for argument 1 from ‘int’ to ‘const std::error_code&’
+  398 |   operator!=(const error_code& __lhs, const error_code& __rhs) noexcept
+      |              ~~~~~~~~~~~~~~~~~~^~~~~
+/usr/include/c++/10/system_error:404:3: note: candidate: ‘bool std::operator!=(const std::error_code&, const std::error_condition&)’
+  404 |   operator!=(const error_code& __lhs, const error_condition& __rhs) noexcept
+      |   ^~~~~~~~
+/usr/include/c++/10/system_error:404:32: note:   no known conversion for argument 1 from ‘int’ to ‘const std::error_code&’
+  404 |   operator!=(const error_code& __lhs, const error_condition& __rhs) noexcept
+      |              ~~~~~~~~~~~~~~~~~~^~~~~
+/usr/include/c++/10/system_error:410:3: note: candidate: ‘bool std::operator!=(const std::error_condition&, const std::error_code&)’
+  410 |   operator!=(const error_condition& __lhs, const error_code& __rhs) noexcept
+      |   ^~~~~~~~
+/usr/include/c++/10/system_error:410:37: note:   no known conversion for argument 1 from ‘int’ to ‘const std::error_condition&’
+  410 |   operator!=(const error_condition& __lhs, const error_code& __rhs) noexcept
+      |              ~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+/usr/include/c++/10/system_error:415:3: note: candidate: ‘bool std::operator!=(const std::error_condition&, const std::error_condition&)’
+  415 |   operator!=(const error_condition& __lhs,
+      |   ^~~~~~~~
+/usr/include/c++/10/system_error:415:37: note:   no known conversion for argument 1 from ‘int’ to ‘const std::error_condition&’
+  415 |   operator!=(const error_condition& __lhs,
+      |              ~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+In file included from /usr/include/c++/10/bits/locale_facets.h:48,
+                 from /usr/include/c++/10/bits/basic_ios.h:37,
+                 from /usr/include/c++/10/ios:44,
+                 from /usr/include/c++/10/ostream:38,
+                 from /usr/include/c++/10/iostream:39,
+                 from src/constants.hpp:4,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/streambuf_iterator.h:233:5: note: candidate: ‘template<class _CharT, class _Traits> bool std::operator!=(const std::istreambuf_iterator<_CharT, _Traits>&, const std::istreambuf_iterator<_CharT, _Traits>&)’
+  233 |     operator!=(const istreambuf_iterator<_CharT, _Traits>& __a,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/streambuf_iterator.h:233:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::istreambuf_iterator<_CharT, _Traits>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/node_handle.h:39,
+                 from /usr/include/c++/10/bits/stl_tree.h:72,
+                 from /usr/include/c++/10/map:60,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/optional:1024:5: note: candidate: ‘template<class _Tp, class _Up> constexpr std::__optional_ne_t<_Tp, _Up> std::operator!=(const std::optional<_Tp>&, const std::optional<_Up>&)’
+ 1024 |     operator!=(const optional<_Tp>& __lhs, const optional<_Up>& __rhs)
+      |     ^~~~~~~~
+/usr/include/c++/10/optional:1024:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::optional<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/node_handle.h:39,
+                 from /usr/include/c++/10/bits/stl_tree.h:72,
+                 from /usr/include/c++/10/map:60,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/optional:1091:5: note: candidate: ‘template<class _Tp> constexpr bool std::operator!=(const std::optional<_Tp>&, std::nullopt_t)’
+ 1091 |     operator!=(const optional<_Tp>& __lhs, nullopt_t) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/optional:1091:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::optional<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/node_handle.h:39,
+                 from /usr/include/c++/10/bits/stl_tree.h:72,
+                 from /usr/include/c++/10/map:60,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/optional:1096:5: note: candidate: ‘template<class _Tp> constexpr bool std::operator!=(std::nullopt_t, const std::optional<_Tp>&)’
+ 1096 |     operator!=(nullopt_t, const optional<_Tp>& __rhs) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/optional:1096:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::optional<_Tp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/node_handle.h:39,
+                 from /usr/include/c++/10/bits/stl_tree.h:72,
+                 from /usr/include/c++/10/map:60,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/optional:1155:5: note: candidate: ‘template<class _Tp, class _Up> constexpr std::__optional_ne_t<_Tp, _Up> std::operator!=(const std::optional<_Tp>&, const _Up&)’
+ 1155 |     operator!=(const optional<_Tp>& __lhs, const _Up& __rhs)
+      |     ^~~~~~~~
+/usr/include/c++/10/optional:1155:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::optional<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/node_handle.h:39,
+                 from /usr/include/c++/10/bits/stl_tree.h:72,
+                 from /usr/include/c++/10/map:60,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/optional:1161:5: note: candidate: ‘template<class _Tp, class _Up> constexpr std::__optional_ne_t<_Up, _Tp> std::operator!=(const _Up&, const std::optional<_Tp>&)’
+ 1161 |     operator!=(const _Up& __lhs, const optional<_Tp>& __rhs)
+      |     ^~~~~~~~
+/usr/include/c++/10/optional:1161:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::optional<_Tp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/tuple:39,
+                 from /usr/include/c++/10/bits/stl_map.h:63,
+                 from /usr/include/c++/10/map:61,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/array:282:5: note: candidate: ‘template<class _Tp, long unsigned int _Nm> bool std::operator!=(const std::array<_Tp, _Nm>&, const std::array<_Tp, _Nm>&)’
+  282 |     operator!=(const array<_Tp, _Nm>& __one, const array<_Tp, _Nm>& __two)
+      |     ^~~~~~~~
+/usr/include/c++/10/array:282:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::array<_Tp, _Nm>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/stl_map.h:63,
+                 from /usr/include/c++/10/map:61,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/tuple:1448:5: note: candidate: ‘template<class ... _TElements, class ... _UElements> constexpr bool std::operator!=(const std::tuple<_Tps ...>&, const std::tuple<_Args2 ...>&)’
+ 1448 |     operator!=(const tuple<_TElements...>& __t,
+      |     ^~~~~~~~
+/usr/include/c++/10/tuple:1448:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::tuple<_Tps ...>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/map:61,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_map.h:1508:5: note: candidate: ‘template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator!=(const std::map<_Key, _Tp, _Compare, _Allocator>&, const std::map<_Key, _Tp, _Compare, _Allocator>&)’
+ 1508 |     operator!=(const map<_Key, _Tp, _Compare, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_map.h:1508:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::map<_Key, _Tp, _Compare, _Allocator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/map:62,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_multimap.h:1173:5: note: candidate: ‘template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator!=(const std::multimap<_Key, _Tp, _Compare, _Allocator>&, const std::multimap<_Key, _Tp, _Compare, _Allocator>&)’
+ 1173 |     operator!=(const multimap<_Key, _Tp, _Compare, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_multimap.h:1173:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::multimap<_Key, _Tp, _Compare, _Allocator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/unordered_map:47,
+                 from src/constants.hpp:7,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/unordered_map.h:2097:5: note: candidate: ‘template<class _Key, class _Tp, class _Hash, class _Pred, class _Alloc> bool std::operator!=(const std::unordered_map<_Key1, _Tp1, _Hash1, _Pred1, _Alloc1>&, const std::unordered_map<_Key1, _Tp1, _Hash1, _Pred1, _Alloc1>&)’
+ 2097 |     operator!=(const unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/unordered_map.h:2097:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::unordered_map<_Key1, _Tp1, _Hash1, _Pred1, _Alloc1>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/unordered_map:47,
+                 from src/constants.hpp:7,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/unordered_map.h:2111:5: note: candidate: ‘template<class _Key, class _Tp, class _Hash, class _Pred, class _Alloc> bool std::operator!=(const std::unordered_multimap<_Key1, _Tp1, _Hash1, _Pred1, _Alloc1>&, const std::unordered_multimap<_Key1, _Tp1, _Hash1, _Pred1, _Alloc1>&)’
+ 2111 |     operator!=(const unordered_multimap<_Key, _Tp, _Hash, _Pred, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/unordered_map.h:2111:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::unordered_multimap<_Key1, _Tp1, _Hash1, _Pred1, _Alloc1>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/ccomplex:39,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:54,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/complex:482:5: note: candidate: ‘template<class _Tp> constexpr bool std::operator!=(const std::complex<_Tp>&, const std::complex<_Tp>&)’
+  482 |     operator!=(const complex<_Tp>& __x, const complex<_Tp>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/complex:482:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::complex<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/ccomplex:39,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:54,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/complex:487:5: note: candidate: ‘template<class _Tp> constexpr bool std::operator!=(const std::complex<_Tp>&, const _Tp&)’
+  487 |     operator!=(const complex<_Tp>& __x, const _Tp& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/complex:487:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::complex<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/ccomplex:39,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:54,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/complex:492:5: note: candidate: ‘template<class _Tp> constexpr bool std::operator!=(const _Tp&, const std::complex<_Tp>&)’
+  492 |     operator!=(const _Tp& __x, const complex<_Tp>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/complex:492:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::complex<_Tp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/functional:59,
+                 from /usr/include/c++/10/pstl/glue_algorithm_defs.h:13,
+                 from /usr/include/c++/10/algorithm:74,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:65,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/std_function.h:699:5: note: candidate: ‘template<class _Res, class ... _Args> bool std::operator!=(const std::function<_Res(_ArgTypes ...)>&, std::nullptr_t)’
+  699 |     operator!=(const function<_Res(_Args...)>& __f, nullptr_t) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/std_function.h:699:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::function<_Res(_ArgTypes ...)>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/functional:59,
+                 from /usr/include/c++/10/pstl/glue_algorithm_defs.h:13,
+                 from /usr/include/c++/10/algorithm:74,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:65,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/std_function.h:705:5: note: candidate: ‘template<class _Res, class ... _Args> bool std::operator!=(std::nullptr_t, const std::function<_Res(_ArgTypes ...)>&)’
+  705 |     operator!=(nullptr_t, const function<_Res(_Args...)>& __f) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/std_function.h:705:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::function<_Res(_ArgTypes ...)>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/vector:67,
+                 from /usr/include/c++/10/functional:62,
+                 from /usr/include/c++/10/pstl/glue_algorithm_defs.h:13,
+                 from /usr/include/c++/10/algorithm:74,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:65,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/stl_vector.h:1937:5: note: candidate: ‘template<class _Tp, class _Alloc> bool std::operator!=(const std::vector<_Tp, _Alloc>&, const std::vector<_Tp, _Alloc>&)’
+ 1937 |     operator!=(const vector<_Tp, _Alloc>& __x, const vector<_Tp, _Alloc>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_vector.h:1937:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::vector<_Tp, _Alloc>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/deque:67,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:68,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/stl_deque.h:2286:5: note: candidate: ‘template<class _Tp, class _Alloc> bool std::operator!=(const std::deque<_Tp, _Alloc>&, const std::deque<_Tp, _Alloc>&)’
+ 2286 |     operator!=(const deque<_Tp, _Alloc>& __x, const deque<_Tp, _Alloc>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_deque.h:2286:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::deque<_Tp, _Alloc>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/locale_conv.h:41,
+                 from /usr/include/c++/10/locale:43,
+                 from /usr/include/c++/10/iomanip:43,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:72,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/unique_ptr.h:774:5: note: candidate: ‘template<class _Tp, class _Dp, class _Up, class _Ep> bool std::operator!=(const std::unique_ptr<_Tp, _Dp>&, const std::unique_ptr<_Up, _Ep>&)’
+  774 |     operator!=(const unique_ptr<_Tp, _Dp>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/unique_ptr.h:774:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::unique_ptr<_Tp, _Dp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/locale_conv.h:41,
+                 from /usr/include/c++/10/locale:43,
+                 from /usr/include/c++/10/iomanip:43,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:72,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/unique_ptr.h:781:5: note: candidate: ‘template<class _Tp, class _Dp> bool std::operator!=(const std::unique_ptr<_Tp, _Dp>&, std::nullptr_t)’
+  781 |     operator!=(const unique_ptr<_Tp, _Dp>& __x, nullptr_t) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/unique_ptr.h:781:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::unique_ptr<_Tp, _Dp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/locale_conv.h:41,
+                 from /usr/include/c++/10/locale:43,
+                 from /usr/include/c++/10/iomanip:43,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:72,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/unique_ptr.h:787:5: note: candidate: ‘template<class _Tp, class _Dp> bool std::operator!=(std::nullptr_t, const std::unique_ptr<_Tp, _Dp>&)’
+  787 |     operator!=(nullptr_t, const unique_ptr<_Tp, _Dp>& __x) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/unique_ptr.h:787:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::unique_ptr<_Tp, _Dp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/list:63,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:79,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/stl_list.h:2057:5: note: candidate: ‘template<class _Tp, class _Alloc> bool std::operator!=(const std::__cxx11::list<_Tp, _Alloc>&, const std::__cxx11::list<_Tp, _Alloc>&)’
+ 2057 |     operator!=(const list<_Tp, _Alloc>& __x, const list<_Tp, _Alloc>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_list.h:2057:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__cxx11::list<_Tp, _Alloc>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/shared_ptr.h:52,
+                 from /usr/include/c++/10/memory:84,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:82,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/shared_ptr_base.h:1470:5: note: candidate: ‘template<class _Tp1, class _Tp2, __gnu_cxx::_Lock_policy _Lp> bool std::operator!=(const std::__shared_ptr<_Tp1, _Lp>&, const std::__shared_ptr<_Tp2, _Lp>&)’
+ 1470 |     operator!=(const __shared_ptr<_Tp1, _Lp>& __a,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/shared_ptr_base.h:1470:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__shared_ptr<_Tp1, _Lp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/shared_ptr.h:52,
+                 from /usr/include/c++/10/memory:84,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:82,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/shared_ptr_base.h:1476:5: note: candidate: ‘template<class _Tp, __gnu_cxx::_Lock_policy _Lp> bool std::operator!=(const std::__shared_ptr<_Tp, _Lp>&, std::nullptr_t)’
+ 1476 |     operator!=(const __shared_ptr<_Tp, _Lp>& __a, nullptr_t) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/shared_ptr_base.h:1476:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::__shared_ptr<_Tp, _Lp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/shared_ptr.h:52,
+                 from /usr/include/c++/10/memory:84,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:82,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/shared_ptr_base.h:1481:5: note: candidate: ‘template<class _Tp, __gnu_cxx::_Lock_policy _Lp> bool std::operator!=(std::nullptr_t, const std::__shared_ptr<_Tp, _Lp>&)’
+ 1481 |     operator!=(nullptr_t, const __shared_ptr<_Tp, _Lp>& __a) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/shared_ptr_base.h:1481:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::__shared_ptr<_Tp, _Lp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/memory:84,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:82,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/shared_ptr.h:469:5: note: candidate: ‘template<class _Tp, class _Up> bool std::operator!=(const std::shared_ptr<_Tp>&, const std::shared_ptr<_Tp>&)’
+  469 |     operator!=(const shared_ptr<_Tp>& __a, const shared_ptr<_Up>& __b) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/shared_ptr.h:469:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::shared_ptr<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/memory:84,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:82,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/shared_ptr.h:475:5: note: candidate: ‘template<class _Tp> bool std::operator!=(const std::shared_ptr<_Tp>&, std::nullptr_t)’
+  475 |     operator!=(const shared_ptr<_Tp>& __a, nullptr_t) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/shared_ptr.h:475:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::shared_ptr<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/memory:84,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:82,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/shared_ptr.h:481:5: note: candidate: ‘template<class _Tp> bool std::operator!=(std::nullptr_t, const std::shared_ptr<_Tp>&)’
+  481 |     operator!=(nullptr_t, const shared_ptr<_Tp>& __a) noexcept
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/shared_ptr.h:481:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::shared_ptr<_Tp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/queue:64,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:86,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/stl_queue.h:368:5: note: candidate: ‘template<class _Tp, class _Seq> bool std::operator!=(const std::queue<_Tp, _Seq>&, const std::queue<_Tp, _Seq>&)’
+  368 |     operator!=(const queue<_Tp, _Seq>& __x, const queue<_Tp, _Seq>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_queue.h:368:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::queue<_Tp, _Seq>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/set:61,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:87,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/stl_set.h:1030:5: note: candidate: ‘template<class _Key, class _Compare, class _Alloc> bool std::operator!=(const std::set<_Key, _Compare, _Allocator>&, const std::set<_Key, _Compare, _Allocator>&)’
+ 1030 |     operator!=(const set<_Key, _Compare, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_set.h:1030:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::set<_Key, _Compare, _Allocator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/set:62,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:87,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/stl_multiset.h:1016:5: note: candidate: ‘template<class _Key, class _Compare, class _Alloc> bool std::operator!=(const std::multiset<_Key, _Compare, _Allocator>&, const std::multiset<_Key, _Compare, _Allocator>&)’
+ 1016 |     operator!=(const multiset<_Key, _Compare, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_multiset.h:1016:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::multiset<_Key, _Compare, _Allocator>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/stack:61,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:89,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/stl_stack.h:343:5: note: candidate: ‘template<class _Tp, class _Seq> bool std::operator!=(const std::stack<_Tp, _Seq>&, const std::stack<_Tp, _Seq>&)’
+  343 |     operator!=(const stack<_Tp, _Seq>& __x, const stack<_Tp, _Seq>& __y)
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_stack.h:343:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::stack<_Tp, _Seq>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/valarray:603,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/valarray_after.h:418:5: note: candidate: ‘template<class _Dom1, class _Dom2> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_Expr, std::_Expr, _Dom1, _Dom2>, typename std::__fun<std::__not_equal_to, typename _Dom1::value_type>::result_type> std::operator!=(const std::_Expr<_Dom1, typename _Dom1::value_type>&, const std::_Expr<_Dom2, typename _Dom2::value_type>&)’
+  418 |     _DEFINE_EXPR_BINARY_OPERATOR(!=, __not_equal_to)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/bits/valarray_after.h:418:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/valarray:603,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/valarray_after.h:418:5: note: candidate: ‘template<class _Dom> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_Expr, std::_Constant, _Dom, typename _Dom::value_type>, typename std::__fun<std::__not_equal_to, typename _Dom1::value_type>::result_type> std::operator!=(const std::_Expr<_Dom1, typename _Dom1::value_type>&, const typename _Dom::value_type&)’
+  418 |     _DEFINE_EXPR_BINARY_OPERATOR(!=, __not_equal_to)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/bits/valarray_after.h:418:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/valarray:603,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/valarray_after.h:418:5: note: candidate: ‘template<class _Dom> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_Constant, std::_Expr, typename _Dom::value_type, _Dom>, typename std::__fun<std::__not_equal_to, typename _Dom1::value_type>::result_type> std::operator!=(const typename _Dom::value_type&, const std::_Expr<_Dom1, typename _Dom1::value_type>&)’
+  418 |     _DEFINE_EXPR_BINARY_OPERATOR(!=, __not_equal_to)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/bits/valarray_after.h:418:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/valarray:603,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/valarray_after.h:418:5: note: candidate: ‘template<class _Dom> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_Expr, std::_ValArray, _Dom, typename _Dom::value_type>, typename std::__fun<std::__not_equal_to, typename _Dom1::value_type>::result_type> std::operator!=(const std::_Expr<_Dom1, typename _Dom1::value_type>&, const std::valarray<typename _Dom::value_type>&)’
+  418 |     _DEFINE_EXPR_BINARY_OPERATOR(!=, __not_equal_to)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/bits/valarray_after.h:418:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/valarray:603,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/valarray_after.h:418:5: note: candidate: ‘template<class _Dom> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_ValArray, std::_Expr, typename _Dom::value_type, _Dom>, typename std::__fun<std::__not_equal_to, typename _Dom1::value_type>::result_type> std::operator!=(const std::valarray<typename _Dom::value_type>&, const std::_Expr<_Dom1, typename _Dom1::value_type>&)’
+  418 |     _DEFINE_EXPR_BINARY_OPERATOR(!=, __not_equal_to)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/bits/valarray_after.h:418:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/valarray:1198:1: note: candidate: ‘template<class _Tp> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_ValArray, std::_ValArray, _Tp, _Tp>, typename std::__fun<std::__not_equal_to, _Tp>::result_type> std::operator!=(const std::valarray<_Tp>&, const std::valarray<_Tp>&)’
+ 1198 | _DEFINE_BINARY_OPERATOR(!=, __not_equal_to)
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/valarray:1198:1: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::valarray<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/valarray:1198:1: note: candidate: ‘template<class _Tp> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_ValArray, std::_Constant, _Tp, _Tp>, typename std::__fun<std::__not_equal_to, _Tp>::result_type> std::operator!=(const std::valarray<_Tp>&, const typename std::valarray<_Tp>::value_type&)’
+ 1198 | _DEFINE_BINARY_OPERATOR(!=, __not_equal_to)
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/valarray:1198:1: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::valarray<_Tp>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:95,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/valarray:1198:1: note: candidate: ‘template<class _Tp> std::_Expr<std::__detail::_BinClos<std::__not_equal_to, std::_Constant, std::_ValArray, _Tp, _Tp>, typename std::__fun<std::__not_equal_to, _Tp>::result_type> std::operator!=(const typename std::valarray<_Tp>::value_type&, const std::valarray<_Tp>&)’
+ 1198 | _DEFINE_BINARY_OPERATOR(!=, __not_equal_to)
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/valarray:1198:1: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const std::valarray<_Tp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/forward_list:38,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:104,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/forward_list.h:1476:5: note: candidate: ‘template<class _Tp, class _Alloc> bool std::operator!=(const std::forward_list<_Tp, _Alloc>&, const std::forward_list<_Tp, _Alloc>&)’
+ 1476 |     operator!=(const forward_list<_Tp, _Alloc>& __lx,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/forward_list.h:1476:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::forward_list<_Tp, _Alloc>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/future:39,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:105,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/thread:311:3: note: candidate: ‘bool std::operator!=(std::thread::id, std::thread::id)’
+  311 |   operator!=(thread::id __x, thread::id __y) noexcept
+      |   ^~~~~~~~
+/usr/include/c++/10/thread:311:25: note:   no known conversion for argument 1 from ‘int’ to ‘std::thread::id’
+  311 |   operator!=(thread::id __x, thread::id __y) noexcept
+      |              ~~~~~~~~~~~^~~
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:423:5: note: candidate: ‘template<class _UIntType, _UIntType __a, _UIntType __c, _UIntType __m> bool std::operator!=(const std::linear_congruential_engine<_UIntType, __a, __c, __m>&, const std::linear_congruential_engine<_UIntType, __a, __c, __m>&)’
+  423 |     operator!=(const std::linear_congruential_engine<_UIntType, __a,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:423:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::linear_congruential_engine<_UIntType, __a, __c, __m>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:660:5: note: candidate: ‘template<class _UIntType, long unsigned int __w, long unsigned int __n, long unsigned int __m, long unsigned int __r, _UIntType __a, long unsigned int __u, _UIntType __d, long unsigned int __s, _UIntType __b, long unsigned int __t, _UIntType __c, long unsigned int __l, _UIntType __f> bool std::operator!=(const std::mersenne_twister_engine<_UIntType, __w, __n, __m, __r, __a, __u, __d, __s, __b, __t, __c, __l, __f>&, const std::mersenne_twister_engine<_UIntType, __w, __n, __m, __r, __a, __u, __d, __s, __b, __t, __c, __l, __f>&)’
+  660 |     operator!=(const std::mersenne_twister_engine<_UIntType, __w, __n, __m,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:660:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::mersenne_twister_engine<_UIntType, __w, __n, __m, __r, __a, __u, __d, __s, __b, __t, __c, __l, __f>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:861:5: note: candidate: ‘template<class _UIntType, long unsigned int __w, long unsigned int __s, long unsigned int __r> bool std::operator!=(const std::subtract_with_carry_engine<_UIntType, __w, __s, __r>&, const std::subtract_with_carry_engine<_UIntType, __w, __s, __r>&)’
+  861 |     operator!=(const std::subtract_with_carry_engine<_UIntType, __w,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:861:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::subtract_with_carry_engine<_UIntType, __w, __s, __r>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:1084:5: note: candidate: ‘template<class _RandomNumberEngine, long unsigned int __p, long unsigned int __r> bool std::operator!=(const std::discard_block_engine<_RandomNumberEngine, __p, __r>&, const std::discard_block_engine<_RandomNumberEngine, __p, __r>&)’
+ 1084 |     operator!=(const std::discard_block_engine<_RandomNumberEngine, __p,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:1084:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::discard_block_engine<_RandomNumberEngine, __p, __r>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:1281:5: note: candidate: ‘template<class _RandomNumberEngine, long unsigned int __w, class _UIntType> bool std::operator!=(const std::independent_bits_engine<_RandomNumberEngine, __w, _UIntType>&, const std::independent_bits_engine<_RandomNumberEngine, __w, _UIntType>&)’
+ 1281 |     operator!=(const std::independent_bits_engine<_RandomNumberEngine, __w,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:1281:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::independent_bits_engine<_RandomNumberEngine, __w, _UIntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:1534:5: note: candidate: ‘template<class _RandomNumberEngine, long unsigned int __k> bool std::operator!=(const std::shuffle_order_engine<_RandomNumberEngine, __k>&, const std::shuffle_order_engine<_RandomNumberEngine, __k>&)’
+ 1534 |     operator!=(const std::shuffle_order_engine<_RandomNumberEngine,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:1534:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::shuffle_order_engine<_RandomNumberEngine, __k>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:1689:5: note: candidate: ‘template<class _IntType> bool std::operator!=(const std::uniform_int_distribution<_IntType>&, const std::uniform_int_distribution<_IntType>&)’
+ 1689 |     operator!=(const std::uniform_int_distribution<_IntType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:1689:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::uniform_int_distribution<_IntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:1910:5: note: candidate: ‘template<class _IntType> bool std::operator!=(const std::uniform_real_distribution<_IntType>&, const std::uniform_real_distribution<_IntType>&)’
+ 1910 |     operator!=(const std::uniform_real_distribution<_IntType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:1910:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::uniform_real_distribution<_IntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:2167:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::normal_distribution<_RealType>&, const std::normal_distribution<_RealType>&)’
+ 2167 |     operator!=(const std::normal_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:2167:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::normal_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:2378:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::lognormal_distribution<_RealType>&, const std::lognormal_distribution<_RealType>&)’
+ 2378 |     operator!=(const std::lognormal_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:2378:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::lognormal_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:2609:6: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::gamma_distribution<_RealType>&, const std::gamma_distribution<_RealType>&)’
+ 2609 |      operator!=(const std::gamma_distribution<_RealType>& __d1,
+      |      ^~~~~~~~
+/usr/include/c++/10/bits/random.h:2609:6: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::gamma_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:2833:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::chi_squared_distribution<_RealType>&, const std::chi_squared_distribution<_RealType>&)’
+ 2833 |     operator!=(const std::chi_squared_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:2833:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::chi_squared_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:3007:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::cauchy_distribution<_RealType>&, const std::cauchy_distribution<_RealType>&)’
+ 3007 |     operator!=(const std::cauchy_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:3007:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::cauchy_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:3271:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::fisher_f_distribution<_RealType>&, const std::fisher_f_distribution<_RealType>&)’
+ 3271 |     operator!=(const std::fisher_f_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:3271:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::fisher_f_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:3493:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::student_t_distribution<_RealType>&, const std::student_t_distribution<_RealType>&)’
+ 3493 |     operator!=(const std::student_t_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:3493:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::student_t_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:3681:3: note: candidate: ‘bool std::operator!=(const std::bernoulli_distribution&, const std::bernoulli_distribution&)’
+ 3681 |   operator!=(const std::bernoulli_distribution& __d1,
+      |   ^~~~~~~~
+/usr/include/c++/10/bits/random.h:3681:49: note:   no known conversion for argument 1 from ‘int’ to ‘const std::bernoulli_distribution&’
+ 3681 |   operator!=(const std::bernoulli_distribution& __d1,
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/usr/include/c++/10/bits/random.h:3956:5: note: candidate: ‘template<class _IntType> bool std::operator!=(const std::binomial_distribution<_IntType>&, const std::binomial_distribution<_IntType>&)’
+ 3956 |     operator!=(const std::binomial_distribution<_IntType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:3956:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::binomial_distribution<_IntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:4135:5: note: candidate: ‘template<class _IntType> bool std::operator!=(const std::geometric_distribution<_IntType>&, const std::geometric_distribution<_IntType>&)’
+ 4135 |     operator!=(const std::geometric_distribution<_IntType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:4135:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::geometric_distribution<_IntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:4389:5: note: candidate: ‘template<class _IntType> bool std::operator!=(const std::negative_binomial_distribution<_IntType>&, const std::negative_binomial_distribution<_IntType>&)’
+ 4389 |     operator!=(const std::negative_binomial_distribution<_IntType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:4389:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::negative_binomial_distribution<_IntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:4615:5: note: candidate: ‘template<class _IntType> bool std::operator!=(const std::poisson_distribution<_IntType>&, const std::poisson_distribution<_IntType>&)’
+ 4615 |     operator!=(const std::poisson_distribution<_IntType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:4615:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::poisson_distribution<_IntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:4806:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::exponential_distribution<_RealType>&, const std::exponential_distribution<_RealType>&)’
+ 4806 |     operator!=(const std::exponential_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:4806:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::exponential_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:5016:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::weibull_distribution<_RealType>&, const std::weibull_distribution<_RealType>&)’
+ 5016 |     operator!=(const std::weibull_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:5016:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::weibull_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:5226:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::extreme_value_distribution<_RealType>&, const std::extreme_value_distribution<_RealType>&)’
+ 5226 |     operator!=(const std::extreme_value_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:5226:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::extreme_value_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:5491:5: note: candidate: ‘template<class _IntType> bool std::operator!=(const std::discrete_distribution<_IntType>&, const std::discrete_distribution<_IntType>&)’
+ 5491 |     operator!=(const std::discrete_distribution<_IntType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:5491:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::discrete_distribution<_IntType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:5762:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::piecewise_constant_distribution<_RealType>&, const std::piecewise_constant_distribution<_RealType>&)’
+ 5762 |     operator!=(const std::piecewise_constant_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:5762:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::piecewise_constant_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/random:49,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:108,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/random.h:6035:5: note: candidate: ‘template<class _RealType> bool std::operator!=(const std::piecewise_linear_distribution<_RealType>&, const std::piecewise_linear_distribution<_RealType>&)’
+ 6035 |     operator!=(const std::piecewise_linear_distribution<_RealType>& __d1,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/random.h:6035:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::piecewise_linear_distribution<_RealType>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:111,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/scoped_allocator:507:5: note: candidate: ‘template<class _OutA1, class _OutA2, class ... _InA> bool std::operator!=(const std::scoped_allocator_adaptor<_OutA1, _InA ...>&, const std::scoped_allocator_adaptor<_InnerHead, _InnerTail ...>&)’
+  507 |     operator!=(const scoped_allocator_adaptor<_OutA1, _InA...>& __a,
+      |     ^~~~~~~~
+/usr/include/c++/10/scoped_allocator:507:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::scoped_allocator_adaptor<_OutA1, _InA ...>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/unordered_set:47,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:118,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/unordered_set.h:1710:5: note: candidate: ‘template<class _Value, class _Hash, class _Pred, class _Alloc> bool std::operator!=(const std::unordered_set<_Value1, _Hash1, _Pred1, _Alloc1>&, const std::unordered_set<_Value1, _Hash1, _Pred1, _Alloc1>&)’
+ 1710 |     operator!=(const unordered_set<_Value, _Hash, _Pred, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/unordered_set.h:1710:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::unordered_set<_Value1, _Hash1, _Pred1, _Alloc1>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/unordered_set:47,
+                 from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:118,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/bits/unordered_set.h:1724:5: note: candidate: ‘template<class _Value, class _Hash, class _Pred, class _Alloc> bool std::operator!=(const std::unordered_multiset<_Value1, _Hash1, _Pred1, _Alloc1>&, const std::unordered_multiset<_Value1, _Hash1, _Pred1, _Alloc1>&)’
+ 1724 |     operator!=(const unordered_multiset<_Value, _Hash, _Pred, _Alloc>& __x,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/unordered_set.h:1724:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::unordered_multiset<_Value1, _Hash1, _Pred1, _Alloc1>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:133,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/variant:1195:3: note: candidate: ‘template<class ... _Types> constexpr bool std::operator!=(const std::variant<_Types ...>&, const std::variant<_Types ...>&)’
+ 1195 |   _VARIANT_RELATION_FUNCTION_TEMPLATE(!=, not_equal)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/10/variant:1195:3: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const std::variant<_Types ...>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/10/bits/stdc++.h:133,
+                 from src/functions.hpp:6,
+                 from src/parser.cpp:4:
+/usr/include/c++/10/variant:1233:18: note: candidate: ‘constexpr bool std::operator!=(std::monostate, std::monostate)’
+ 1233 |   constexpr bool operator!=(monostate, monostate) noexcept { return false; }
+      |                  ^~~~~~~~
+/usr/include/c++/10/variant:1233:29: note:   no known conversion for argument 1 from ‘int’ to ‘std::monostate’
+ 1233 |   constexpr bool operator!=(monostate, monostate) noexcept { return false; }
+      |                             ^~~~~~~~~
+In file included from /usr/include/c++/10/map:60,
+                 from src/constants.hpp:6,
+                 from src/parser.hpp:7,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_tree.h:401:7: note: candidate: ‘bool std::operator!=(const _Self&, const _Self&)’
+  401 |       operator!=(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
+      |       ^~~~~~~~
+/usr/include/c++/10/bits/stl_tree.h:401:31: note:   no known conversion for argument 1 from ‘int’ to ‘const _Self&’
+  401 |       operator!=(const _Self& __x, const _Self& __y) _GLIBCXX_NOEXCEPT
+      |                  ~~~~~~~~~~~~~^~~
+In file included from /usr/include/c++/10/string:41,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/allocator.h:197:7: note: candidate: ‘bool std::operator!=(const std::allocator<char>&, const std::allocator<char>&)’
+  197 |       operator!=(const allocator&, const allocator&) _GLIBCXX_NOTHROW
+      |       ^~~~~~~~
+/usr/include/c++/10/bits/allocator.h:197:18: note:   no known conversion for argument 1 from ‘int’ to ‘const std::allocator<char>&’
+  197 |       operator!=(const allocator&, const allocator&) _GLIBCXX_NOTHROW
+      |                  ^~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/10/bits/stl_algobase.h:67,
+                 from /usr/include/c++/10/bits/char_traits.h:39,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_iterator.h:1105:5: note: candidate: ‘template<class _IteratorL, class _IteratorR, class _Container> bool __gnu_cxx::operator!=(const __gnu_cxx::__normal_iterator<_IteratorL, _Container>&, const __gnu_cxx::__normal_iterator<_IteratorR, _Container>&)’
+ 1105 |     operator!=(const __normal_iterator<_IteratorL, _Container>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_iterator.h:1105:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const __gnu_cxx::__normal_iterator<_IteratorL, _Container>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/c++/10/bits/stl_algobase.h:67,
+                 from /usr/include/c++/10/bits/char_traits.h:39,
+                 from /usr/include/c++/10/string:40,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/bits/stl_iterator.h:1113:5: note: candidate: ‘template<class _Iterator, class _Container> bool __gnu_cxx::operator!=(const __gnu_cxx::__normal_iterator<_Iterator, _Container>&, const __gnu_cxx::__normal_iterator<_Iterator, _Container>&)’
+ 1113 |     operator!=(const __normal_iterator<_Iterator, _Container>& __lhs,
+      |     ^~~~~~~~
+/usr/include/c++/10/bits/stl_iterator.h:1113:5: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   mismatched types ‘const __gnu_cxx::__normal_iterator<_Iterator, _Container>’ and ‘int’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+In file included from /usr/include/x86_64-linux-gnu/c++/10/bits/c++allocator.h:33,
+                 from /usr/include/c++/10/bits/allocator.h:46,
+                 from /usr/include/c++/10/string:41,
+                 from src/parser.hpp:4,
+                 from src/parser.cpp:3:
+/usr/include/c++/10/ext/new_allocator.h:178:2: note: candidate: ‘template<class _Up> bool __gnu_cxx::operator!=(const __gnu_cxx::new_allocator<char>&, const __gnu_cxx::new_allocator<_Tp>&)’
+  178 |  operator!=(const new_allocator&, const new_allocator<_Up>&)
+      |  ^~~~~~~~
+/usr/include/c++/10/ext/new_allocator.h:178:2: note:   template argument deduction/substitution failed:
+src/parser.cpp:162:49: note:   ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >::const_iterator’ {aka ‘std::_Rb_tree<std::__cxx11::basic_string<char>, std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >, std::_Select1st<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >, std::less<std::__cxx11::basic_string<char> >, std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > > >::const_iterator’} is not derived from ‘const __gnu_cxx::new_allocator<_Tp>’
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                 ^
+src/parser.cpp:162:65: error: base operand of ‘->’ is not a pointer
+  162 |             if (index != REPLACE_OPERATORS.cend()) value = index->second;
+      |                                                                 ^~
+src/parser.cpp:168:5: warning: no return statement in function returning non-void [-Wreturn-type]
+  168 |     }
+      |     ^
+src/parser.cpp: At global scope:
+src/parser.cpp:169:5: error: expected unqualified-id before ‘if’
+  169 |     if (!value.empty()) addTreeByValues(*exprList, value, type);
+      |     ^~
+src/parser.cpp:170:5: error: expected unqualified-id before ‘return’
+  170 |     return exprList;
+      |     ^~~~~~
+src/parser.cpp:171:1: error: expected declaration before ‘}’ token
+  171 | }
+      | ^
+make: *** [Makefile:24 : obj/parser.o] Erreur 1

@@ -1,18 +1,14 @@
+#include "tokenizer.hpp"
+
 using namespace std;
-
-#include "parser.hpp"
-#include "functions.hpp"
-#include "constants.hpp"
-
 using namespace constants;
 
-void removeParenthesis(Node *t) {
-    if (t->getType() == Types::CPA) t->replaceData(t->getChild());
-    Node *child = t->getChild();
-    while (child != nullptr) {
-        removeParenthesis(child);
-        child = child->getNext();
-    }
+bool isOperator(const string &value) {
+    return OPERATORS.find(value) != OPERATORS.end() || REPLACE_OPERATORS.find(value) != REPLACE_OPERATORS.end();
+}
+
+bool isTypeOrEmpty(Types type, Types checkType) {
+    return (type == Types::NUL || type == checkType);
 }
 
 void addTreeByValues(Node &t, const string &value, Types type) {
@@ -32,7 +28,7 @@ void addTreeByValues(Node &t, const string &value, Types type) {
 
 bool tokenizeSpace(char character, string &value, bool &createNewTree) {
     if (isspace(character)) {
-        if (value.empty()) createNewTree = false;
+        createNewTree = false;
         return true;
     }
     return false;
@@ -123,7 +119,7 @@ bool tokenizeOperator(char character, string &value, bool &createNewTree, int &i
     return false;
 }
 
-Node *tokenizer(string &expr, bool debug, bool implicitPriority) {
+Node *tokenizer(const string &expr, bool debug, bool implicitPriority) {
     Node *exprList = new Node{};
     string value{""};
     string testString{""};
@@ -158,7 +154,7 @@ Node *tokenizer(string &expr, bool debug, bool implicitPriority) {
             }
         if (debug) cerr << "value : " << value << " type : " << type << endl;
         if (createNewTree) {
-            std::map<std::string, std::string>::const_iterator} index = REPLACE_OPERATORS.find(value);
+            std::map<std::string, std::string>::const_iterator index = REPLACE_OPERATORS.find(value);
             if (index != REPLACE_OPERATORS.cend()) value = index->second;
             addTreeByValues(*exprList, value, type);
             value.clear();
@@ -168,63 +164,4 @@ Node *tokenizer(string &expr, bool debug, bool implicitPriority) {
     }
     if (!value.empty()) addTreeByValues(*exprList, value, type);
     return exprList;
-}
-
-Node *findRootOrParenthesis(Node *tree) {
-    if (tree->getParent() == nullptr || tree->getParent()->getType() == Types::OPA) return tree;
-    return findRootOrParenthesis(tree->getParent());
-}
-
-Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
-    Node *tree = new Node{};
-    Types treeType = Types::NUL;
-    if (tokenList == nullptr) return tree;
-    while (tokenList != nullptr) {
-        treeType = tokenList->getType();
-        if (treeType == Types::NBR || treeType == Types::VAR) {
-            tree->replaceData(tokenList);
-            tree = findRootOrParenthesis(tree);
-        }
-        else if (treeType == Types::OPT) {
-            if ((tokenList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OPA)) {
-                tree->replaceData(new Node{Types::NBR, "0"});
-            }
-            if (tokenList->getValue() == IMPLICIT_MULTIPLICATION_SIGN) tokenList->setValue(MULTIPLICATION_SIGN);
-            if (tree->getType() != Types::OPT || getPriority(tokenList->getValue()) <= getPriority(tree->getValue())) {
-                tokenList->addEmptyChild()->replaceData(tree);
-                tree->replaceData(tokenList);
-                tree = tree->addEmptyChild();
-            }
-            else {
-                Node *child;
-                child = getLastChild(tree);
-                while (child->getType() == Types::OPT && getPriority(tokenList->getValue()) > getPriority(child->getValue()))
-                    child = getLastChild(child);
-                tokenList->addEmptyChild()->replaceData(child);
-                child->replaceData(tokenList);
-                tree = child->addEmptyChild();
-            }
-        }
-        else if (treeType == Types::OPA) {
-            if (tree->getType() != Types::NUL) tree = tree->addEmptyChild();
-            tree->replaceData(tokenList);
-            tree = tree->addEmptyChild();
-        }
-        else if (treeType == Types::CPA) {
-            tree = findRootOrParenthesis(tree);
-            if (tree->getParent() != nullptr) {
-                tree = tree->getParent();
-                tree->setType(Types::CPA);
-            }
-            if (tree->getParent() != nullptr) tree = tree->getParent();
-        }
-        if (debug) {
-            cerr << endl << "Root : " << endl;
-            root(tree)->display(cerr);
-            cerr << endl;
-        }
-        tokenList = tokenList->getNext();
-    }
-    removeParenthesis(tree);
-    return root(tree);
 }

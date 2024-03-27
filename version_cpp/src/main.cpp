@@ -4,6 +4,7 @@
 #include "node.hpp"
 #include "parser.hpp"
 #include "solver.hpp"
+#include "tokenizer.hpp"
 
 using namespace std;
 
@@ -20,7 +21,8 @@ int main() {
     tl = tokenizer(expr, debug, implicitPriority);
     if (debug) {
         Node *tmp = tl;
-        while (tmp != NULL) {
+        cerr << "Tokens" << endl;
+        while (tmp != nullptr) {
             tmp->display(cerr);
             tmp = tmp->getNext();
         }
