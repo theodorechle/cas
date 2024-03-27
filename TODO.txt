@@ -5,6 +5,3 @@ Modify functions like sortTree and areSameNodes to allow any number of childs
 Refactor parser
 
 Create floats, ints, litterals, operators
-
-Operators should not be considered as functions
-
