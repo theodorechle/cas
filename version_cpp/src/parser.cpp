@@ -2,6 +2,7 @@ using namespace std;
 
 #include "parser.hpp"
 #include "functions.hpp"
+#include "constants.hpp"
 
 using namespace constants;
 
@@ -165,7 +166,7 @@ Node *tokenizer(string &expr, bool debug, bool implicitPriority) {
             }
         if (debug) cerr << "value : " << value << " type : " << type << endl;
         if (createNewTree) {
-            std::map<std::string, std::string>::const_iterator index = REPLACE_OPERATORS.find(value);
+            std::map<std::string, std::string>::const_iterator} index = REPLACE_OPERATORS.find(value);
             if (index != REPLACE_OPERATORS.cend()) value = index->second;
             addTreeByValues(*exprList, value, type);
             value.clear();

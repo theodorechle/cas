@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <unordered_map>
 
 namespace constants {
 
@@ -32,6 +33,18 @@ const std::string IMPLICIT_MULTIPLICATION_SIGN{""};
 const std::map<std::string, std::string> REPLACE_OPERATORS {
     {POWER_SIGN_2, POWER_SIGN}
 };
+
+
+const std::unordered_map<std::string, int> OPERATORS {
+    {constants::ADDITION_SIGN, 1},
+    {constants::SUBSTRACTION_SIGN, 1},
+    {constants::MULTIPLICATION_SIGN, 2},
+    {constants::DIVISION_SIGN, 2},
+    {constants::POWER_SIGN, 3},
+    {constants::IMPLICIT_MULTIPLICATION_SIGN, 4}
+};
+
+const int DEFAULT_PRIORITY = 50;
 
 }
 
