@@ -2,6 +2,7 @@ using namespace std;
 
 #include "parser.hpp"
 #include "functions.hpp"
+#include "constants.hpp"
 
 using namespace constants;
 

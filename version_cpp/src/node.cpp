@@ -151,8 +151,8 @@ Node *getLastChild(Node *n) {
 }
 
 int getPriority(const string &ope) {
-    map<string, int>::const_iterator iter = PRIORITIES.find(ope);
-    if (iter != PRIORITIES.cend()) return iter->second;
+    unordered_map<string, int>::const_iterator iter = OPERATORS.find(ope);
+    if (iter != OPERATORS.cend()) return iter->second;
     return DEFAULT_PRIORITY;
 }
 
