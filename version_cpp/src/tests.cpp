@@ -21,7 +21,7 @@ void testStringEqual(const string &expr, const string &expected, bool implicitPr
         delete tokens;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -37,7 +37,7 @@ void testStringDifferent(const string &expr, const string &notExpected, bool imp
         delete tokens;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -57,7 +57,7 @@ void testExprEqual(const string &expr, const string &expr2, bool implicitPriorit
         delete tokens2;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -78,7 +78,7 @@ void testExprDifferent(const string &expr, const string &expr2, bool implicitPri
         delete tokens2;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -102,7 +102,7 @@ void testEqualTokenizerNode(const string &expr, const Node *node, bool implicitP
         delete result;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -127,7 +127,7 @@ void testDifferentTokenizerNode(const string &expr, const Node *node, bool impli
         delete result;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -141,7 +141,7 @@ void testEqualParserNode(Node *expr, const Node *node, bool implicitPriority = f
         delete result;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -156,7 +156,7 @@ void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority
         delete result;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -172,7 +172,7 @@ void testEqualNode(const string &expr, const Node *node, bool implicitPriority =
         delete tokens;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
@@ -189,19 +189,31 @@ void testDifferentNode(const string &expr, const Node *node, bool implicitPriori
         delete tokens;
     }
     catch (const exception& e) {
-        cout << "Failed with error : " << e.what();
+        cerr << "Failed with error : " << e.what();
     }
     cerr << endl;
 }
 
-const string isBoolValid(bool a, bool b) {
+string isBoolValid(bool a, bool b) {
     if (a == b) return "OK";
     return "Error, " + to_string(a) + " instead of " + to_string(b);
 }
 
-const string isStringValid(const string &a, const string &b) {
+string isStringValid(const string &a, const string &b) {
     if (a == b) return "OK";
     return "Error, " + a + " instead of " + b;
+}
+
+void isGreaterNumber(Number *a, Number *b, bool expected) {
+    cerr << *a << " > " << *b << " : " << isBoolValid(a->isGreaterThan(b), expected) << endl;
+}
+
+void isLowerNumber(Number *a, Number *b, bool expected) {
+    cerr << *a << " < " << *b << " : " << isBoolValid(a->isLowerThan(b), expected) << endl;
+}
+
+void isEqualNumber(Number *a, Number *b, bool expected) {
+    cerr << *a << " == " << *b << " : " << isBoolValid(a->isEqualTo(b), expected) << endl;
 }
 
 int main() {
@@ -218,31 +230,35 @@ int main() {
     child2->appendNext(child3);
     testEqualTokenizerNode("-3x", value);
     delete value;
-    Number a{"53.9"};
-    Number a2{"53.9"};
-    Number b{"-92.5"};
-    Number c{"-3.2"};
-    cout << a << " > " << b << " : " << isBoolValid(a.isGreaterThan(&b), true) << endl;
-    cout << b << " < " << a << " : " << isBoolValid(b.isLowerThan(&a), true) << endl;
-    cout << a << " < " << b << " : " << isBoolValid(a.isLowerThan(&b), false) << endl;
-    cout << b << " > " << a << " : " << isBoolValid(b.isGreaterThan(&a), false) << endl;
-    cout << a << " > " << a << " : " << isBoolValid(a.isGreaterThan(&a), false) << endl;
-    cout << a << " < " << a << " : " << isBoolValid(a.isLowerThan(&a), false) << endl;
-    cout << a << " = " << a << " : " << isBoolValid(a.isEqualTo(&a), true) << endl;
-    cout << b << " = " << b << " : " << isBoolValid(b.isEqualTo(&b), true) << endl;
-    cout << a << " = " << b << " : " << isBoolValid(a.isEqualTo(&b), false) << endl;
-    cout << b << " = " << a << " : " << isBoolValid(b.isEqualTo(&a), false) << endl;
-    cout << a << " + " << b << " : ";
-    a.add(&b);
-    cout << isStringValid(a.getValue(), "-38.6") << endl;
-    cout << b << " + " << a2 << " : ";
-    b.add(&a2);
-    cout << isStringValid(b.getValue(), "-38.6") << endl;
-    cout << a2 << " + " << a2 << " : ";
-    a2.add(&a2);
-    cout << isStringValid(a2.getValue(), "107.8") << endl;
-    cout << c << " + " << c << " : ";
-    c.add(&c);
-    cout << isStringValid(c.getValue(), "-6.4") << endl;
+    Number *a = new Number{"53.9"};
+    Number *a2 = new Number{"53.9"};
+    Number *b = new Number{"-92.5"};
+    Number *c = new Number{"-3.2"};
+    isGreaterNumber(a, b, true);
+    isLowerNumber(b, a, true);
+    isLowerNumber(a, b, false);
+    isGreaterNumber(b, a, false);
+    isGreaterNumber(a, a, false);
+    isLowerNumber(a, a, false);
+    isEqualNumber(a, a, true);
+    isEqualNumber(b, b, true);
+    isEqualNumber(a, b, false);
+    isEqualNumber(b, a, false);
+    cout << *a << " + " << *b << " : ";
+    a->add(b);
+    cout << isStringValid(a->getValue(), "-38.6") << endl;
+    cout << *b << " + " << *a2 << " : ";
+    b->add(a2);
+    cout << isStringValid(b->getValue(), "-38.6") << endl;
+    cout << *a2 << " + " << *a2 << " : ";
+    a2->add(a2);
+    cout << isStringValid(a2->getValue(), "107.8") << endl;
+    cout << *c << " + " << *c << " : ";
+    c->add(c);
+    cout << isStringValid(c->getValue(), "-6.4") << endl;
+    delete a;
+    delete a2;
+    delete b;
+    delete c;
     return 0;
 }
