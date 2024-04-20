@@ -59,9 +59,11 @@ string Node::str() const {
             parenthesis = true;
             s += "(";
         }
-        s += getChild()->str();
+        if (getChild() != nullptr)
+            s += getChild()->str();
         s += getValue();
-        s += getChild()->getNext()->str();
+        if (getChild() != nullptr && getChild()->getNext() != nullptr)
+            s += getChild()->getNext()->str();
         if (parenthesis) s += ")";
     }
     else if (getType() == Types::FUC)
@@ -156,10 +158,6 @@ int getPriority(const string &ope) {
     return DEFAULT_PRIORITY;
 }
 
-bool operator==(const Node &n1, const Node &n2) {
-    return (n1.getValue() == n2.getValue() || n1.getType() == n2.getType());
-}
-
 bool areSameNodes(const Node *node1, const Node *node2) {
     if (!(node1 == node2)) return false;
     Node *child1 = node1->getChild();
@@ -171,4 +169,13 @@ bool areSameNodes(const Node *node1, const Node *node2) {
         child2 = child2->getNext();
     }
     return (child2 == nullptr);
+}
+
+bool operator==(const Node &n1, const Node &n2) {
+    return (n1.getValue() == n2.getValue() || n1.getType() == n2.getType());
+}
+
+std::ostream &operator<<(std::ostream &o, const Node &n) {
+    o << n.str();
+    return o;
 }

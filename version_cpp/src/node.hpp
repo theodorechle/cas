@@ -6,12 +6,12 @@
 #include "constants.hpp"
 
 
-class TypeError: public std::exception {
+/* class TypeError: public std::exception {
     std::string msg;
 public:
     TypeError(const std::string& msg=""): msg{msg} {};
     const char* what() const noexcept override {return msg.c_str();};
-};
+}; */
 
 class Node {
     constants::Types type;
@@ -34,7 +34,7 @@ public :
     void setNext(Node *next);
     void removeNext() {setValue(nullptr);};
     Node *getChild() const {return child;};
-    /*Set the first child (the one who is directly pointed by the instance)*/
+    /*Set the child pointer*/
     void setChild(Node *child);
     void removeChild() {setChild(nullptr);};
     void appendNext(Node *next);
@@ -57,6 +57,7 @@ public :
     ~Node();
 
     friend bool operator==(const Node &, const Node &);
+    friend std::ostream &operator<<(std::ostream &o, const Node &n);
 };
 
 /**
@@ -67,8 +68,6 @@ Node *root(Node *node);
 Node *getLastChild(Node *n);
 
 int getPriority(const std::string &ope);
-
-bool operator==(const Node &, const Node &);
 
 bool areSameNodes(const Node *node1, const Node *node2);
 

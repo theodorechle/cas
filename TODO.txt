@@ -2,6 +2,11 @@ Set doubles instead of floats
 
 Modify functions like sortTree and areSameNodes to allow any number of childs
 
-Refactor parser
 
-Create floats, ints, litterals, operators
+Create number class
+
+Forbid multiple dots in one number
+
+Add operator<< to nodes
+
+Rework tokenizer to tokenize blocks, not char by char

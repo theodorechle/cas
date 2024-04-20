@@ -5,6 +5,7 @@
 #include "parser.hpp"
 #include "solver.hpp"
 #include "tokenizer.hpp"
+#include "number.hpp"
 
 using namespace std;
 using namespace constants;
@@ -108,7 +109,7 @@ void testDifferentTokenizerNode(const string &expr, const Node *node, bool impli
 }
 
 void testEqualParserNode(Node *expr, const Node *node, bool implicitPriority = false) {
-    cerr << "Test parser " << expr->str() << " == node " << node->str() << " : ";
+    cerr << "Test parser " << *expr << " == node " << *node << " : ";
     try {
         const Node *result = parser(expr, false, implicitPriority);
         if (areSameNodes(result, node)) cerr << "OK";
@@ -122,7 +123,7 @@ void testEqualParserNode(Node *expr, const Node *node, bool implicitPriority = f
 
 
 void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority = false) {
-    cerr << "Test parser " << expr->str() << " != node " << node->str() << " : ";
+    cerr << "Test parser " << *expr << " != node " << *node << " : ";
     try {
         const Node *result = parser(expr, false, implicitPriority);
         if (!areSameNodes(result, node)) cerr << "OK";
@@ -135,7 +136,7 @@ void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority
 }
 
 void testEqualNode(const string &expr, const Node *node, bool implicitPriority = false) {
-    cerr << "Test tokenizer + parser " << expr << " == node " << node->str() << " : ";
+    cerr << "Test tokenizer + parser " << expr << " == node " << *node << " : ";
     try {
         const Node *result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority);
         if (areSameNodes(result, node)) cerr << "OK";
@@ -149,7 +150,7 @@ void testEqualNode(const string &expr, const Node *node, bool implicitPriority =
 
 
 void testDifferentNode(const string &expr, const Node *node, bool implicitPriority = false) {
-    cerr << "Test tokenizer + parser " << expr << " != node " << node->str() << " : ";
+    cerr << "Test tokenizer + parser " << expr << " != node " << *node << " : ";
     try {
         const Node *result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority);
         if (!areSameNodes(result, node)) cerr << "OK";
@@ -161,7 +162,15 @@ void testDifferentNode(const string &expr, const Node *node, bool implicitPriori
     cerr << endl;
 }
 
+const string isBoolValid(bool a, bool b) {
+    if (a == b) return "OK";
+    return "Error";
+}
 
+const string isStringValid(const string &a, const string &b) {
+    if (a == b) return "OK";
+    return "Error";
+}
 
 int main() {
     testExprEqual("3x**2", "3x^2");
@@ -177,5 +186,24 @@ int main() {
     child2->appendNext(child3);
     testEqualTokenizerNode("-3x", value);
     delete value;
+    Number a{"53.9"};
+    Number a2{"53.9"};
+    Number b{"-92.5"};
+    cout << a << " > " << b << " : " << isBoolValid(a.isGreaterThan(&b), true) << endl;
+    cout << b << " < " << a << " : " << isBoolValid(b.isLowerThan(&a), true) << endl;
+    cout << a << " < " << b << " : " << isBoolValid(a.isLowerThan(&b), false) << endl;
+    cout << b << " > " << a << " : " << isBoolValid(b.isGreaterThan(&a), false) << endl;
+    cout << a << " > " << a << " : " << isBoolValid(a.isGreaterThan(&a), false) << endl;
+    cout << a << " < " << a << " : " << isBoolValid(a.isLowerThan(&a), false) << endl;
+    cout << a << " = " << a << " : " << isBoolValid(a.isEqualTo(&a), true) << endl;
+    cout << b << " = " << b << " : " << isBoolValid(b.isEqualTo(&b), true) << endl;
+    cout << a << " = " << b << " : " << isBoolValid(a.isEqualTo(&b), false) << endl;
+    cout << b << " = " << a << " : " << isBoolValid(b.isEqualTo(&a), false) << endl;
+    cout << a << " + " << b << " : ";
+    a.Add(&b);
+    cout << isStringValid(a.str(), "-38.6") << endl;
+    cout << b << " + " << a2 << " : ";
+    b.Add(&a2);
+    cout << isStringValid(b.str(), "-38.6") << endl;
     return 0;
 }
