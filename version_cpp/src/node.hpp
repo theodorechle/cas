@@ -38,7 +38,7 @@ public :
     void setChild(Node *child);
     void removeChild() {setChild(nullptr);};
     void appendNext(Node *next);
-    /*Add a child at the end of them*/
+    /*add a child at the end of them*/
     Node *appendChild(Node *child);
     Node *appendChild(Node &child);
     Node *addEmptyChild();

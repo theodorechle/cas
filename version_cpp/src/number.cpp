@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void Number::ParseNumber() {
+void Number::parseNumber() {
     negative = false;
     string v = getValue();
     string integer;
@@ -134,7 +134,7 @@ bool Number::isEqualTo(Number *n) const {
     return true;
 }
 
-void Number::Add(Number *n) {
+void Number::add(Number *n) {
     bool substract = isNegative() ^ n->isNegative();
     bool overflow = false;
     if (isLowerThan(n)) {
@@ -183,15 +183,15 @@ string Number::addPart(const string &thisNumber, const string &otherNumber, bool
     /*Do it with int casts, char by char*/
 }
 
-void Number::Substract(Number *n) {
+void Number::substract(Number *n) {
 
 }
 
-void Number::Multiply(Number *n) {
+void Number::multiply(Number *n) {
 
 }
 
-void Number::Divide(Number *n) {
+void Number::divide(Number *n) {
     
 }
 

@@ -200,10 +200,10 @@ int main() {
     cout << a << " = " << b << " : " << isBoolValid(a.isEqualTo(&b), false) << endl;
     cout << b << " = " << a << " : " << isBoolValid(b.isEqualTo(&a), false) << endl;
     cout << a << " + " << b << " : ";
-    a.Add(&b);
+    a.add(&b);
     cout << isStringValid(a.getValue(), "-38.6") << endl;
     cout << b << " + " << a2 << " : ";
-    b.Add(&a2);
+    b.add(&a2);
     cout << isStringValid(b.getValue(), "-38.6") << endl;
     return 0;
 }
