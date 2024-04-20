@@ -57,11 +57,13 @@ void Number::setFractionPart(const std::string &value) {
 bool Number::isGreaterThan(Number *n) const {
     if (isNegative() && !n->isNegative()) return false;
     if (!isNegative() && n->isNegative()) return true;
-    // value is without '-'
     if (isNegative() && n->isNegative()) {
-        Number thisCopy = Number(n->getValue());
-        Number otherCopy = Number(getValue());
-        return thisCopy.isLowerThan(&otherCopy);
+        Number *thisCopy = n->getAbsolute();
+        Number *otherCopy = getAbsolute();
+        bool result = thisCopy->isLowerThan(otherCopy);
+        delete thisCopy;
+        delete otherCopy;
+        return result;
     }
     if (getIntegerSize() > n->getIntegerSize()) return true;
     if (getIntegerSize() < n->getIntegerSize()) return false;
@@ -86,11 +88,13 @@ bool Number::isGreaterThan(Number *n) const {
 
 bool Number::isLowerThan(Number *n) const {
     if (!isNegative() && n->isNegative()) return false;
-    // value is without '-'
     if (isNegative() && n->isNegative()) {
-        Number thisCopy = Number(n->getValue());
-        Number otherCopy = Number(getValue());
-        return thisCopy.isGreaterThan(&otherCopy);
+        Number *thisCopy = n->getAbsolute();
+        Number *otherCopy = getAbsolute();
+        bool result = thisCopy->isGreaterThan(otherCopy);
+        delete thisCopy;
+        delete otherCopy;
+        return result;
     }
     if (isNegative() && !n->isNegative()) return true;
     if (getIntegerSize() < n->getIntegerSize()) return true;
@@ -136,18 +140,28 @@ bool Number::isEqualTo(Number *n) const {
 
 void Number::add(Number *n) {
     bool substract = isNegative() ^ n->isNegative();
+    bool negativeSign = false;
+    Number *absolute = getAbsolute();
+    if (isNegative() && !n->isNegative() && absolute->isGreaterThan(n)) negativeSign = true;
+    delete absolute;
+    absolute = n->getAbsolute();
+    if (!isNegative() && n->isNegative() && isLowerThan(absolute)) negativeSign = true;
+    delete absolute;
+    if (isNegative() && n->isNegative()) negativeSign = true;
     bool overflow = false;
+    string integer;
     if (isLowerThan(n)) {
         setFractionPart(addPart(getFractionPart(), n->getFractionPart(), substract, &overflow));
-        setIntegerPart(addPart(getIntegerPart(), n->getIntegerPart(), substract, &overflow));
+        integer = addPart(getIntegerPart(), n->getIntegerPart(), substract, &overflow);
     }
     else {
         setFractionPart(addPart(n->getFractionPart(), getFractionPart(), substract, &overflow));
-        setIntegerPart(addPart(n->getIntegerPart(), getIntegerPart(), substract, &overflow));
+        integer = addPart(n->getIntegerPart(), getIntegerPart(), substract, &overflow);
     }
     if (overflow)
-        setIntegerPart('1' + getIntegerPart());
-    setValue((substract ? "-" : "") + getIntegerPart() + "." + getFractionPart());
+        integer = '1' + integer;
+    setIntegerPart(integer);
+    setValue((negativeSign ? "-" : "") + getIntegerPart() + "." + getFractionPart());
     negative = substract;
 }
 

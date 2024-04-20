@@ -13,9 +13,12 @@ using namespace constants;
 void testStringEqual(const string &expr, const string &expected, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " == \"" << expected << "\" : ";
     try {
-        const string result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority)->str();
-        if (result == expected) cerr << "OK";
+        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *result = parser(tokens, false, implicitPriority);
+        if (result->str() == expected) cerr << "OK";
         else cerr << "KO";
+        delete result;
+        delete tokens;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -26,9 +29,12 @@ void testStringEqual(const string &expr, const string &expected, bool implicitPr
 void testStringDifferent(const string &expr, const string &notExpected, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " != \"" << notExpected << "\" : ";
     try {
-        const string result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority)->str();
-        if (result != notExpected) cerr << "OK";
+        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *result = parser(tokens, false, implicitPriority);
+        if (result->str() != notExpected) cerr << "OK";
         else cerr << "KO";
+        delete result;
+        delete tokens;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -39,10 +45,16 @@ void testStringDifferent(const string &expr, const string &notExpected, bool imp
 void testExprEqual(const string &expr, const string &expr2, bool implicitPriority = false) {
     cerr << "Test expr " << expr << " == " << expr2 << " : ";
     try {
-        const string result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority)->str();
-        const string result2 = parser(tokenizer(expr2, false, implicitPriority), false, implicitPriority)->str();
-        if (result == result2) cerr << "OK";
+        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *result = parser(tokens, false, implicitPriority);
+        Node *tokens2 = tokenizer(expr2, false, implicitPriority);
+        Node *result2 = parser(tokens2, false, implicitPriority);
+        if (result->str() == result2->str()) cerr << "OK";
         else cerr << "KO";
+        delete result;
+        delete result2;
+        delete tokens;
+        delete tokens2;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -54,10 +66,16 @@ void testExprEqual(const string &expr, const string &expr2, bool implicitPriorit
 void testExprDifferent(const string &expr, const string &expr2, bool implicitPriority = false) {
     cerr << "Test expr " << expr << " != " << expr2 << " : ";
     try {
-        const string result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority)->str();
-        const string result2 = parser(tokenizer(expr2, false, implicitPriority), false, implicitPriority)->str();
-        if (result != result2) cerr << "OK";
+        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *result = parser(tokens, false, implicitPriority);
+        Node *tokens2 = tokenizer(expr2, false, implicitPriority);
+        Node *result2 = parser(tokens2, false, implicitPriority);
+        if (result->str() != result2->str()) cerr << "OK";
         else cerr << "KO";
+        delete result;
+        delete result2;
+        delete tokens;
+        delete tokens2;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -68,17 +86,20 @@ void testExprDifferent(const string &expr, const string &expr2, bool implicitPri
 void testEqualTokenizerNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer " << expr << " == node : ";
     try {
-        const Node *result = tokenizer(expr, false, implicitPriority);
-        while (result != nullptr) {
-            if (node == nullptr || !(*result == *node)) {
+        Node *result = tokenizer(expr, false, implicitPriority);
+        Node *n = result;
+        while (n != nullptr) {
+            if (node == nullptr || !(*n == *node)) {
                 cerr << "KO" << endl;
+                delete result;
                 return;
             }
-            result = result->getNext();
+            n = n->getNext();
             node = node->getNext();
         }
         if (node != nullptr) cerr << "KO";
         else cerr << "OK";
+        delete result;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -90,17 +111,20 @@ void testEqualTokenizerNode(const string &expr, const Node *node, bool implicitP
 void testDifferentTokenizerNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer " << expr << " != node : ";
     try {
-        const Node *result = tokenizer(expr, false, implicitPriority);
-        while (result != nullptr) {
-            if (node == nullptr || *result == *node) {
+        Node *result = tokenizer(expr, false, implicitPriority);
+        Node *n = result;
+        while (n != nullptr) {
+            if (node == nullptr || *n == *node) {
                 cerr << "KO" << endl;
+                delete result;
                 return;
             }
-            result = result->getNext();
+            n = n->getNext();
             node = node->getNext();
         }
         if (node != nullptr) cerr << "KO";
         else cerr << "OK";
+        delete result;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -111,9 +135,10 @@ void testDifferentTokenizerNode(const string &expr, const Node *node, bool impli
 void testEqualParserNode(Node *expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test parser " << *expr << " == node " << *node << " : ";
     try {
-        const Node *result = parser(expr, false, implicitPriority);
+        Node *result = parser(expr, false, implicitPriority);
         if (areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
+        delete result;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -125,9 +150,10 @@ void testEqualParserNode(Node *expr, const Node *node, bool implicitPriority = f
 void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test parser " << *expr << " != node " << *node << " : ";
     try {
-        const Node *result = parser(expr, false, implicitPriority);
+        Node *result = parser(expr, false, implicitPriority);
         if (!areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
+        delete result;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -138,9 +164,12 @@ void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority
 void testEqualNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " == node " << *node << " : ";
     try {
-        const Node *result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority);
+        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *result = parser(tokens, false, implicitPriority);
         if (areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
+        delete result;
+        delete tokens;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -152,9 +181,12 @@ void testEqualNode(const string &expr, const Node *node, bool implicitPriority =
 void testDifferentNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " != node " << *node << " : ";
     try {
-        const Node *result = parser(tokenizer(expr, false, implicitPriority), false, implicitPriority);
+        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *result = parser(tokens, false, implicitPriority);
         if (!areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
+        delete result;
+        delete tokens;
     }
     catch (const exception& e) {
         cout << "Failed with error : " << e.what();
@@ -189,6 +221,7 @@ int main() {
     Number a{"53.9"};
     Number a2{"53.9"};
     Number b{"-92.5"};
+    Number c{"-3.2"};
     cout << a << " > " << b << " : " << isBoolValid(a.isGreaterThan(&b), true) << endl;
     cout << b << " < " << a << " : " << isBoolValid(b.isLowerThan(&a), true) << endl;
     cout << a << " < " << b << " : " << isBoolValid(a.isLowerThan(&b), false) << endl;
@@ -205,5 +238,11 @@ int main() {
     cout << b << " + " << a2 << " : ";
     b.add(&a2);
     cout << isStringValid(b.getValue(), "-38.6") << endl;
+    cout << a2 << " + " << a2 << " : ";
+    a2.add(&a2);
+    cout << isStringValid(a2.getValue(), "107.8") << endl;
+    cout << c << " + " << c << " : ";
+    c.add(&c);
+    cout << isStringValid(c.getValue(), "-6.4") << endl;
     return 0;
 }

@@ -22,6 +22,7 @@ public:
     bool isEqualTo(Number *) const;
     const std::string &getIntegerPart() const {return integerPart;}
     const std::string &getFractionPart() const {return fractionPart;}
+    Number *getAbsolute() const {return new Number(negative ? getValue().substr(1) : getValue());}
     int getIntegerSize() const {return integerPart.size() - negative;}
     int getFractionSize() const {return fractionPart.size();}
     void add(Number *n);
