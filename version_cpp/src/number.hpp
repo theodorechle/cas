@@ -10,6 +10,12 @@ class Number: public Node {
     void parseNumber();
     void setIntegerPart(const std::string &);
     void setFractionPart(const std::string &);
+    /**
+     * Update the base node value with new negative, integerPart and fractionPart values.
+     * The value attribute is used to have a representing string of the Number.
+     * The updateValue method must be called after each modification of the inner attributes.
+    */
+    void updatevalue();
     std::string addPart(const std::string &thisNumber, const std::string &otherNumber, bool substract, bool *overflow);
 public:
     Number(std::string number, Node *parent=nullptr): Node{constants::Types::NBR, number, parent} {

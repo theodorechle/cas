@@ -23,6 +23,7 @@ void Number::parseNumber() {
     }
     setIntegerPart(integer);
     setFractionPart(fraction);
+    updatevalue();
 }
 
 void Number::setIntegerPart(const std::string &value) {
@@ -37,6 +38,7 @@ void Number::setIntegerPart(const std::string &value) {
         }
         else integerPart += c;
     }
+    if (integerPart.empty()) integerPart = "0";
 }
 
 void Number::setFractionPart(const std::string &value) {
@@ -52,6 +54,10 @@ void Number::setFractionPart(const std::string &value) {
         else fractionPart += *c;
     }
     reverse(fractionPart.begin(), fractionPart.end());
+}
+
+void Number::updatevalue() {
+    setValue((negative ? "-" : "") + getIntegerPart() + (!getFractionPart().empty() ? "." + getFractionPart() : ""));
 }
 
 bool Number::isGreaterThan(Number *n) const {
@@ -161,8 +167,8 @@ void Number::add(Number *n) {
     if (overflow)
         integer = '1' + integer;
     setIntegerPart(integer);
-    setValue((negativeSign ? "-" : "") + getIntegerPart() + "." + getFractionPart());
-    negative = substract;
+    negative = negativeSign;
+    updatevalue();
 }
 
 string Number::addPart(const string &thisNumber, const string &otherNumber, bool substract, bool *overflow) {

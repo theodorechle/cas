@@ -199,7 +199,7 @@ string isBoolValid(bool a, bool b) {
     return "Error, " + to_string(a) + " instead of " + to_string(b);
 }
 
-string isStringValid(const string &a, const string &b) {
+string areStringEquals(const string &a, const string &b) {
     if (a == b) return "OK";
     return "Error, " + a + " instead of " + b;
 }
@@ -234,6 +234,9 @@ int main() {
     Number *a2 = new Number{"53.9"};
     Number *b = new Number{"-92.5"};
     Number *c = new Number{"-3.2"};
+    Number *one = new Number{"1"};
+    Number *zero = new Number{"0"};
+    Number *zeroFloat = new Number{"0.0"};
     isGreaterNumber(a, b, true);
     isLowerNumber(b, a, true);
     isLowerNumber(a, b, false);
@@ -246,19 +249,30 @@ int main() {
     isEqualNumber(b, a, false);
     cout << *a << " + " << *b << " : ";
     a->add(b);
-    cout << isStringValid(a->getValue(), "-38.6") << endl;
+    cout << areStringEquals(a->getValue(), "-38.6") << endl;
     cout << *b << " + " << *a2 << " : ";
     b->add(a2);
-    cout << isStringValid(b->getValue(), "-38.6") << endl;
+    cout << areStringEquals(b->getValue(), "-38.6") << endl;
     cout << *a2 << " + " << *a2 << " : ";
     a2->add(a2);
-    cout << isStringValid(a2->getValue(), "107.8") << endl;
+    cout << areStringEquals(a2->getValue(), "107.8") << endl;
     cout << *c << " + " << *c << " : ";
     c->add(c);
-    cout << isStringValid(c->getValue(), "-6.4") << endl;
+    cout << areStringEquals(c->getValue(), "-6.4") << endl;
+    isEqualNumber(zero, zeroFloat, true);
+    isGreaterNumber(zero, a, true);
+    isLowerNumber(zero, c, false);
+    cout << *zero << " + " << *one << " : ";
+    zero->add(one);
+    cout << areStringEquals(zero->getValue(), "1") << endl;
+    cout << *zeroFloat << " + " << *one << " : ";
+    zeroFloat->add(one);
+    cout << areStringEquals(zeroFloat->getValue(), "1") << endl;
     delete a;
     delete a2;
     delete b;
     delete c;
+    delete zero;
+    delete zeroFloat;
     return 0;
 }
