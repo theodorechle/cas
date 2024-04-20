@@ -7,52 +7,51 @@ using namespace std;
 void Number::ParseNumber() {
     negative = false;
     string v = getValue();
-    string integral;
-    string decimal;
-    string *part = &integral;
+    string integer;
+    string fraction;
+    string *part = &integer;
     if (v[0] == '-') {
         negative = true;
         v.erase(0, 1);
-        setValue(v);
     }
     for (char c : v) {
         if (c == '.') {
-            part = &decimal;
+            part = &fraction;
             continue;
         }
         *part += c;
     }
-    setIntegralPart(integral);
-    setDecimalPart(decimal);
+    setIntegerPart(integer);
+    setFractionPart(fraction);
 }
 
-void Number::setIntegralPart(const std::string &value) {
+void Number::setIntegerPart(const std::string &value) {
     bool beginning = true;
-    integralPart.clear();
+    integerPart.clear();
     for (char c : value) {
         if (beginning) {
             if (c != '0') {
                 beginning = false;
-                integralPart += c;
+                integerPart += c;
             }
         }
-        else integralPart += c;
+        else integerPart += c;
     }
 }
 
-void Number::setDecimalPart(const std::string &value) {
+void Number::setFractionPart(const std::string &value) {
     bool ending = true;
-    decimalPart.clear();
+    fractionPart.clear();
     for (string::const_reverse_iterator c = value.crbegin(); c != value.crend(); c++) {
         if (ending) {
             if (*c != '0') {
                 ending = false;
-                decimalPart += *c;
+                fractionPart += *c;
             }
         }
-        else decimalPart += *c;
+        else fractionPart += *c;
     }
-    reverse(decimalPart.begin(), decimalPart.end());
+    reverse(fractionPart.begin(), fractionPart.end());
 }
 
 bool Number::isGreaterThan(Number *n) const {
@@ -64,19 +63,19 @@ bool Number::isGreaterThan(Number *n) const {
         Number otherCopy = Number(getValue());
         return thisCopy.isLowerThan(&otherCopy);
     }
-    if (getIntegralPart().size() > n->getIntegralPart().size()) return true;
-    if (getIntegralPart().size() < n->getIntegralPart().size()) return false;
-    string::const_iterator thisChar = getIntegralPart().cbegin();
-    string::const_iterator otherChar = n->getIntegralPart().cbegin();
-    while (thisChar != getIntegralPart().cend()) {
+    if (getIntegerSize() > n->getIntegerSize()) return true;
+    if (getIntegerSize() < n->getIntegerSize()) return false;
+    string::const_iterator thisChar = getIntegerPart().cbegin();
+    string::const_iterator otherChar = n->getIntegerPart().cbegin();
+    while (thisChar != getIntegerPart().cend()) {
         if (*thisChar > *otherChar) return true;
         if (*thisChar < *otherChar) return false;
         thisChar++;
         otherChar++;
     }
-    thisChar = getDecimalPart().cbegin();
-    otherChar = n->getDecimalPart().cbegin();
-    while (thisChar != getDecimalPart().cend() && otherChar != n->getDecimalPart().cend()) {
+    thisChar = getFractionPart().cbegin();
+    otherChar = n->getFractionPart().cbegin();
+    while (thisChar != getFractionPart().cend() && otherChar != n->getFractionPart().cend()) {
         if (*thisChar > *otherChar) return true;
         if (*thisChar < *otherChar) return false;
         thisChar++;
@@ -94,19 +93,19 @@ bool Number::isLowerThan(Number *n) const {
         return thisCopy.isGreaterThan(&otherCopy);
     }
     if (isNegative() && !n->isNegative()) return true;
-    if (getIntegralPart().size() < n->getIntegralPart().size()) return true;
-    if (getIntegralPart().size() > n->getIntegralPart().size()) return false;
-    string::const_iterator thisChar = getIntegralPart().cbegin();
-    string::const_iterator otherChar = n->getIntegralPart().cbegin();
-    while (thisChar != getIntegralPart().cend()) {
+    if (getIntegerSize() < n->getIntegerSize()) return true;
+    if (getIntegerSize() > n->getIntegerSize()) return false;
+    string::const_iterator thisChar = getIntegerPart().cbegin();
+    string::const_iterator otherChar = n->getIntegerPart().cbegin();
+    while (thisChar != getIntegerPart().cend()) {
         if (*thisChar < *otherChar) return true;
         if (*thisChar > *otherChar) return false;
         thisChar++;
         otherChar++;
     }
-    thisChar = getDecimalPart().cbegin();
-    otherChar = n->getDecimalPart().cbegin();
-    while (thisChar != getDecimalPart().cend() && otherChar != n->getDecimalPart().cend()) {
+    thisChar = getFractionPart().cbegin();
+    otherChar = n->getFractionPart().cbegin();
+    while (thisChar != getFractionPart().cend() && otherChar != n->getFractionPart().cend()) {
         if (*thisChar < *otherChar) return true;
         if (*thisChar > *otherChar) return false;
         thisChar++;
@@ -117,17 +116,17 @@ bool Number::isLowerThan(Number *n) const {
 
 bool Number::isEqualTo(Number *n) const {
     if (isNegative() != n->isNegative()) return false;
-    if (getIntegralPart().size() != n->getIntegralPart().size()) return false;
-    string::const_iterator thisChar = getIntegralPart().cbegin();
-    string::const_iterator otherChar = n->getIntegralPart().cbegin();
-    while (thisChar != getIntegralPart().cend()) {
+    if (getIntegerSize() != n->getIntegerSize()) return false;
+    string::const_iterator thisChar = getIntegerPart().cbegin();
+    string::const_iterator otherChar = n->getIntegerPart().cbegin();
+    while (thisChar != getIntegerPart().cend()) {
         if (*thisChar != *otherChar) return false;
         thisChar++;
         otherChar++;
     }
-    thisChar = getDecimalPart().cbegin();
-    otherChar = n->getDecimalPart().cbegin();
-    while (thisChar != getDecimalPart().cend() && otherChar != n->getDecimalPart().cend()) {
+    thisChar = getFractionPart().cbegin();
+    otherChar = n->getFractionPart().cbegin();
+    while (thisChar != getFractionPart().cend() && otherChar != n->getFractionPart().cend()) {
         if (*thisChar != *otherChar) return false;
         thisChar++;
         otherChar++;
@@ -139,15 +138,16 @@ void Number::Add(Number *n) {
     bool substract = isNegative() ^ n->isNegative();
     bool overflow = false;
     if (isLowerThan(n)) {
-        setDecimalPart(addPart(getDecimalPart(), n->getDecimalPart(), substract, &overflow));
-        setIntegralPart(addPart(getIntegralPart(), n->getIntegralPart(), substract, &overflow));
+        setFractionPart(addPart(getFractionPart(), n->getFractionPart(), substract, &overflow));
+        setIntegerPart(addPart(getIntegerPart(), n->getIntegerPart(), substract, &overflow));
     }
     else {
-        setDecimalPart(addPart(n->getDecimalPart(), getDecimalPart(), substract, &overflow));
-        setIntegralPart(addPart(n->getIntegralPart(), getIntegralPart(), substract, &overflow));
+        setFractionPart(addPart(n->getFractionPart(), getFractionPart(), substract, &overflow));
+        setIntegerPart(addPart(n->getIntegerPart(), getIntegerPart(), substract, &overflow));
     }
     if (overflow)
-        setIntegralPart('1' + getIntegralPart());
+        setIntegerPart('1' + getIntegerPart());
+    setValue((substract ? "-" : "") + getIntegerPart() + "." + getFractionPart());
     negative = substract;
 }
 
@@ -195,16 +195,7 @@ void Number::Divide(Number *n) {
     
 }
 
-string Number::str() const {
-    string str = (isNegative() ? "-" : "") + getIntegralPart();
-    const string &decimal = getDecimalPart();
-    if (decimal.size()) {
-        str += '.' + decimal;
-    }
-    return str;
-}
-
 std::ostream &operator<<(std::ostream &o, const Number &n) {
-    o << n.str();
+    o << n.getValue();
     return o;
 }

@@ -164,12 +164,12 @@ void testDifferentNode(const string &expr, const Node *node, bool implicitPriori
 
 const string isBoolValid(bool a, bool b) {
     if (a == b) return "OK";
-    return "Error";
+    return "Error, " + to_string(a) + " instead of " + to_string(b);
 }
 
 const string isStringValid(const string &a, const string &b) {
     if (a == b) return "OK";
-    return "Error";
+    return "Error, " + a + " instead of " + b;
 }
 
 int main() {
@@ -201,9 +201,9 @@ int main() {
     cout << b << " = " << a << " : " << isBoolValid(b.isEqualTo(&a), false) << endl;
     cout << a << " + " << b << " : ";
     a.Add(&b);
-    cout << isStringValid(a.str(), "-38.6") << endl;
+    cout << isStringValid(a.getValue(), "-38.6") << endl;
     cout << b << " + " << a2 << " : ";
     b.Add(&a2);
-    cout << isStringValid(b.str(), "-38.6") << endl;
+    cout << isStringValid(b.getValue(), "-38.6") << endl;
     return 0;
 }

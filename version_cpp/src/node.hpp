@@ -23,9 +23,9 @@ class Node {
     void displayTree(std::ostream &flow = std::cout, int level=0) const;
 public :
     Node(constants::Types type=constants::Types::NUL, std::string value="", Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
-
+    virtual ~Node();
     void setValue(const std::string& s) {value = s;};
-    const std::string& getValue() const {return value;};
+    virtual const std::string& getValue() const {return value;};
     void setType(const constants::Types& t) {type = t;};
     const constants::Types& getType() const {return type;};
     Node *getParent() const {return parent;};
@@ -53,8 +53,6 @@ public :
     Node *copyNode() const;
     void display(std::ostream &flow = std::cout) const;
     std::string str() const;
-
-    ~Node();
 
     friend bool operator==(const Node &, const Node &);
     friend std::ostream &operator<<(std::ostream &o, const Node &n);
