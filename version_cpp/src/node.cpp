@@ -18,12 +18,12 @@ Node *Node::copyNodeAndChilds() {
     return n;
 }
 
-Node *Node::copyNode() const {
+Node *Node::copy() const {
     Node *n = new Node;
     Node *child = getChild();
     n->setType(getType());
     n->setValue(getValue());
-    if (n != nullptr) n->setChild(child->copyNodeAndChilds());
+    if (child != nullptr) n->setChild(child->copyNodeAndChilds());
     return n;
 }
 
@@ -38,7 +38,7 @@ void Node::displayTree(ostream &flow, int level) const {
 }
 
 void Node::display(ostream &flow) const {
-    displayTree(flow);
+    displayTree(flow, 0);
 }
 
 void Node::setParent(Node *parent) {
@@ -66,7 +66,7 @@ string Node::str() const {
             s += getChild()->getNext()->str();
         if (parenthesis) s += ")";
     }
-    else if (getType() == Types::FUC)
+    else if (getType() == Types::Function)
     {
         s += getValue();
         s += "(";
@@ -127,6 +127,7 @@ Node *Node::addEmptyChild() {
 void Node::replaceData(Node *tree) {
     setValue(tree->getValue());
     setType(tree->getType());
+    delete getChild();
     setChild(tree->getChild());
     if (getChild() != nullptr) {
         getChild()->setParent(this);   
@@ -140,7 +141,9 @@ Node::~Node() {
 }
 
 Node *root(Node *node) {
-    if (node == nullptr || node->getParent() == nullptr) return node;
+    if (node == nullptr ||
+        node->getParent() == nullptr ||
+        node->getParent()->getType() == Types::NullRoot) return node;
     return root(node->getParent());
 }
 
@@ -169,6 +172,14 @@ bool areSameNodes(const Node *node1, const Node *node2) {
         child2 = child2->getNext();
     }
     return (child2 == nullptr);
+}
+
+void deleteNullRoot(Node *node) {
+    node = root(node);
+    if (node->getParent() == nullptr) return;
+    node->getParent()->setChild(nullptr);
+    delete node->getParent();
+    node->setParent(nullptr);
 }
 
 bool operator==(const Node &n1, const Node &n2) {

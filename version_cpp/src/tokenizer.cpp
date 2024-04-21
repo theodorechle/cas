@@ -8,14 +8,14 @@ bool isOperator(const string &value) {
 }
 
 bool isTypeOrEmpty(Types type, Types checkType) {
-    return (type == Types::NUL || type == checkType);
+    return (type == Types::Empty || type == checkType);
 }
 
 void addTreeByValues(Node &t, const string &value, Types type) {
-    if (type == Types::NUL) {
-        throw NullError(value);
+    if (type == Types::Empty) {
+        throw UnknownValue(value);
     }
-    if (t.getType() == Types::NUL) {
+    if (t.getType() == Types::Empty) {
         t.setValue(value);
         t.setType(type);
         return;
@@ -36,18 +36,18 @@ bool tokenizeSpace(char character, string &value, bool &createNewTree) {
 
 bool tokenizeAlpha(char character, string &value, bool &createNewTree, int &index, Types &type, Node *exprList, bool implicitPriority) {
     if (isalpha(character)) {
-        if (isTypeOrEmpty(type, Types::VAR)) {
+        if (isTypeOrEmpty(type, Types::Variable)) {
                 value += character;
-                type = Types::VAR;
+                type = Types::Variable;
                 createNewTree = false;
             }
             else {
-                if (type == Types::NBR || type == Types::CPA) {
+                if (type == Types::Number || type == Types::ClosingParenthesis) {
                     addTreeByValues(*exprList, value, type);
                     value.clear();
                     if (implicitPriority) value += IMPLICIT_MULTIPLICATION_SIGN;
                     else value += MULTIPLICATION_SIGN;
-                    type = Types::OPT;
+                    type = Types::Operator;
                 }
                 index--;
             }
@@ -58,14 +58,14 @@ bool tokenizeAlpha(char character, string &value, bool &createNewTree, int &inde
 
 bool tokenizeOpeningParenthesis(char character, string &value, bool &createNewTree, int &index, Types &type, Node *exprList, bool implicitPriority) {
     if (character == OPENING_PARENTHESIS_SIGN[0]) {
-        if (type == Types::NUL) type = Types::OPA;
+        if (type == Types::Empty) type = Types::OpeningParenthesis;
         else {
-            if (type == Types::NBR || type == Types::VAR) {
+            if (type == Types::Number || type == Types::Variable) {
                 addTreeByValues(*exprList, value, type);
                 value.clear();
                 if (implicitPriority) value += IMPLICIT_MULTIPLICATION_SIGN;
                 else value += MULTIPLICATION_SIGN;
-                type = Types::OPT;
+                type = Types::Operator;
             }
             index--;
         }
@@ -76,7 +76,7 @@ bool tokenizeOpeningParenthesis(char character, string &value, bool &createNewTr
 
 bool tokenizeClosingParenthesis(char character, string &value, int &index, Types &type) {
     if (character == CLOSING_PARENTHESIS_SIGN[0]) {
-        if (type == Types::NUL) type = Types::CPA;
+        if (type == Types::Empty) type = Types::ClosingParenthesis;
         else index --;
         return true;
     }
@@ -85,12 +85,12 @@ bool tokenizeClosingParenthesis(char character, string &value, int &index, Types
 
 bool tokenizeNumber(char character, string &value, bool &createNewTree, int &index, Types &type) {
     if (isdigit(character) || character == '.') {
-        if (isTypeOrEmpty(type, Types::NBR)) {
+        if (isTypeOrEmpty(type, Types::Number)) {
                 value += character;
-                type = Types::NBR;
+                type = Types::Number;
                 createNewTree = false;
         }
-        else if (type == Types::VAR) {
+        else if (type == Types::Variable) {
             value += character;
             createNewTree = false;
         }
@@ -101,12 +101,12 @@ bool tokenizeNumber(char character, string &value, bool &createNewTree, int &ind
 }
 
 bool tokenizeOperator(char character, string &value, bool &createNewTree, int &index, Types &type, string &testString) {
-    if (type != Types::NUL && type != Types::OPT) index--;
+    if (type != Types::Empty && type != Types::Operator) index--;
     else {
         testString += value;
         testString += character;
         if (isOperator(testString)) {
-            type = Types::OPT;
+            type = Types::Operator;
             value.clear();
             value += testString;
             createNewTree = false;
@@ -126,7 +126,7 @@ Node *tokenizer(const string &expr, bool debug, bool implicitPriority) {
     bool createNewTree;
     char character;
     int len = expr.length(), index = 0;
-    Types type = Types::NUL;
+    Types type = Types::Empty;
     while (index < len) {
         createNewTree = true;
         character = expr[index];
@@ -158,7 +158,7 @@ Node *tokenizer(const string &expr, bool debug, bool implicitPriority) {
             if (index != REPLACE_OPERATORS.cend()) value = index->second;
             addTreeByValues(*exprList, value, type);
             value.clear();
-            type = Types::NUL;
+            type = Types::Empty;
         }
         index++;
     }

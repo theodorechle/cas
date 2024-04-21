@@ -7,6 +7,13 @@
 #include "constants.hpp"
 #include "node.hpp"
 
+class UnknownToken: public std::exception {
+    Node token;
+public:
+    UnknownToken(const Node token): token{token} {};
+    const char* what() const noexcept override;
+};
+
 void removeParenthesis(Node *t);
 
 Node *findRootOrParenthesis(Node *tree);

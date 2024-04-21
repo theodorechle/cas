@@ -221,10 +221,10 @@ int main() {
     testExprDifferent("3x**2", "3x*2");
     testStringEqual("3x**2", "3*x^2");
     testStringDifferent("3x**2", "3x^2");
-    Node *value = new Node{Types::OPT, "-"};
-    Node *child1 = new Node{Types::NBR, "3"};
-    Node *child2 = new Node{Types::OPT, "*"};
-    Node *child3 = new Node{Types::VAR, "x"};
+    Node *value = new Node{Types::Operator, "-"};
+    Node *child1 = new Node{Types::Number, "3"};
+    Node *child2 = new Node{Types::Operator, "*"};
+    Node *child3 = new Node{Types::Variable, "x"};
     value->appendNext(child1);
     child1->appendNext(child2);
     child2->appendNext(child3);

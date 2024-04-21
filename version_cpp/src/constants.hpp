@@ -9,18 +9,25 @@
 namespace constants {
 
 enum class Types {
-    NUL,
-    VAR,
-    NBR,
-    OPT,
-    OPA,
-    CPA,
-    FUC
+    /**NullRoot is used only when an algorithm must start with an existing node
+     * Nodes with this type will be ignored by the root and findRootOrParenthesis functions
+     * (they return the NullRoot node's child)
+    */
+    NullRoot,
+    Empty,
+    Variable,
+    Number,
+    Operator,
+    OpeningParenthesis,
+    ClosingParenthesis,
+    Function
 };
+
+std::string TypesStr(const Types type);
 
 std::ostream& operator<<(std::ostream& o, const Types type);
 
-const std::string addITION_SIGN{"+"};
+const std::string ADDITION_SIGN{"+"};
 const std::string SUBSTRACTION_SIGN{"-"};
 const std::string MULTIPLICATION_SIGN{"*"};
 const std::string DIVISION_SIGN{"/"};
@@ -36,7 +43,7 @@ const std::map<std::string, std::string> REPLACE_OPERATORS {
 
 
 const std::unordered_map<std::string, int> OPERATORS {
-    {constants::addITION_SIGN, 1},
+    {constants::ADDITION_SIGN, 1},
     {constants::SUBSTRACTION_SIGN, 1},
     {constants::MULTIPLICATION_SIGN, 2},
     {constants::DIVISION_SIGN, 2},

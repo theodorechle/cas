@@ -6,11 +6,11 @@
 #include "node.hpp"
 #include "functions.hpp"
 
-class NullError : public std::exception {
-    std::string msg;
+class UnknownValue: public std::exception {
+    std::string value;
 public:
-    NullError(const std::string &msg): msg{msg} {};
-    const char *what() const noexcept override {std::string m = "Unknown value '"+msg+"'"; return m.c_str();};
+    UnknownValue(const std::string& value): value{value} {};
+    const char* what() const noexcept override {return ("Error : Unknown value '" + value + "'").c_str();};
 };
 
 bool isTypeOrEmpty(constants::Types type, constants::Types checkType);
