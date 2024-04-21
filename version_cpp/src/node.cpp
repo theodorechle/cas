@@ -125,6 +125,8 @@ Node *Node::addEmptyChild() {
 }
 
 void Node::replaceData(Node *tree) {
+    if (tree == nullptr) return;
+    tree = tree->copy();
     setValue(tree->getValue());
     setType(tree->getType());
     delete getChild();
@@ -133,6 +135,7 @@ void Node::replaceData(Node *tree) {
         getChild()->setParent(this);   
         tree->setChild(nullptr);
     }
+    delete tree;
 }
 
 Node::~Node() {

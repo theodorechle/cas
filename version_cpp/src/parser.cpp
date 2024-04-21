@@ -3,6 +3,7 @@ using namespace std;
 #include "parser.hpp"
 #include "functions.hpp"
 #include "constants.hpp"
+#include "number.hpp"
 
 using namespace constants;
 
@@ -39,22 +40,24 @@ Node *findRootOrParenthesis(Node *tree) {
 
 Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
     Node *tree = new Node{Types::NullRoot};
-    Types treeType;
+    Types tokenType;
     if (tokenList == nullptr) return tree;
     while (tokenList != nullptr) {
-        treeType = tokenList->getType();
-        if (treeType == Types::Number) {
+        tokenType = tokenList->getType();
+        if (tokenType == Types::Number) {
+            tree = tree->appendChild(new Number{tokenList->getValue()});
+            tree = findRootOrParenthesis(tree);
+        }
+        else if (tokenType == Types::Variable) {
             tree = tree->appendChild(tokenList->copy());
             tree = findRootOrParenthesis(tree);
         }
-        else if (treeType == Types::Variable) {
-            tree = tree->appendChild(tokenList->copy());
-            tree = findRootOrParenthesis(tree);
-        }
-        else if (treeType == Types::Operator) {
-            if ((tokenList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || treeType == Types::OpeningParenthesis)) {
-                tree->appendChild(new Node{Types::Number, "0"});
+        else if (tokenType == Types::Operator) {
+            if ((tokenList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OpeningParenthesis)) {
+                tree = tree->appendChild(new Number{"0.0"});
             }
+            
+            // Duplicate code with next block
             if (tree->getType() != Types::Operator || getPriority(tokenList->getValue()) <= getPriority(tree->getValue())) {
                 Node *tempNode = tokenList->copy();
                 tempNode->appendChild(tree->copy());
@@ -73,10 +76,10 @@ Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
                 tree = child;
             }
         }
-        else if (treeType == Types::OpeningParenthesis) {
-            tree->appendChild(tokenList->copy());
+        else if (tokenType == Types::OpeningParenthesis) {
+            tree = tree->appendChild(tokenList->copy());
         }
-        else if (treeType == Types::ClosingParenthesis) {
+        else if (tokenType == Types::ClosingParenthesis) {
             tree = findRootOrParenthesis(tree);
             if (tree->getParent() != nullptr) {
                 tree = tree->getParent();
