@@ -3,5 +3,7 @@ __pycache__/
 cas_c/compiled_cas
 version_cpp/bin/exe
 version_cpp/bin/*
+!version_cpp/bin/.gitkeep
 version_cpp/obj/*
+!version_cpp/obj/.gitkeep
 version_cpp/logs
