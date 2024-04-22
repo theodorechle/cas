@@ -96,12 +96,6 @@ Node *parseOperator(Node *tree, Node *token) {
     if ((token->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OpeningParenthesis)) {
         tree = tree->appendChild(new Number{"0"});
     }
-    // Duplicate code with next block
-    /**
-     * Error : check with 3x**2*(-2)+3
-     * and implicit priority
-     * The + is set inside the * instead of outside
-    */
     if (tree->getType() != Types::Operator || getPriority(token->getValue()) <= getPriority(tree->getValue())) {
         Node *tempNode = token->copy();
         tempNode->appendChild(tree->copy());
