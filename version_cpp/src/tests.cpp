@@ -272,6 +272,7 @@ int main() {
     delete a2;
     delete b;
     delete c;
+    delete one;
     delete zero;
     delete zeroFloat;
     return 0;

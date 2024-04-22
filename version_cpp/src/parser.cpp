@@ -102,10 +102,7 @@ Node *parseOperator(Node *tree, Node *token) {
      * and implicit priority
      * The + is set inside the * instead of outside
     */
-    cout << *tree << endl;
-    cout << "token : " << *token << endl;
     if (tree->getType() != Types::Operator || getPriority(token->getValue()) <= getPriority(tree->getValue())) {
-        cout << "here" << endl;
         Node *tempNode = token->copy();
         tempNode->appendChild(tree->copy());
         tree->replaceData(tempNode);
@@ -135,9 +132,6 @@ Node *parseClosingParenthesis(Node *tree, Node *token) {
         throw MissingToken("(");
     }
     tree->setType(Types::ClosingParenthesis);
-    cout << *tree << endl;
-    cout << tree->getParent()->getValue() << endl;
-    cout << *tree->getParent() << endl;
     if (tree->getParent() != nullptr && tree->getParent()->getType() != Types::NullRoot) tree = tree->getParent();
     return tree;
 }
