@@ -22,4 +22,9 @@ std::ostream& operator<<(std::ostream& o, const Types type) {
     return o;
 }
 
+int getPriority(const std::string &ope) {
+    std::unordered_map<std::string, int>::const_iterator iter = OPERATORS.find(ope);
+    if (iter != OPERATORS.cend()) return iter->second;
+    return DEFAULT_PRIORITY;
+}
 }

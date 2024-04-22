@@ -59,8 +59,6 @@ Node *root(Node *node);
 
 Node *getLastChild(Node *n);
 
-int getPriority(const std::string &ope);
-
 bool areSameNodes(const Node *node1, const Node *node2);
 
 void deleteNullRoot(Node *node);

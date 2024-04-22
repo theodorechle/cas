@@ -10,7 +10,7 @@ namespace constants {
 
 enum class Types {
     /**NullRoot is used only when an algorithm must start with an existing node
-     * Nodes with this type will be ignored by the root and findRootOrParenthesis functions
+     * Nodes with this type will be ignored by the root and getRootOrParenthesis functions
      * (they return the NullRoot node's child)
     */
     NullRoot,
@@ -41,7 +41,7 @@ const std::map<std::string, std::string> REPLACE_OPERATORS {
     {POWER_SIGN_2, POWER_SIGN}
 };
 
-
+// operators and their priorities
 const std::unordered_map<std::string, int> OPERATORS {
     {constants::ADDITION_SIGN, 1},
     {constants::SUBSTRACTION_SIGN, 1},
@@ -52,6 +52,8 @@ const std::unordered_map<std::string, int> OPERATORS {
 };
 
 const int DEFAULT_PRIORITY = 50;
+
+int getPriority(const std::string &ope);
 
 }
 

@@ -53,16 +53,28 @@ string Node::str() const {
     bool parenthesis = false;
     Node *child;
     string s;
-    if (OPERATORS.find(getValue()) != OPERATORS.end()) {
+    // cout << getValue() << endl;
+    // cout << getParent() << endl;
+    if (getType() == Types::Operator) {
         // add parenthesis if father is operator and has bigger priority
-        if (getParent() != nullptr && OPERATORS.find(getParent()->getValue()) != OPERATORS.end() && getPriority(getValue()) <= getPriority(getParent()->getValue())) {
+        if (getParent() != nullptr) {
+            // cout << getParent()->getType() << endl;
+            // cout << getPriority(getValue()) << " <= " << getPriority(getParent()->getValue()) << endl;
+        }
+        if (getParent() != nullptr &&
+        getParent()->getType() == Types::Operator &&
+        getPriority(getValue()) <= getPriority(getParent()->getValue())) {
             parenthesis = true;
             s += "(";
         }
+        // check to allow using the method even if the tree is not fully created
+        // cout << getChild() << " : " << (getChild() == nullptr) << endl;
         if (getChild() != nullptr)
             s += getChild()->str();
         s += getValue();
-        if (getChild() != nullptr && getChild()->getNext() != nullptr)
+        // same as first check
+        if (getChild() != nullptr &&
+        getChild()->getNext() != nullptr)
             s += getChild()->getNext()->str();
         if (parenthesis) s += ")";
     }
@@ -82,12 +94,17 @@ string Node::str() const {
         }
         s += ")";
     }
+    else if (getType() == Types::OpeningParenthesis ||
+    getType() == Types::ClosingParenthesis) {
+        s += getChild()->str();
+    }
     else s += getValue();
     return s;
 }
 
 void Node::setChild(Node *child)  {
     this->child = child;
+    child->setParent(this);
 }
 
 void Node::setNext(Node *next) {
@@ -101,13 +118,13 @@ void Node::appendNext(Node *next) {
         c = c->getNext();
     }
     c->setNext(next);
+    next->setParent(getParent());
 }
 
 Node *Node::appendChild(Node *child) {
     Node *c = getChild();
     if (c == nullptr) setChild(child);
     else c->appendNext(child);
-    child->parent = this;
     return child;
 }
 
@@ -156,12 +173,6 @@ Node *getLastChild(Node *n) {
     if (n == nullptr) return nullptr;
     while (n->getNext() != nullptr) n = n->getNext();
     return n;
-}
-
-int getPriority(const string &ope) {
-    unordered_map<string, int>::const_iterator iter = OPERATORS.find(ope);
-    if (iter != OPERATORS.cend()) return iter->second;
-    return DEFAULT_PRIORITY;
 }
 
 bool areSameNodes(const Node *node1, const Node *node2) {

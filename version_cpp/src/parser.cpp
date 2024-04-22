@@ -12,8 +12,14 @@ const char* UnknownToken::what() const noexcept {
       return str->c_str();
 }
 
+const char* MissingToken::what() const noexcept {
+      string *str =  new string("Error : Missing token '" + token + "'");
+      return str->c_str();
+}
+
 void removeParenthesis(Node *t) {
     if (t->getType() == Types::ClosingParenthesis) t->replaceData(t->getChild());
+    else if (t->getType() == Types::OpeningParenthesis) throw MissingToken(")");
     Node *child = t->getChild();
     while (child != nullptr) {
         removeParenthesis(child);
@@ -30,65 +36,38 @@ void changeImplicitToExplicitMultiplications(Node *t) {
     }
 }
 
-Node *findRootOrParenthesis(Node *tree) {
+Node *getRootOrParenthesis(Node *tree) {
     if (tree == nullptr ||
+        tree->getType() == Types::OpeningParenthesis ||
         tree->getParent() == nullptr ||
-        tree->getParent()->getType() == Types::OpeningParenthesis ||
         tree->getParent()->getType() == Types::NullRoot) return tree;
-    return findRootOrParenthesis(tree->getParent());
+    return getRootOrParenthesis(tree->getParent());
 }
 
 Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
     Node *tree = new Node{Types::NullRoot};
-    Types tokenType;
     if (tokenList == nullptr) return tree;
     while (tokenList != nullptr) {
-        tokenType = tokenList->getType();
-        if (tokenType == Types::Number) {
-            tree = tree->appendChild(new Number{tokenList->getValue()});
-            tree = findRootOrParenthesis(tree);
-        }
-        else if (tokenType == Types::Variable) {
-            tree = tree->appendChild(tokenList->copy());
-            tree = findRootOrParenthesis(tree);
-        }
-        else if (tokenType == Types::Operator) {
-            if ((tokenList->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OpeningParenthesis)) {
-                tree = tree->appendChild(new Number{"0.0"});
-            }
-            
-            // Duplicate code with next block
-            if (tree->getType() != Types::Operator || getPriority(tokenList->getValue()) <= getPriority(tree->getValue())) {
-                Node *tempNode = tokenList->copy();
-                tempNode->appendChild(tree->copy());
-                tree->replaceData(tempNode);
-                delete tempNode;
-            }
-            else {
-                Node *child;
-                child = getLastChild(tree);
-                while (child->getType() == Types::Operator && getPriority(tokenList->getValue()) > getPriority(child->getValue()))
-                    child = getLastChild(child);
-                Node *tempNode = tokenList->copy();
-                tempNode->appendChild(child->copy());
-                child->replaceData(tempNode);
-                delete tempNode;
-                tree = child;
-            }
-        }
-        else if (tokenType == Types::OpeningParenthesis) {
-            tree = tree->appendChild(tokenList->copy());
-        }
-        else if (tokenType == Types::ClosingParenthesis) {
-            tree = findRootOrParenthesis(tree);
-            if (tree->getParent() != nullptr) {
-                tree = tree->getParent();
-                tree->setType(Types::ClosingParenthesis);
-            }
-            if (tree->getParent() != nullptr) tree = tree->getParent();
-        }
-        else {
+        switch (tokenList->getType())
+        {
+        case Types::Number:
+            tree = parseNumber(tree, tokenList);
+            break;
+        case Types::Variable:
+            tree = parseVariable(tree, tokenList);
+            break;
+        case Types::Operator:
+            tree = parseOperator(tree, tokenList);
+            break;
+        case Types::OpeningParenthesis:
+            tree = parseOpeningParenthesis(tree, tokenList);
+            break;
+        case Types::ClosingParenthesis:
+            tree = parseClosingParenthesis(tree, tokenList);
+            break;
+        default:
             throw UnknownToken(*tokenList);
+            break;
         }
         if (debug) {
             cerr << endl << "Root : " << endl;
@@ -100,7 +79,65 @@ Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
 
     tree = root(tree);
     removeParenthesis(tree);
-    changeImplicitToExplicitMultiplications(tree);
+    // changeImplicitToExplicitMultiplications(tree);
     deleteNullRoot(tree);
+    return tree;
+}
+
+Node *parseNumber(Node *tree, Node *token) {
+    return getRootOrParenthesis(tree->appendChild(new Number{token->getValue()}));
+}
+
+Node *parseVariable(Node *tree, Node *token) {
+    return getRootOrParenthesis(tree->appendChild(token->copy()));
+}
+
+Node *parseOperator(Node *tree, Node *token) {
+    if ((token->getValue() == SUBSTRACTION_SIGN) && (tree == nullptr || tree->getType() == Types::OpeningParenthesis)) {
+        tree = tree->appendChild(new Number{"0"});
+    }
+    // Duplicate code with next block
+    /**
+     * Error : check with 3x**2*(-2)+3
+     * and implicit priority
+     * The + is set inside the * instead of outside
+    */
+    cout << *tree << endl;
+    cout << "token : " << *token << endl;
+    if (tree->getType() != Types::Operator || getPriority(token->getValue()) <= getPriority(tree->getValue())) {
+        cout << "here" << endl;
+        Node *tempNode = token->copy();
+        tempNode->appendChild(tree->copy());
+        tree->replaceData(tempNode);
+        delete tempNode;
+    }
+    else {
+        Node *child;
+        child = getLastChild(tree);
+        while (child->getType() == Types::Operator && getPriority(token->getValue()) > getPriority(child->getValue()))
+            child = getLastChild(child);
+        Node *tempNode = token->copy();
+        tempNode->appendChild(child->copy());
+        child->replaceData(tempNode);
+        delete tempNode;
+        tree = child;
+    }
+    return tree;
+}
+
+Node *parseOpeningParenthesis(Node *tree, Node *token) {
+    return tree->appendChild(token->copy());
+}
+
+Node *parseClosingParenthesis(Node *tree, Node *token) {
+    tree = getRootOrParenthesis(tree);
+    if (tree->getType() != Types::OpeningParenthesis) {
+        throw MissingToken("(");
+    }
+    tree->setType(Types::ClosingParenthesis);
+    cout << *tree << endl;
+    cout << tree->getParent()->getValue() << endl;
+    cout << *tree->getParent() << endl;
+    if (tree->getParent() != nullptr && tree->getParent()->getType() != Types::NullRoot) tree = tree->getParent();
     return tree;
 }
