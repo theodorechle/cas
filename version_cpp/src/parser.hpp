@@ -4,7 +4,6 @@
 #include <string>
 #include <exception>
 
-#include "constants.hpp"
 #include "node.hpp"
 
 class UnknownToken: public std::exception {

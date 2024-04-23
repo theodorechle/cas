@@ -93,7 +93,7 @@ Node *tokenizer(const string &expr) {
     Token type = Token::Empty;
     int i = 0;
     for (int index=0; index<expr.length(); index++) {
-        i = tokenizeSpace(expr, index, exprList);
+        i = tokenizeSpace(expr, index);
         if (!i) i = tokenizeNumber(expr, index, exprList);
         if (!i) i = tokenizeName(expr, index, exprList);
         if (!i) i = tokenizeSpecialCharacters(expr, index, exprList);
