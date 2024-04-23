@@ -222,10 +222,10 @@ int main() {
     testStringEqual("3x**2", "3*x^2");
     testStringDifferent("3x**2", "3x^2");
     testStringEqual("3x**2*(-2)+3", "3x^2*(0-2)+3", true);
-    Node *value = new Node{Types::Operator, "-"};
-    Node *child1 = new Node{Types::Number, "3"};
-    Node *child2 = new Node{Types::Operator, "*"};
-    Node *child3 = new Node{Types::Variable, "x"};
+    Node *value = new Node{'-', Types::Operator};
+    Node *child1 = new Node{'3', Types::Number};
+    Node *child2 = new Node{'*', Types::Operator};
+    Node *child3 = new Node{'x', Types::Variable};
     value->appendNext(child1);
     child1->appendNext(child2);
     child2->appendNext(child3);

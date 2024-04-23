@@ -18,7 +18,7 @@ class Number: public Node {
     void updatevalue();
     std::string addPart(const std::string &thisNumber, const std::string &otherNumber, bool substract, bool *overflow);
 public:
-    Number(std::string number, Node *parent=nullptr): Node{constants::Types::Number, number, parent} {
+    Number(std::string number, Node *parent=nullptr): Node{number, constants::Types::Number, parent} {
         parseNumber();
     };
     ~Number() {};

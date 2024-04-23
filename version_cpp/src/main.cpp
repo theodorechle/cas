@@ -9,16 +9,16 @@
 using namespace std;
 
 int main() {
-    bool debug, implicitPriority;
+    bool debug, implicitMultiplicationPriority;
     string expr;
     Node *tl, *tree;
     cout << "Expression : ";
     getline(cin, expr);
     cout << "1 for debug, 0 else : ";
     cin >> debug;
-    cout << "1 for implicit priority, 0 else : ";
-    cin >> implicitPriority;
-    tl = tokenizer(expr, debug, implicitPriority);
+    cout << "1 for implicit multiplication priority, 0 else : ";
+    cin >> implicitMultiplicationPriority;
+    tl = tokenizer(expr);
     if (debug) {
         Node *tmp = tl;
         cerr << "Tokens" << endl;
@@ -27,7 +27,7 @@ int main() {
             tmp = tmp->getNext();
         }
     }
-    tree = parser(tl, debug, implicitPriority);
+    tree = parser(tl, debug, implicitMultiplicationPriority);
     delete tl;
     if (debug) {
         cerr << "Parsed tree" << endl;

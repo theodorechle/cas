@@ -8,7 +8,7 @@ using namespace std;
 using namespace constants;
 
 const char* UnknownToken::what() const noexcept {
-      string *str =  new string("Error : Unknown token '" + token.getValue() + " (" + TypesStr(token.getType()) + ")'");
+      string *str =  new string("Error : Unknown token '" + token.getValue() + " (" + TokensStr(token.getType()) + ")'");
       return str->c_str();
 }
 
@@ -45,7 +45,7 @@ Node *getRootOrParenthesis(Node *tree) {
 }
 
 Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
-    Node *tree = new Node{Types::NullRoot};
+    Node *tree = new Node{"", Types::NullRoot};
     if (tokenList == nullptr) return tree;
     while (tokenList != nullptr) {
         switch (tokenList->getType())

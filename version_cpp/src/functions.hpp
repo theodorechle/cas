@@ -6,7 +6,6 @@
 #include <bits/stdc++.h>
 
 #include "node.hpp"
-#include "constants.hpp"
 
 
 const std::unordered_map<std::string, std::function<bool(Node *)>> FUNCTIONS {

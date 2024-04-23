@@ -1,12 +1,12 @@
-#ifndef TREE_HPP
-#define TREE_HPP
+#ifndef NODE_HPP
+#define NODE_HPP
 
 #include <string>
 
-#include "constants.hpp"
+#include "tokens.hpp"
 
 class Node {
-    constants::Types type;
+    Token type;
     std::string value;
     Node *next;
     Node *child;
@@ -15,12 +15,14 @@ class Node {
     Node *copyNodeAndChilds();
     void displayTree(std::ostream &flow = std::cout, int level=0) const;
 public :
-    Node(constants::Types type=constants::Types::Empty, std::string value="", Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
+    Node(std::string value="", Token type=Token::Empty, Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
+    Node(char *value, Token type=Token::Empty, Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
+    Node(char value, Token type=Token::Empty, Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
     virtual ~Node();
     void setValue(const std::string& s) {value = s;};
     virtual const std::string& getValue() const {return value;};
-    void setType(const constants::Types& t) {type = t;};
-    const constants::Types& getType() const {return type;};
+    void setType(const Token& t) {type = t;};
+    const Token& getType() const {return type;};
     Node *getParent() const {return parent;};
     void setParent(Node *parent);
     Node *getNext() const {return next;};
@@ -63,4 +65,4 @@ bool areSameNodes(const Node *node1, const Node *node2);
 
 void deleteNullRoot(Node *node);
 
-#endif // TREE_HPP
+#endif // NODE_HPP
