@@ -14,7 +14,7 @@ public:
     const char* what() const noexcept override {return ("Error : Unknown value '" + value + "'").c_str();};
 };
 
-int tokenizeSpace(const string &expr, int index, Node *TokensStr);
+int tokenizeSpace(const string &expr, int index);
 
 int tokenizeName(const string &expr, int index, Node *tokens);
 
