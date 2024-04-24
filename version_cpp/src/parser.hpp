@@ -1,10 +1,12 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
-#include <string>
 #include <exception>
+#include <unordered_map>
 
-#include "node.hpp"
+#include "number.hpp"
+
+int getOperatorPriority(const Token &token);
 
 class UnknownToken: public std::exception {
     Node token;

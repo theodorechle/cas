@@ -1,5 +1,5 @@
-#ifndef FLOAT_HPP
-#define FLOAT_HPP
+#ifndef NUMBER_HPP
+#define NUMBER_HPP
 
 #include "node.hpp"
 
@@ -18,7 +18,7 @@ class Number: public Node {
     void updatevalue();
     std::string addPart(const std::string &thisNumber, const std::string &otherNumber, bool substract, bool *overflow);
 public:
-    Number(std::string number, Node *parent=nullptr): Node{number, constants::Types::Number, parent} {
+    Number(std::string number, Node *parent=nullptr): Node{Token::Number, number, parent} {
         parseNumber();
     };
     ~Number() {};
@@ -40,4 +40,4 @@ public:
 
 std::ostream &operator<<(std::ostream &o, const Number &n);
 
-#endif // FLOAT_HPP
+#endif // NUMBER_HPP

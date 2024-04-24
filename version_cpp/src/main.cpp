@@ -1,17 +1,13 @@
-#include <string>
-#include <iostream>
-
-#include "node.hpp"
+#include "tokenizer.hpp"
 #include "parser.hpp"
 #include "solver.hpp"
-#include "tokenizer.hpp"
 
 using namespace std;
 
 int main() {
     bool debug, implicitMultiplicationPriority;
     string expr;
-    Node *tl, *tree;
+    Node *tl;
     cout << "Expression : ";
     getline(cin, expr);
     cout << "1 for debug, 0 else : ";
@@ -19,6 +15,7 @@ int main() {
     cout << "1 for implicit multiplication priority, 0 else : ";
     cin >> implicitMultiplicationPriority;
     tl = tokenizer(expr);
+
     if (debug) {
         Node *tmp = tl;
         cerr << "Tokens" << endl;
@@ -27,6 +24,7 @@ int main() {
             tmp = tmp->getNext();
         }
     }
+    Node *tree;
     tree = parser(tl, debug, implicitMultiplicationPriority);
     delete tl;
     if (debug) {

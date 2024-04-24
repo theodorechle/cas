@@ -8,12 +8,11 @@
 #include "number.hpp"
 
 using namespace std;
-using namespace constants;
 
 void testStringEqual(const string &expr, const string &expected, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " == \"" << expected << "\" : ";
     try {
-        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *tokens = tokenizer(expr);
         Node *result = parser(tokens, false, implicitPriority);
         if (result->str() == expected) cerr << "OK";
         else cerr << "KO";
@@ -29,7 +28,7 @@ void testStringEqual(const string &expr, const string &expected, bool implicitPr
 void testStringDifferent(const string &expr, const string &notExpected, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " != \"" << notExpected << "\" : ";
     try {
-        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *tokens = tokenizer(expr);
         Node *result = parser(tokens, false, implicitPriority);
         if (result->str() != notExpected) cerr << "OK";
         else cerr << "KO";
@@ -45,9 +44,9 @@ void testStringDifferent(const string &expr, const string &notExpected, bool imp
 void testExprEqual(const string &expr, const string &expr2, bool implicitPriority = false) {
     cerr << "Test expr " << expr << " == " << expr2 << " : ";
     try {
-        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *tokens = tokenizer(expr);
         Node *result = parser(tokens, false, implicitPriority);
-        Node *tokens2 = tokenizer(expr2, false, implicitPriority);
+        Node *tokens2 = tokenizer(expr2);
         Node *result2 = parser(tokens2, false, implicitPriority);
         if (result->str() == result2->str()) cerr << "OK";
         else cerr << "KO";
@@ -66,9 +65,9 @@ void testExprEqual(const string &expr, const string &expr2, bool implicitPriorit
 void testExprDifferent(const string &expr, const string &expr2, bool implicitPriority = false) {
     cerr << "Test expr " << expr << " != " << expr2 << " : ";
     try {
-        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *tokens = tokenizer(expr);
         Node *result = parser(tokens, false, implicitPriority);
-        Node *tokens2 = tokenizer(expr2, false, implicitPriority);
+        Node *tokens2 = tokenizer(expr2);
         Node *result2 = parser(tokens2, false, implicitPriority);
         if (result->str() != result2->str()) cerr << "OK";
         else cerr << "KO";
@@ -86,7 +85,7 @@ void testExprDifferent(const string &expr, const string &expr2, bool implicitPri
 void testEqualTokenizerNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer " << expr << " == node : ";
     try {
-        Node *result = tokenizer(expr, false, implicitPriority);
+        Node *result = tokenizer(expr);
         Node *n = result;
         while (n != nullptr) {
             if (node == nullptr || !(*n == *node)) {
@@ -111,7 +110,7 @@ void testEqualTokenizerNode(const string &expr, const Node *node, bool implicitP
 void testDifferentTokenizerNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer " << expr << " != node : ";
     try {
-        Node *result = tokenizer(expr, false, implicitPriority);
+        Node *result = tokenizer(expr);
         Node *n = result;
         while (n != nullptr) {
             if (node == nullptr || *n == *node) {
@@ -164,7 +163,7 @@ void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority
 void testEqualNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " == node " << *node << " : ";
     try {
-        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *tokens = tokenizer(expr);
         Node *result = parser(tokens, false, implicitPriority);
         if (areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
@@ -181,7 +180,7 @@ void testEqualNode(const string &expr, const Node *node, bool implicitPriority =
 void testDifferentNode(const string &expr, const Node *node, bool implicitPriority = false) {
     cerr << "Test tokenizer + parser " << expr << " != node " << *node << " : ";
     try {
-        Node *tokens = tokenizer(expr, false, implicitPriority);
+        Node *tokens = tokenizer(expr);
         Node *result = parser(tokens, false, implicitPriority);
         if (!areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
@@ -222,10 +221,10 @@ int main() {
     testStringEqual("3x**2", "3*x^2");
     testStringDifferent("3x**2", "3x^2");
     testStringEqual("3x**2*(-2)+3", "3x^2*(0-2)+3", true);
-    Node *value = new Node{'-', Types::Operator};
-    Node *child1 = new Node{'3', Types::Number};
-    Node *child2 = new Node{'*', Types::Operator};
-    Node *child3 = new Node{'x', Types::Variable};
+    Node *value = new Node{Token::Minus};
+    Node *child1 = new Node{Token::Number, "3"};
+    Node *child2 = new Node{Token::Times};
+    Node *child3 = new Node{Token::Variable, "x"};
     value->appendNext(child1);
     child1->appendNext(child2);
     child2->appendNext(child3);

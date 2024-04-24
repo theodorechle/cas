@@ -1,11 +1,13 @@
 #ifndef TOKENS_HPP
 #define TOKENS_HPP
 
+#include <unordered_map>
+
 enum class Token {
     Name,
     Number,
-    Operator,
     Function,
+    Variable,
     OpeningParenthesis,
     ClosingParenthesis,
     Plus,
@@ -25,7 +27,26 @@ enum class Token {
    NullRoot
 };
 
-std::string TokensStr(const Token type);
+class Operators {
+public:
+    static const int DEFAULT_PRIORITY = 50;
+    // operators and their priorities
+    static const std::unordered_map<Token, int> OperatorsPriorities;
+    // operators and the strings associated to
+    static const std::unordered_map<Token, std::string> OperatorsStrings;
+};
+
+
+std::string TokensToStr(const Token &type);
+
+int getOperatorPriority(const Token &token);
+
+/**
+ * Take a token and if it is an operator, return a char * associated to.
+ * Ex :
+ * OperatorString(Token::Plus) // "+"
+*/
+std::string OperatorsString(const Token &token);
 
 std::ostream& operator<<(std::ostream& o, const Token type);
 

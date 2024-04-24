@@ -1,17 +1,15 @@
 #include <iostream>
-using namespace std;
 
 #include "node.hpp"
-#include "functions.hpp"
+#include "parser.hpp"
 
-using namespace constants;
-
+using namespace std;
 
 Node *Node::copyNodeAndChilds() {
     Node *n = new Node;
     Node *child = getChild();
     Node *next = getNext();
-    n->setType(getType());
+    n->setType(getTokenType());
     n->setValue(getValue());
     if (child != nullptr) n->setChild(child->copyNodeAndChilds());
     if (next != nullptr) n->setNext(next->copyNodeAndChilds());
@@ -21,7 +19,7 @@ Node *Node::copyNodeAndChilds() {
 Node *Node::copy() const {
     Node *n = new Node;
     Node *child = getChild();
-    n->setType(getType());
+    n->setType(getTokenType());
     n->setValue(getValue());
     if (child != nullptr) n->setChild(child->copyNodeAndChilds());
     return n;
@@ -29,7 +27,7 @@ Node *Node::copy() const {
 
 void Node::displayTree(ostream &flow, int level) const {
     for (int i=0; i<level; i++) flow << "\t";
-    flow << getValue() << " (" << getType() << ")" << endl;
+    flow << getValue() << " (" << getTokenType() << ")" << endl;
     Node * child = getChild();
     while (child != nullptr) {
         child->displayTree(flow, level+1);
@@ -53,32 +51,27 @@ string Node::str() const {
     bool parenthesis = false;
     Node *child;
     string s;
-    // cout << getValue() << endl;
-    // cout << getParent() << endl;
-    if (getType() == Types::Operator) {
+    if (isOperator(getTokenType())) {
         // add parenthesis if father is operator and has bigger priority
         if (getParent() != nullptr) {
-            // cout << getParent()->getType() << endl;
-            // cout << getPriority(getValue()) << " <= " << getPriority(getParent()->getValue()) << endl;
         }
         if (getParent() != nullptr &&
-        getParent()->getType() == Types::Operator &&
-        getPriority(getValue()) <= getPriority(getParent()->getValue())) {
+        isOperator(getParent()->getTokenType()) &&
+        getOperatorPriority(getTokenType()) <= getOperatorPriority(getParent()->getTokenType())) {
             parenthesis = true;
             s += "(";
         }
         // check to allow using the method even if the tree is not fully created
-        // cout << getChild() << " : " << (getChild() == nullptr) << endl;
         if (getChild() != nullptr)
             s += getChild()->str();
-        s += getValue();
+        s += OperatorsString(getTokenType());
         // same as first check
         if (getChild() != nullptr &&
         getChild()->getNext() != nullptr)
             s += getChild()->getNext()->str();
         if (parenthesis) s += ")";
     }
-    else if (getType() == Types::Function)
+    else if (getTokenType() == Token::Function)
     {
         s += getValue();
         s += "(";
@@ -94,8 +87,8 @@ string Node::str() const {
         }
         s += ")";
     }
-    else if (getType() == Types::OpeningParenthesis ||
-    getType() == Types::ClosingParenthesis) {
+    else if (getTokenType() == Token::OpeningParenthesis ||
+    getTokenType() == Token::ClosingParenthesis) {
         s += getChild()->str();
     }
     else s += getValue();
@@ -108,7 +101,6 @@ void Node::setChild(Node *child)  {
 }
 
 void Node::setNext(Node *next) {
-    delete getNext();
     this->next = next;
 }
 
@@ -145,7 +137,7 @@ void Node::replaceData(Node *tree) {
     if (tree == nullptr) return;
     tree = tree->copy();
     setValue(tree->getValue());
-    setType(tree->getType());
+    setType(tree->getTokenType());
     delete getChild();
     setChild(tree->getChild());
     if (getChild() != nullptr) {
@@ -163,7 +155,7 @@ Node::~Node() {
 Node *root(Node *node) {
     if (node == nullptr ||
         node->getParent() == nullptr ||
-        node->getParent()->getType() == Types::NullRoot) return node;
+        node->getParent()->getTokenType() == Token::NullRoot) return node;
     return root(node->getParent());
 }
 
@@ -197,10 +189,19 @@ void deleteNullRoot(Node *node) {
 }
 
 bool operator==(const Node &n1, const Node &n2) {
-    return (n1.getValue() == n2.getValue() || n1.getType() == n2.getType());
+    return (n1.getValue() == n2.getValue() || n1.getTokenType() == n2.getTokenType());
 }
 
 std::ostream &operator<<(std::ostream &o, const Node &n) {
     o << n.str();
     return o;
+}
+
+bool isOperator(const Token &token) {
+    return (token == Token::Plus ||
+    token == Token::Minus ||
+    token == Token::Times ||
+    token == Token::Slash ||
+    token == Token::Caret ||
+    token == Token::DoubleTimes);
 }

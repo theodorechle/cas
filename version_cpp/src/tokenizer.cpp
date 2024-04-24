@@ -11,7 +11,7 @@ bool isCharInValues(char c, char *values, int nbValues) {
 
 int tokenizeSpace(const string &expr, int index) {
     int i = 0;
-    while (isspace(expr[index+i])) {
+    while (index+i < (int)expr.length() && isspace(expr[index+i])) {
         i++;
     }
     return i;
@@ -23,11 +23,11 @@ int tokenizeName(const string &expr, int index, Node *tokens) {
         return 0;
     }
     int i = 1;
-    while (isalnum(expr[index+i]) ||
-            expr[index] == '_') {
+    while (index+i < (int)expr.length() && (isalnum(expr[index+i]) ||
+            expr[index+i] == '_')) {
         i++;
     }
-    tokens->appendNext(new Node{expr.substr(index, i), Token::Name});
+    tokens->appendNext(new Node{Token::Name, expr.substr(index, i)});
     return i;
 }
 
@@ -35,19 +35,19 @@ int tokenizeNumber(const string &expr, int index, Node *tokens) {
     if (!isdigit(expr[index])) return 0;
     bool dotFound = false;
     int i = 1;
-    while (isdigit(expr[index+i]) ||
+    while (index+i < (int)expr.length() && (isdigit(expr[index+i]) ||
             expr[index+i] == '_' ||
-            (!dotFound && expr[index] == '.')) {
+            (!dotFound && expr[index] == '.'))) {
         i++;
     }
-    tokens->appendNext(new Node{expr.substr(index, i), Token::Number});
+    tokens->appendNext(new Node{Token::Number, expr.substr(index, i)});
     return i;
     
 }
 
 int tokenizeSpecialCharacters(const string &expr, int index, Node *tokens) {
-    if (expr[index] == '*' && expr[index+1] == '*') {
-        tokens->appendNext(new Node{expr[index] + expr[index+1], Token::DoubleTimes});
+    if (index + 1 < (int)expr.length() && expr[index] == '*' && expr[index+1] == '*') {
+        tokens->appendNext(new Node{Token::DoubleTimes});
         return 2;
     }
     Token token;
@@ -84,20 +84,26 @@ int tokenizeSpecialCharacters(const string &expr, int index, Node *tokens) {
         break;
     }
     if (token == Token::Empty) return 0;
-    tokens->appendNext(new Node{expr[index], token});
+    tokens->appendNext(new Node{token});
     return 1;
 }
 
 Node *tokenizer(const string &expr) {
-    Node *exprList = new Node{};
-    Token type = Token::Empty;
+    Node *exprList = new Node{Token::NullRoot};
     int i = 0;
-    for (int index=0; index<expr.length(); index++) {
+    for (int index=0; index < (int)expr.length(); index+=i) {
         i = tokenizeSpace(expr, index);
         if (!i) i = tokenizeNumber(expr, index, exprList);
         if (!i) i = tokenizeName(expr, index, exprList);
         if (!i) i = tokenizeSpecialCharacters(expr, index, exprList);
-        if (!i) throw UnknownValue(expr.substr(index));
+        if (!i) {
+            // avoid memory leak
+            delete exprList;
+            throw UnknownValue(expr.substr(index));
+        }
     }
-   return exprList;
+    Node *nextList = exprList->getNext();
+    exprList->setNext(nullptr);
+    delete exprList;
+    return nextList;
 }

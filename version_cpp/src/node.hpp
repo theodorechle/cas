@@ -2,6 +2,7 @@
 #define NODE_HPP
 
 #include <string>
+#include <iostream>
 
 #include "tokens.hpp"
 
@@ -15,14 +16,12 @@ class Node {
     Node *copyNodeAndChilds();
     void displayTree(std::ostream &flow = std::cout, int level=0) const;
 public :
-    Node(std::string value="", Token type=Token::Empty, Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
-    Node(char *value, Token type=Token::Empty, Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
-    Node(char value, Token type=Token::Empty, Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
+    Node(Token type=Token::Empty, std::string value="", Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
     virtual ~Node();
     void setValue(const std::string& s) {value = s;};
     virtual const std::string& getValue() const {return value;};
     void setType(const Token& t) {type = t;};
-    const Token& getType() const {return type;};
+    const Token& getTokenType() const {return type;};
     Node *getParent() const {return parent;};
     void setParent(Node *parent);
     Node *getNext() const {return next;};
@@ -64,5 +63,7 @@ Node *getLastChild(Node *n);
 bool areSameNodes(const Node *node1, const Node *node2);
 
 void deleteNullRoot(Node *node);
+
+bool isOperator(const Token &token);
 
 #endif // NODE_HPP
