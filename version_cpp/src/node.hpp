@@ -20,7 +20,7 @@ public :
     virtual ~Node();
     void setValue(const std::string& s) {value = s;};
     virtual const std::string& getValue() const {return value;};
-    void setType(const Token& t) {type = t;};
+    void setTokenType(const Token& t) {type = t;};
     const Token& getTokenType() const {return type;};
     Node *getParent() const {return parent;};
     void setParent(Node *parent);

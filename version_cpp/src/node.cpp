@@ -9,7 +9,7 @@ Node *Node::copyNodeAndChilds() {
     Node *n = new Node;
     Node *child = getChild();
     Node *next = getNext();
-    n->setType(getTokenType());
+    n->setTokenType(getTokenType());
     n->setValue(getValue());
     if (child != nullptr) n->setChild(child->copyNodeAndChilds());
     if (next != nullptr) n->setNext(next->copyNodeAndChilds());
@@ -19,7 +19,7 @@ Node *Node::copyNodeAndChilds() {
 Node *Node::copy() const {
     Node *n = new Node;
     Node *child = getChild();
-    n->setType(getTokenType());
+    n->setTokenType(getTokenType());
     n->setValue(getValue());
     if (child != nullptr) n->setChild(child->copyNodeAndChilds());
     return n;
@@ -137,7 +137,7 @@ void Node::replaceData(Node *tree) {
     if (tree == nullptr) return;
     tree = tree->copy();
     setValue(tree->getValue());
-    setType(tree->getTokenType());
+    setTokenType(tree->getTokenType());
     delete getChild();
     setChild(tree->getChild());
     if (getChild() != nullptr) {
@@ -154,8 +154,7 @@ Node::~Node() {
 
 Node *root(Node *node) {
     if (node == nullptr ||
-        node->getParent() == nullptr ||
-        node->getParent()->getTokenType() == Token::NullRoot) return node;
+        isNodeNull(node->getParent())) return node;
     return root(node->getParent());
 }
 
@@ -203,5 +202,6 @@ bool isOperator(const Token &token) {
     token == Token::Times ||
     token == Token::Slash ||
     token == Token::Caret ||
-    token == Token::DoubleTimes);
+    token == Token::DoubleTimes ||
+    token == Token::ImplicitTimes);
 }

@@ -10,6 +10,7 @@ enum class Token {
     Variable,
     OpeningParenthesis,
     ClosingParenthesis,
+    Space,
     Plus,
     Minus,
     Times,
@@ -21,7 +22,7 @@ enum class Token {
     Bang,
     Empty,
     /**NullRoot is used only when an algorithm must start with an existing node
-     * Nodes with this type will be ignored by the root and getRootOrParenthesis functions
+     * Nodes with this type will be ignored by the root and getRootOrStopBeforeParenthesis functions
      * (they return the NullRoot node's child)
     */
    NullRoot
@@ -37,7 +38,7 @@ public:
 };
 
 
-std::string TokensToStr(const Token &type);
+std::string tokenToStr(const Token &type);
 
 int getOperatorPriority(const Token &token);
 

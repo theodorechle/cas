@@ -2,16 +2,6 @@ using namespace std;
 
 #include "parser.hpp"
 
-const char* UnknownToken::what() const noexcept {
-      string *str =  new string("Error : Unknown token '" + token.getValue() + " (" + TokensToStr(token.getTokenType()) + ")'");
-      return str->c_str();
-}
-
-const char* MissingToken::what() const noexcept {
-      string *str =  new string("Error : Missing token '" + token + "'");
-      return str->c_str();
-}
-
 void removeParenthesis(Node *t) {
     if (t->getTokenType() == Token::ClosingParenthesis) t->replaceData(t->getChild());
     else if (t->getTokenType() == Token::OpeningParenthesis) throw MissingToken(")");
@@ -22,17 +12,19 @@ void removeParenthesis(Node *t) {
     }
 }
 
-Node *getRootOrParenthesis(Node *tree) {
+Node *getRootOrStopBeforeParenthesis(Node *tree) {
     if (tree == nullptr ||
-            tree->getTokenType() == Token::OpeningParenthesis ||
-            tree->getParent() == nullptr ||
-            tree->getParent()->getTokenType() == Token::NullRoot)
+            isNodeNull(tree->getParent()) ||
+            tree->getParent()->getTokenType() == Token::OpeningParenthesis)
         return tree;
-    return getRootOrParenthesis(tree->getParent());
+    return getRootOrStopBeforeParenthesis(tree->getParent());
+}
+
+bool isNodeNull(Node *node) {
+    return (node == nullptr || node->getTokenType() == Token::NullRoot);
 }
 
 Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
-
     Node *tree = new Node{Token::NullRoot};
     while (tokenList != nullptr) {
         Token tokenType = tokenList->getTokenType();
@@ -57,6 +49,7 @@ Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
             tree = parseClosingParenthesis(tree, tokenList);
         }
         else {
+            delete root(tree);
             throw UnknownToken(*tokenList);
         }
         if (debug) {
@@ -74,14 +67,29 @@ Node *parser(Node *tokenList, bool debug, bool implicitPriority) {
 }
 
 Node *parseNumber(Node *tree, Node *token) {
-    return getRootOrParenthesis(tree->appendChild(new Number{token->getValue()}));
+    tree = getRootOrStopBeforeParenthesis(tree->appendChild(new Number{token->getValue()}));
+    return addImplicitMultiplication(tree, token);
 }
 
 Node *parseVariable(Node *tree, Node *token) {
-    return getRootOrParenthesis(tree->appendChild(token->copy()));
+    tree = getRootOrStopBeforeParenthesis(tree->appendChild(token->copy()));
+    return addImplicitMultiplication(tree, token);
 }
 
 Node *parseOperator(Node *tree, Node *token) {
+    if (token->getTokenType() == Token::DoubleTimes) token->setTokenType(Token::Caret);
+    Node *nextToken = token->getNext();
+    if (nextToken != nullptr) {
+        Token nextTokenType = nextToken->getTokenType();
+        if (isOperator(nextTokenType)) {
+            if (nextTokenType != Token::Minus) {
+                throw InvalidExpression(OperatorsString(token->getTokenType()) + OperatorsString(nextToken->getTokenType()));
+            }
+            if (token->getTokenType() == Token::Minus) nextToken->setTokenType(Token::Plus);
+            return tree;
+        }
+    }
+
     if ((token->getValue() == "-") && (tree == nullptr || tree->getTokenType() == Token::OpeningParenthesis)) {
         tree = tree->appendChild(new Number{"0"});
     }
@@ -104,17 +112,29 @@ Node *parseOperator(Node *tree, Node *token) {
     }
     return tree;
 }
-
 Node *parseOpeningParenthesis(Node *tree, Node *token) {
     return tree->appendChild(token->copy());
 }
 
 Node *parseClosingParenthesis(Node *tree, Node *token) {
-    tree = getRootOrParenthesis(tree);
-    if (tree->getTokenType() != Token::OpeningParenthesis) {
+    tree = getRootOrStopBeforeParenthesis(tree);
+    if (isNodeNull(tree->getParent())) {
         throw MissingToken("(");
     }
-    tree->setType(Token::ClosingParenthesis);
-    if (tree->getParent() != nullptr && tree->getParent()->getTokenType() != Token::NullRoot) tree = tree->getParent();
+    tree = tree->getParent();
+    tree->setTokenType(Token::ClosingParenthesis);
+    if (isNodeNull(tree->getParent())) tree = tree->getParent();
+    return addImplicitMultiplication(tree, token);
+}
+
+Node *addImplicitMultiplication(Node *tree, Node *token) {
+    Node *nextToken = token->getNext();
+    if (nextToken  == nullptr) return tree;
+    Token nextTokenType = nextToken->getTokenType();
+    if (nextTokenType == Token::Number ||
+            nextTokenType == Token::Name ||
+            nextTokenType == Token::OpeningParenthesis) {
+        return parseOperator(tree, new Node{Token::ImplicitTimes});
+    }
     return tree;
 }

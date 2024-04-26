@@ -33,12 +33,12 @@ int main() {
         cerr << tree->str() << endl;
     }
     // tree = solve(tree, debug);
-    // if (debug) {
-    //     cerr << "Solved tree" << endl);
-    //     printTree(tree);
-    // }
-    // cout << "Start expression : " << endl << expr << endl;
-    // cout << "Final expression : " << endl << treeStr(tree) < endl;
+    if (debug) {
+        cerr << "Solved tree" << endl;
+        tree->display(cerr);
+    }
+    cout << "Start expression : " << endl << expr << endl;
+    cout << "Final expression : " << endl << *tree << endl;
     delete tree;
     return 0;
 }

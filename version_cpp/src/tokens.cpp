@@ -2,7 +2,7 @@
 
 #include "tokens.hpp"
 
-std::string TokensToStr(const Token &type) {
+std::string tokenToStr(const Token &type) {
     std::string value;
     switch (type) {
         case Token::Name: value = "Name";break;
@@ -31,8 +31,8 @@ const std::unordered_map<Token, int> Operators::OperatorsPriorities {
     {Token::Minus, 1},
     {Token::Times, 2},
     {Token::Slash, 2},
-    {Token::Caret, 3},
-    {Token::ImplicitTimes, 4}
+    {Token::ImplicitTimes, 3},
+    {Token::Caret, 4}
 };
 
 const std::unordered_map<Token, std::string> Operators::OperatorsStrings {
@@ -57,7 +57,7 @@ std::string OperatorsString(const Token &token) {
 }
 
 std::ostream& operator<<(std::ostream& o, const Token type) {
-    o << TokensToStr(type);
+    o << tokenToStr(type);
     return o;
 }
 

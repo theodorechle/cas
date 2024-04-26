@@ -9,11 +9,12 @@ bool isCharInValues(char c, char *values, int nbValues) {
     return false;
 }
 
-int tokenizeSpace(const string &expr, int index) {
+int tokenizeSpace(const string &expr, int index, Node *tokens) {
     int i = 0;
     while (index+i < (int)expr.length() && isspace(expr[index+i])) {
         i++;
     }
+    if (i > 0) tokens->appendNext(new Node{Token::Space});
     return i;
 }
 
@@ -92,7 +93,7 @@ Node *tokenizer(const string &expr) {
     Node *exprList = new Node{Token::NullRoot};
     int i = 0;
     for (int index=0; index < (int)expr.length(); index+=i) {
-        i = tokenizeSpace(expr, index);
+        i = tokenizeSpace(expr, index, exprList);
         if (!i) i = tokenizeNumber(expr, index, exprList);
         if (!i) i = tokenizeName(expr, index, exprList);
         if (!i) i = tokenizeSpecialCharacters(expr, index, exprList);

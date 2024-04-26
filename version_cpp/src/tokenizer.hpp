@@ -6,10 +6,10 @@
 #include "node.hpp"
 
 class UnknownValue: public std::exception {
-    std::string value;
+    std::string message;
 public:
-    UnknownValue(const std::string& value): value{value} {};
-    const char* what() const noexcept override {return ("Error : Unknown value '" + value + "'").c_str();};
+    UnknownValue(const std::string& value): message{"Error : Unknown value '" + value + "'"} {};
+    const char* what() const noexcept override {return message.c_str();};
 };
 
 int tokenizeSpace(const std::string &expr, int index);
