@@ -6,6 +6,8 @@ std::string tokenToStr(const Token &type) {
     std::string value;
     switch (type) {
         case Token::Name: value = "Name";break;
+        case Token::Space: value = "Space";break;
+        case Token::Variable: value = "Variable";break;
         case Token::Number: value = "Number";break;
         case Token::Function: value = "Function";break;
         case Token::OpeningParenthesis: value = "OpeningParenthesis";break;

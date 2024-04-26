@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "number.hpp"
+#include "settings.hpp"
 
 int getOperatorPriority(const Token &token);
 
@@ -29,22 +30,34 @@ public:
     const char *what() const noexcept override {return message.c_str();}
 };
 
-void removeParenthesis(Node *t);
+class Parser {
+    Node *expressionTokens;
+    Node *expressionTreeRoot = new Node{Token::NullRoot};
+    Node *expressionTree = expressionTreeRoot;
+    Settings *settings;
+    bool debug;
+    bool implicitMultiplicationPriority;
 
-Node *getRootOrStopBeforeParenthesis(Node *tree);
+    void getRootOrStopBeforeParenthesis();
+    void removeParenthesis(Node *t);
+    void replaceImplicitTimes(Node *t);
 
-bool isNodeNull(Node *node);
+public:
+    Parser(Node *expressionTokens, Settings *settings, bool debug=false, bool implicitMultiplicationPriority=false)
+    : expressionTokens{expressionTokens}, settings{settings}, debug{debug}, implicitMultiplicationPriority{implicitMultiplicationPriority} {};
+    
+    /**
+     * Transform a chain of trees (no childs) like the one the parser function returns into a tree containing the entire expression
+    */
+    Node *parse();
 
-/**
-  * Transform a chain of trees (no childs) like the one the parser function returns into a tree containing the entire expression
-*/
-Node *parser(Node *exprList, bool debug, bool implicitPriority);
-
-Node *parseNumber(Node *tree, Node *token);
-Node *parseVariable(Node *tree, Node *token);
-Node *parseOperator(Node *tree, Node *token);
-Node *parseOpeningParenthesis(Node *tree, Node *token);
-Node *parseClosingParenthesis(Node *tree, Node *token);
-Node *addImplicitMultiplication(Node *tree, Node *token);
+    void parseNumber();
+    void parseVariable();
+    void parseOperator();
+    void parseOpeningParenthesis();
+    void parseClosingParenthesis();
+    void addImplicitMultiplication();
+    static bool isNodeNull(Node *node);
+};
 
 #endif // PARSER_HPP

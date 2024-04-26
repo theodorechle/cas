@@ -5,28 +5,30 @@
 using namespace std;
 
 int main() {
+    Settings *settings = new Settings;
     bool debug, implicitMultiplicationPriority;
     string expr;
-    Node *tl;
+    Node *tokens;
     cout << "Expression : ";
     getline(cin, expr);
     cout << "1 for debug, 0 else : ";
     cin >> debug;
     cout << "1 for implicit multiplication priority, 0 else : ";
     cin >> implicitMultiplicationPriority;
-    tl = tokenizer(expr);
+    tokens = tokenizer(expr);
 
     if (debug) {
-        Node *tmp = tl;
+        Node *tmp = tokens;
         cerr << "Tokens" << endl;
         while (tmp != nullptr) {
             tmp->display(cerr);
             tmp = tmp->getNext();
         }
     }
+    Parser *parser = new Parser{tokens, settings, debug, implicitMultiplicationPriority};
     Node *tree;
-    tree = parser(tl, debug, implicitMultiplicationPriority);
-    delete tl;
+    tree = parser->parse();
+    delete tokens;
     if (debug) {
         cerr << "Parsed tree" << endl;
         tree->display(cerr);

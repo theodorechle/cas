@@ -16,6 +16,9 @@ Node *Node::copyNodeAndChilds() {
     return n;
 }
 
+/**
+ * Copy the node and his childs (not the nexts)
+*/
 Node *Node::copy() const {
     Node *n = new Node;
     Node *child = getChild();
@@ -154,7 +157,7 @@ Node::~Node() {
 
 Node *root(Node *node) {
     if (node == nullptr ||
-        isNodeNull(node->getParent())) return node;
+        Parser::isNodeNull(node->getParent())) return node;
     return root(node->getParent());
 }
 
