@@ -1,58 +1,55 @@
 #include "tokenizer.hpp"
 
-using namespace std;
-
-bool isCharInValues(char c, char *values, int nbValues) {
-    for (int i=0; i<nbValues; i++) {
-        if (c == values[i]) return true;
-    }
-    return false;
-}
-
-int tokenizeSpace(const string &expr, int index, Node *tokens) {
-    int i = 0;
-    while (index+i < (int)expr.length() && isspace(expr[index+i])) {
+void Tokenizer::tokenizeSpace() {
+    size_t i = 0;
+    while (index+i < expressionLength && isspace(expression[index+i])) {
         i++;
     }
-    if (i > 0) tokens->appendNext(new Node{Token::Space});
-    return i;
+    if (i > 0) {
+        expressionTree->appendNext(new Node{Token::Space});
+        tokenized = true;
+        index += i;
+    }
 }
 
-int tokenizeName(const string &expr, int index, Node *tokens) {
-    if (!isalpha(expr[index]) ||
-            expr[index] == '_') {
-        return 0;
+void Tokenizer::tokenizeName() {
+    if (!isalpha(expression[index]) ||
+            expression[index] == '_') {
+        return;
     }
-    int i = 1;
-    while (index+i < (int)expr.length() && (isalnum(expr[index+i]) ||
-            expr[index+i] == '_')) {
+    size_t i = 1;
+    while (index+i < expressionLength && (isalnum(expression[index+i]) ||
+            expression[index+i] == '_')) {
         i++;
     }
-    tokens->appendNext(new Node{Token::Name, expr.substr(index, i)});
-    return i;
+    expressionTree->appendNext(new Node{Token::Name, expression.substr(index, i)});
+    index += i;
+    tokenized = true;
 }
 
-int tokenizeNumber(const string &expr, int index, Node *tokens) {
-    if (!isdigit(expr[index])) return 0;
+void Tokenizer::tokenizeNumber() {
+    if (!isdigit(expression[index])) return;
     bool dotFound = false;
-    int i = 1;
-    while (index+i < (int)expr.length() && (isdigit(expr[index+i]) ||
-            expr[index+i] == '_' ||
-            (!dotFound && expr[index] == '.'))) {
+    size_t i = 1;
+    while (index+i < expressionLength && (isdigit(expression[index+i]) ||
+            expression[index+i] == '_' ||
+            (!dotFound && expression[index+i] == '.'))) {
         i++;
     }
-    tokens->appendNext(new Node{Token::Number, expr.substr(index, i)});
-    return i;
-    
+    expressionTree->appendNext(new Node{Token::Number, expression.substr(index, i)});
+    index += i;
+    tokenized = true;
 }
 
-int tokenizeSpecialCharacters(const string &expr, int index, Node *tokens) {
-    if (index + 1 < (int)expr.length() && expr[index] == '*' && expr[index+1] == '*') {
-        tokens->appendNext(new Node{Token::DoubleTimes});
-        return 2;
+void Tokenizer::tokenizeSpecialCharacters() {
+    if (index + 1 < expressionLength && expression[index] == '*' && expression[index+1] == '*') {
+        expressionTree->appendNext(new Node{Token::DoubleTimes});
+        index += 2;
+        tokenized = true;
+        return;
     }
     Token token;
-    switch (expr[index]) {
+    switch (expression[index]) {
     case '(':
         token = Token::OpeningParenthesis;
         break;
@@ -84,27 +81,27 @@ int tokenizeSpecialCharacters(const string &expr, int index, Node *tokens) {
         token = Token::Empty;
         break;
     }
-    if (token == Token::Empty) return 0;
-    tokens->appendNext(new Node{token});
-    return 1;
+    if (token == Token::Empty) return;
+    expressionTree->appendNext(new Node{token});
+    index++;
+    tokenized = true;
 }
 
-Node *tokenizer(const string &expr) {
-    Node *exprList = new Node{Token::NullRoot};
-    int i = 0;
-    for (int index=0; index < (int)expr.length(); index+=i) {
-        i = tokenizeSpace(expr, index, exprList);
-        if (!i) i = tokenizeNumber(expr, index, exprList);
-        if (!i) i = tokenizeName(expr, index, exprList);
-        if (!i) i = tokenizeSpecialCharacters(expr, index, exprList);
-        if (!i) {
+void Tokenizer::tokenize() {
+    while (index < expressionLength) {
+        tokenized = false;
+        tokenizeSpace();
+        if (!tokenized) tokenizeNumber();
+        if (!tokenized) tokenizeName();
+        if (!tokenized) tokenizeSpecialCharacters();
+        if (!tokenized) {
             // avoid memory leak
-            delete exprList;
-            throw UnknownValue(expr.substr(index));
+            delete expressionTree;
+            throw UnknownValue(expression.substr(index));
         }
     }
-    Node *nextList = exprList->getNext();
-    exprList->setNext(nullptr);
-    delete exprList;
-    return nextList;
+    Node *nextList = expressionTree->getNext();
+    expressionTree->setNext(nullptr);
+    delete expressionTree;
+    expressionTree = nextList;
 }

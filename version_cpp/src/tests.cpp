@@ -12,7 +12,7 @@ using namespace std;
 void testStringEqual(const string &expr, const string &expected, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " == \"" << expected << "\" : ";
     try {
-        Node *tokens = tokenizer(expr);
+        Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
         if (result->str() == expected) cerr << "OK";
         else cerr << "KO";
@@ -28,7 +28,7 @@ void testStringEqual(const string &expr, const string &expected, Settings *setti
 void testStringDifferent(const string &expr, const string &notExpected, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " != \"" << notExpected << "\" : ";
     try {
-        Node *tokens = tokenizer(expr);
+        Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
         if (result->str() != notExpected) cerr << "OK";
         else cerr << "KO";
@@ -44,9 +44,9 @@ void testStringDifferent(const string &expr, const string &notExpected, Settings
 void testExprEqual(const string &expr, const string &expr2, Settings *settings) {
     cerr << "Test expr " << expr << " == " << expr2 << " : ";
     try {
-        Node *tokens = tokenizer(expr);
+        Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
-        Node *tokens2 = tokenizer(expr2);
+        Node *tokens2 = Tokenizer(expr2, settings).getResult();
         Node *result2 = Parser(tokens2, settings).getFinalTree();
         if (result->str() == result2->str()) cerr << "OK";
         else cerr << "KO";
@@ -65,9 +65,9 @@ void testExprEqual(const string &expr, const string &expr2, Settings *settings) 
 void testExprDifferent(const string &expr, const string &expr2, Settings *settings) {
     cerr << "Test expr " << expr << " != " << expr2 << " : ";
     try {
-        Node *tokens = tokenizer(expr);
+        Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
-        Node *tokens2 = tokenizer(expr2);
+        Node *tokens2 = Tokenizer(expr2, settings).getResult();
         Node *result2 = Parser(tokens2, settings).getFinalTree();
         if (result->str() != result2->str()) cerr << "OK";
         else cerr << "KO";
@@ -85,7 +85,7 @@ void testExprDifferent(const string &expr, const string &expr2, Settings *settin
 void testEqualTokenizerNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer " << expr << " == node : ";
     try {
-        Node *result = tokenizer(expr);
+        Node *result = Tokenizer(expr, settings).getResult();
         Node *n = result;
         while (n != nullptr) {
             if (node == nullptr || !(*n == *node)) {
@@ -110,7 +110,7 @@ void testEqualTokenizerNode(const string &expr, const Node *node, Settings *sett
 void testDifferentTokenizerNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer " << expr << " != node : ";
     try {
-        Node *result = tokenizer(expr);
+        Node *result = Tokenizer(expr, settings).getResult();
         Node *n = result;
         while (n != nullptr) {
             if (node == nullptr || *n == *node) {
@@ -163,7 +163,7 @@ void testDifferentParserNode(Node *expr, const Node *node, Settings *settings) {
 void testEqualNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " == node " << *node << " : ";
     try {
-        Node *tokens = tokenizer(expr);
+        Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
         if (areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
@@ -180,7 +180,7 @@ void testEqualNode(const string &expr, const Node *node, Settings *settings) {
 void testDifferentNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " != node " << *node << " : ";
     try {
-        Node *tokens = tokenizer(expr);
+        Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
         if (!areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";

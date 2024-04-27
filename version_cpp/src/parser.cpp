@@ -97,7 +97,11 @@ void Parser::parseOperator() {
         if (isOperator(nextTokenType)) {
             if (nextTokenType != Token::Minus) {
                 // Avoid things like 5-/3
-                throw InvalidExpression(OperatorsString(actualToken->getTokenType()) + OperatorsString(nextToken->getTokenType()));
+                string actualTokenTypeString = OperatorsString(actualToken->getTokenType());
+                string nextTokenTypeString = OperatorsString(nextToken->getTokenType());
+                actualToken = nullptr;
+                nextToken = nullptr;
+                throw InvalidExpression(actualTokenTypeString + nextTokenTypeString);
             }
             // Avoid modifying expressionTokens
             if (actualToken->getTokenType() == Token::Minus) {

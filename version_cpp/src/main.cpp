@@ -7,16 +7,18 @@ using namespace std;
 int main() {
     Settings *settings = new Settings;
     bool debug, implicitMultiplicationPriority;
-    string expr;
+    string *expr = new string;
     Node *tokens;
     cout << "Expression : ";
-    getline(cin, expr);
+    getline(cin, *expr);
     cout << "1 for debug, 0 else : ";
     cin >> debug;
     cout << "1 for implicit multiplication priority, 0 else : ";
     cin >> implicitMultiplicationPriority;
-    tokens = tokenizer(expr);
-
+    Tokenizer *tokenizer = new Tokenizer{*expr, settings};
+    tokens = tokenizer->getResult();
+    delete tokenizer;
+    delete expr;
     if (debug) {
         Node *tmp = tokens;
         cerr << "Tokens" << endl;
@@ -40,7 +42,7 @@ int main() {
         cerr << "Solved tree" << endl;
         tree->display(cerr);
     }
-    cout << "Start expression : " << endl << expr << endl;
+    cout << "Start expression : " << endl << *expr << endl;
     cout << "Final expression : " << endl << *tree << endl;
     delete tree;
     delete settings;
