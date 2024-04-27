@@ -35,22 +35,21 @@ class Parser {
     Node *expressionTreeRoot = new Node{Token::NullRoot};
     Node *expressionTree = expressionTreeRoot;
     Settings *settings;
-    bool debug;
-    bool implicitMultiplicationPriority;
 
     void getRootOrStopBeforeParenthesis();
     void removeParenthesis(Node *t);
     void replaceImplicitTimes(Node *t);
 
 public:
-    Parser(Node *expressionTokens, Settings *settings, bool debug=false, bool implicitMultiplicationPriority=false)
-    : expressionTokens{expressionTokens}, settings{settings}, debug{debug}, implicitMultiplicationPriority{implicitMultiplicationPriority} {};
+    Parser(Node *expressionTokens, Settings *settings)
+    : expressionTokens{expressionTokens}, settings{settings} {
+        parse();
+    };
     
     /**
      * Transform a chain of trees (no childs) like the one the parser function returns into a tree containing the entire expression
     */
-    Node *parse();
-
+    void parse();
     void parseNumber();
     void parseVariable();
     void parseOperator();
@@ -58,6 +57,7 @@ public:
     void parseClosingParenthesis();
     void addImplicitMultiplication();
     static bool isNodeNull(Node *node);
+    Node *getFinalTree() {return expressionTreeRoot;}
 };
 
 #endif // PARSER_HPP

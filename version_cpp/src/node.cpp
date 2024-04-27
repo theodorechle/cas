@@ -60,7 +60,7 @@ string Node::str() const {
         }
         if (getParent() != nullptr &&
         isOperator(getParent()->getTokenType()) &&
-        getOperatorPriority(getTokenType()) <= getOperatorPriority(getParent()->getTokenType())) {
+        getOperatorPriority(getTokenType()) < getOperatorPriority(getParent()->getTokenType())) {
             parenthesis = true;
             s += "(";
         }

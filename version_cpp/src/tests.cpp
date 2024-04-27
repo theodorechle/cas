@@ -9,11 +9,11 @@
 
 using namespace std;
 
-void testStringEqual(const string &expr, const string &expected, bool implicitPriority = false) {
+void testStringEqual(const string &expr, const string &expected, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " == \"" << expected << "\" : ";
     try {
         Node *tokens = tokenizer(expr);
-        Node *result = parse(tokens, false, implicitPriority);
+        Node *result = Parser(tokens, settings).getFinalTree();
         if (result->str() == expected) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -25,11 +25,11 @@ void testStringEqual(const string &expr, const string &expected, bool implicitPr
     cerr << endl;
 }
 
-void testStringDifferent(const string &expr, const string &notExpected, bool implicitPriority = false) {
+void testStringDifferent(const string &expr, const string &notExpected, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " != \"" << notExpected << "\" : ";
     try {
         Node *tokens = tokenizer(expr);
-        Node *result = parse(tokens, false, implicitPriority);
+        Node *result = Parser(tokens, settings).getFinalTree();
         if (result->str() != notExpected) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -41,13 +41,13 @@ void testStringDifferent(const string &expr, const string &notExpected, bool imp
     cerr << endl;
 }
 
-void testExprEqual(const string &expr, const string &expr2, bool implicitPriority = false) {
+void testExprEqual(const string &expr, const string &expr2, Settings *settings) {
     cerr << "Test expr " << expr << " == " << expr2 << " : ";
     try {
         Node *tokens = tokenizer(expr);
-        Node *result = parse(tokens, false, implicitPriority);
+        Node *result = Parser(tokens, settings).getFinalTree();
         Node *tokens2 = tokenizer(expr2);
-        Node *result2 = parse(tokens2, false, implicitPriority);
+        Node *result2 = Parser(tokens2, settings).getFinalTree();
         if (result->str() == result2->str()) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -62,13 +62,13 @@ void testExprEqual(const string &expr, const string &expr2, bool implicitPriorit
 }
 
 
-void testExprDifferent(const string &expr, const string &expr2, bool implicitPriority = false) {
+void testExprDifferent(const string &expr, const string &expr2, Settings *settings) {
     cerr << "Test expr " << expr << " != " << expr2 << " : ";
     try {
         Node *tokens = tokenizer(expr);
-        Node *result = parse(tokens, false, implicitPriority);
+        Node *result = Parser(tokens, settings).getFinalTree();
         Node *tokens2 = tokenizer(expr2);
-        Node *result2 = parse(tokens2, false, implicitPriority);
+        Node *result2 = Parser(tokens2, settings).getFinalTree();
         if (result->str() != result2->str()) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -82,7 +82,7 @@ void testExprDifferent(const string &expr, const string &expr2, bool implicitPri
     cerr << endl;
 }
 
-void testEqualTokenizerNode(const string &expr, const Node *node, bool implicitPriority = false) {
+void testEqualTokenizerNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer " << expr << " == node : ";
     try {
         Node *result = tokenizer(expr);
@@ -107,7 +107,7 @@ void testEqualTokenizerNode(const string &expr, const Node *node, bool implicitP
 }
 
 
-void testDifferentTokenizerNode(const string &expr, const Node *node, bool implicitPriority = false) {
+void testDifferentTokenizerNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer " << expr << " != node : ";
     try {
         Node *result = tokenizer(expr);
@@ -131,10 +131,10 @@ void testDifferentTokenizerNode(const string &expr, const Node *node, bool impli
     cerr << endl;
 }
 
-void testEqualParserNode(Node *expr, const Node *node, bool implicitPriority = false) {
+void testEqualParserNode(Node *expr, const Node *node, Settings *settings) {
     cerr << "Test parser " << *expr << " == node " << *node << " : ";
     try {
-        Node *result = parse(expr, false, implicitPriority);
+        Node *result = Parser(expr, settings).getFinalTree();
         if (areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -146,10 +146,10 @@ void testEqualParserNode(Node *expr, const Node *node, bool implicitPriority = f
 }
 
 
-void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority = false) {
+void testDifferentParserNode(Node *expr, const Node *node, Settings *settings) {
     cerr << "Test parser " << *expr << " != node " << *node << " : ";
     try {
-        Node *result = parse(expr, false, implicitPriority);
+        Node *result = Parser(expr, settings).getFinalTree();
         if (!areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -160,11 +160,11 @@ void testDifferentParserNode(Node *expr, const Node *node, bool implicitPriority
     cerr << endl;
 }
 
-void testEqualNode(const string &expr, const Node *node, bool implicitPriority = false) {
+void testEqualNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " == node " << *node << " : ";
     try {
         Node *tokens = tokenizer(expr);
-        Node *result = parse(tokens, false, implicitPriority);
+        Node *result = Parser(tokens, settings).getFinalTree();
         if (areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -177,11 +177,11 @@ void testEqualNode(const string &expr, const Node *node, bool implicitPriority =
 }
 
 
-void testDifferentNode(const string &expr, const Node *node, bool implicitPriority = false) {
+void testDifferentNode(const string &expr, const Node *node, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " != node " << *node << " : ";
     try {
         Node *tokens = tokenizer(expr);
-        Node *result = parser(tokens, false, implicitPriority);
+        Node *result = Parser(tokens, settings).getFinalTree();
         if (!areSameNodes(result, node)) cerr << "OK";
         else cerr << "KO";
         delete result;
@@ -216,19 +216,21 @@ void isEqualNumber(Number *a, Number *b, bool expected) {
 }
 
 int main() {
-    testExprEqual("3x**2", "3x^2");
-    testExprDifferent("3x**2", "3x*2");
-    testStringEqual("3x**2", "3*x^2");
-    testStringDifferent("3x**2", "3x^2");
-    testStringEqual("3x**2*(-2)+3", "3x^2*(0-2)+3", true);
+    Settings *settings = new Settings;
+    settings->debug = false;
+    testExprEqual("3x**2", "3x^2", settings);
+    testExprDifferent("3x**2", "3x*2", settings);
+    testStringEqual("3x**2", "3*x^2", settings);
+    testStringDifferent("3x**2", "3x^2", settings);
+    settings->implicitMultiplicationPriority = true;
+    testStringEqual("3x**2*(-2)+3", "3*x^2*(0-2)+3", settings);
+    settings->implicitMultiplicationPriority = false;
     Node *value = new Node{Token::Minus};
-    Node *child1 = new Node{Token::Number, "3"};
-    Node *child2 = new Node{Token::Times};
-    Node *child3 = new Node{Token::Variable, "x"};
-    value->appendNext(child1);
-    child1->appendNext(child2);
-    child2->appendNext(child3);
-    testEqualTokenizerNode("-3x", value);
+    Node *next1 = new Number{"3"};
+    Node *next2 = new Node{Token::Name, "x"};
+    value->appendNext(next1);
+    next1->appendNext(next2);
+    testEqualTokenizerNode("-3x", value, settings);
     delete value;
     Number *a = new Number{"53.9"};
     Number *a2 = new Number{"53.9"};
@@ -275,5 +277,6 @@ int main() {
     delete one;
     delete zero;
     delete zeroFloat;
+    delete settings;
     return 0;
 }

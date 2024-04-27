@@ -36,7 +36,7 @@ bool Parser::isNodeNull(Node *node) {
     return (node == nullptr || node->getTokenType() == Token::NullRoot);
 }
 
-Node *Parser::parse() {
+void Parser::parse() {
     while (expressionTokens != nullptr) {
         Token tokenType = expressionTokens->getTokenType();
         if (tokenType == Token::Number) {
@@ -63,7 +63,7 @@ Node *Parser::parse() {
             delete expressionTreeRoot;
             throw UnknownToken(*expressionTokens);
         }
-        if (debug) {
+        if (settings->debug) {
             cerr << endl << "Root : " << endl;
             root(expressionTree)->display(cerr);
             cerr << endl;
@@ -73,9 +73,8 @@ Node *Parser::parse() {
 
     removeParenthesis(expressionTreeRoot);
     replaceImplicitTimes(expressionTreeRoot);
-    expressionTree = expressionTreeRoot->getChild();
+    expressionTreeRoot = expressionTreeRoot->getChild();
     deleteNullRoot(expressionTreeRoot);
-    return expressionTree;
 }
 
 void Parser::parseNumber() {

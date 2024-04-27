@@ -25,9 +25,10 @@ int main() {
             tmp = tmp->getNext();
         }
     }
-    Parser *parser = new Parser{tokens, settings, debug, implicitMultiplicationPriority};
     Node *tree;
-    tree = parser->parse();
+    Parser *parser = new Parser{tokens, settings};
+    tree = parser->getFinalTree();
+    delete parser;
     delete tokens;
     if (debug) {
         cerr << "Parsed tree" << endl;
@@ -42,5 +43,6 @@ int main() {
     cout << "Start expression : " << endl << expr << endl;
     cout << "Final expression : " << endl << *tree << endl;
     delete tree;
+    delete settings;
     return 0;
 }
