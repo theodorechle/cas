@@ -191,7 +191,7 @@ void deleteNullRoot(Node *node) {
 }
 
 bool operator==(const Node &n1, const Node &n2) {
-    return (n1.getValue() == n2.getValue() || n1.getTokenType() == n2.getTokenType());
+    return (n1.getValue() == n2.getValue() && n1.getTokenType() == n2.getTokenType());
 }
 
 std::ostream &operator<<(std::ostream &o, const Node &n) {
