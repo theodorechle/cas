@@ -18,7 +18,6 @@ int main() {
     Tokenizer *tokenizer = new Tokenizer{*expr, settings};
     tokens = tokenizer->getResult();
     delete tokenizer;
-    delete expr;
     if (debug) {
         Node *tmp = tokens;
         cerr << "Tokens" << endl;
@@ -44,6 +43,7 @@ int main() {
     }
     cout << "Start expression : " << endl << *expr << endl;
     cout << "Final expression : " << endl << *tree << endl;
+    delete expr;
     delete tree;
     delete settings;
     return 0;
