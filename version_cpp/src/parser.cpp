@@ -1,6 +1,7 @@
 using namespace std;
 
 #include "parser.hpp"
+#include "functions.hpp"
 
 void Parser::getRootOrStopBeforeParenthesis() {
     if (isNodeNull(expressionTree) ||
@@ -45,6 +46,9 @@ void Parser::parse() {
         else if (tokenType == Token::Name) {
             parseVariable();
         }
+        else if (tokenType == Token::Comma) {
+            parseComma();
+        }
         else if (tokenType == Token::Plus ||
                 tokenType == Token::Minus ||
                 tokenType == Token::Times ||
@@ -84,9 +88,21 @@ void Parser::parseNumber() {
 }
 
 void Parser::parseVariable() {
-    expressionTree = expressionTree->appendChild(new Node{Token::Variable, expressionTokens->getValue()});
-    getRootOrStopBeforeParenthesis();
-    return addImplicitMultiplication();
+    if ( !isFunction(expressionTokens->getValue()) || isNodeNull(expressionTokens->getNext()) || expressionTokens->getNext()->getTokenType() != Token::OpeningParenthesis) {
+        expressionTree = expressionTree->appendChild(new Node{Token::Variable, expressionTokens->getValue()});
+        getRootOrStopBeforeParenthesis();
+        addImplicitMultiplication();
+    }
+    else {
+        expressionTree = expressionTree->appendChild(new Node{Token::Function, expressionTokens->getValue()});
+    }
+}
+
+void Parser::parseComma() {
+    if (isNodeNull(expressionTree->getParent()) || expressionTree->getParent()->getTokenType() != Token::OpeningParenthesis) {
+        throw InvalidExpression(tokenToStr(expressionTokens->getTokenType()));
+    }
+    expressionTree = expressionTree->getParent();
 }
 
 void Parser::parseOperator() {
@@ -115,8 +131,8 @@ void Parser::parseOperator() {
         expressionTree = expressionTree->appendChild(new Number{"0"});
     }
     if (!isOperator(expressionTree->getTokenType()) || getOperatorPriority(actualToken->getTokenType()) <= getOperatorPriority(expressionTree->getTokenType())) {
-        Node *tempNode = actualToken->copy();
-        tempNode->appendChild(expressionTree->copy());
+        Node *tempNode = actualToken->copyNodeWithChilds();
+        tempNode->appendChild(expressionTree->copyNodeWithChilds());
         expressionTree->replaceData(tempNode);
         delete tempNode;
     }
@@ -125,8 +141,8 @@ void Parser::parseOperator() {
         child = getLastChild(expressionTree);
         while (isOperator(child->getTokenType()) && getOperatorPriority(actualToken->getTokenType()) > getOperatorPriority(child->getTokenType()))
             child = getLastChild(child);
-        Node *tempNode = actualToken->copy();
-        tempNode->appendChild(child->copy());
+        Node *tempNode = actualToken->copyNodeWithChilds();
+        tempNode->appendChild(child->copyNodeWithChilds());
         child->replaceData(tempNode);
         delete tempNode;
         expressionTree = child;
@@ -134,7 +150,7 @@ void Parser::parseOperator() {
     if (expressionTree->getTokenType() == Token::DoubleTimes) expressionTree->setTokenType(Token::Caret);
 }
 void Parser::parseOpeningParenthesis() {
-    expressionTree = expressionTree->appendChild(expressionTokens->copy());
+    expressionTree = expressionTree->appendChild(expressionTokens->copyNodeWithChilds());
 }
 
 void Parser::parseClosingParenthesis() {

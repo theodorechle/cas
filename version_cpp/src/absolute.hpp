@@ -1,5 +1,3 @@
 #include "node.hpp"
 
-bool absolute(Node *) {
-
-}
+bool absolute(Node *);

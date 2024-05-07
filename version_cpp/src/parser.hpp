@@ -7,7 +7,6 @@
 #include "number.hpp"
 #include "settings.hpp"
 
-int getOperatorPriority(const Token &token);
 
 class UnknownToken: public std::exception {
     std::string message;
@@ -52,6 +51,7 @@ public:
     void parse();
     void parseNumber();
     void parseVariable();
+    void parseComma();
     void parseOperator();
     void parseOpeningParenthesis();
     void parseClosingParenthesis();

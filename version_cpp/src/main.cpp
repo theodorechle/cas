@@ -6,19 +6,18 @@ using namespace std;
 
 int main() {
     Settings *settings = new Settings;
-    bool debug, implicitMultiplicationPriority;
     string *expr = new string;
     Node *tokens;
     cout << "Expression : ";
     getline(cin, *expr);
     cout << "1 for debug, 0 else : ";
-    cin >> debug;
+    cin >> settings->debug;
     cout << "1 for implicit multiplication priority, 0 else : ";
-    cin >> implicitMultiplicationPriority;
+    cin >> settings->implicitMultiplicationPriority;
     Tokenizer *tokenizer = new Tokenizer{*expr, settings};
     tokens = tokenizer->getResult();
     delete tokenizer;
-    if (debug) {
+    if (settings->debug) {
         Node *tmp = tokens;
         cerr << "Tokens" << endl;
         while (tmp != nullptr) {
@@ -31,13 +30,13 @@ int main() {
     tree = parser->getFinalTree();
     delete parser;
     delete tokens;
-    if (debug) {
+    if (settings->debug) {
         cerr << "Parsed tree" << endl;
         tree->display(cerr);
         cerr << tree->str() << endl;
     }
     // tree = solve(tree, debug);
-    if (debug) {
+    if (settings->debug) {
         cerr << "Solved tree" << endl;
         tree->display(cerr);
     }

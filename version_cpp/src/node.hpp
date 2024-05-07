@@ -12,8 +12,6 @@ class Node {
     Node *next;
     Node *child;
     Node *parent;
-    /**Only used by public method copy*/
-    Node *copyNodeAndChilds();
     void displayTree(std::ostream &flow = std::cout, int level=0) const;
 public :
     Node(Token type=Token::Empty, std::string value="", Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
@@ -23,6 +21,9 @@ public :
     void setTokenType(const Token& t) {type = t;};
     const Token& getTokenType() const {return type;};
     Node *getParent() const {return parent;};
+    /**
+     * Set parent for the node and the nexts nodes
+    */
     void setParent(Node *parent);
     Node *getNext() const {return next;};
     void setNext(Node *next);
@@ -32,20 +33,21 @@ public :
     void setChild(Node *child);
     void removeChild() {setChild(nullptr);};
     void appendNext(Node *next);
-    /*add a child at the end of them*/
+    /**add a child at the end of them
+     * Return the child
+    */
     Node *appendChild(Node *child);
     Node *appendChild(Node &child);
     Node *addEmptyChild();
     /**
-        *Replace the data of the node (value, type and childs)
+        *Replace the data of the node (value, type, childs and nexts)
         *by the ones of the given tree.
         Delete the last childs
     */
     void replaceData(Node *tree);
-    /**
-        *Copy self node and childs, not brothers
-    */
-    Node *copy() const;
+
+    Node *copyNodeWithChildsAndNexts();
+    Node *copyNodeWithChilds() const;
     void display(std::ostream &flow = std::cout) const;
     std::string str() const;
 

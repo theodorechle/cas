@@ -30,7 +30,7 @@ enum class Token {
 
 class Operators {
 public:
-    static const int DEFAULT_PRIORITY = 50;
+    static const int DEFAULT_PRIORITY = INT32_MAX;
     // operators and their priorities
     static const std::unordered_map<Token, int> OperatorsPriorities;
     // operators and the strings associated to

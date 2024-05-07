@@ -7,13 +7,13 @@
 #include "node.hpp"
 #include "absolute.hpp"
 
-const std::unordered_map<std::string, bool (*)(Node *)> FUNCTIONS;
+typedef bool (*function)(Node *);
 
-bool (*getFunction(const std::string &value))(Node *) {
-    std::unordered_map<std::string, bool (*)(Node *)>::const_iterator iter = FUNCTIONS.find(value);
-    if (iter != FUNCTIONS.cend()) return iter->second;
-    return nullptr;
-}
+const std::unordered_map<std::string, function> FUNCTIONS{
+    {"abs", absolute}
+};
 
+bool (*getFunction(const std::string &value))(Node *);
+bool isFunction(const std::string &value);
 
 #endif // FUNCTIONS_HPP

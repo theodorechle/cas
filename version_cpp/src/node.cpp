@@ -5,26 +5,26 @@
 
 using namespace std;
 
-Node *Node::copyNodeAndChilds() {
+Node *Node::copyNodeWithChildsAndNexts() {
     Node *n = new Node;
     Node *child = getChild();
     Node *next = getNext();
     n->setTokenType(getTokenType());
     n->setValue(getValue());
-    if (child != nullptr) n->setChild(child->copyNodeAndChilds());
-    if (next != nullptr) n->setNext(next->copyNodeAndChilds());
+    if (child != nullptr) n->setChild(child->copyNodeWithChildsAndNexts());
+    if (next != nullptr) n->setNext(next->copyNodeWithChildsAndNexts());
     return n;
 }
 
 /**
  * Copy the node and his childs (not the nexts)
 */
-Node *Node::copy() const {
+Node *Node::copyNodeWithChilds() const {
     Node *n = new Node;
     Node *child = getChild();
     n->setTokenType(getTokenType());
     n->setValue(getValue());
-    if (child != nullptr) n->setChild(child->copyNodeAndChilds());
+    if (child != nullptr) n->setChild(child->copyNodeWithChildsAndNexts());
     return n;
 }
 
@@ -138,7 +138,8 @@ Node *Node::addEmptyChild() {
 
 void Node::replaceData(Node *tree) {
     if (tree == nullptr) return;
-    tree = tree->copy();
+    tree = tree->copyNodeWithChildsAndNexts();
+    cout << tree->getNext() << endl;
     setValue(tree->getValue());
     setTokenType(tree->getTokenType());
     delete getChild();
@@ -147,6 +148,9 @@ void Node::replaceData(Node *tree) {
         getChild()->setParent(this);   
         tree->setChild(nullptr);
     }
+    delete getNext();
+    setNext(tree->getNext());
+    tree->setNext(nullptr);
     delete tree;
 }
 
