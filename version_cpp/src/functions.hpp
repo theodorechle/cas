@@ -5,10 +5,9 @@
 #include <string>
 
 #include "node.hpp"
+#include "absolute.hpp"
 
-const std::unordered_map<std::string, bool (*)(Node *)> FUNCTIONS {
-
-};
+const std::unordered_map<std::string, bool (*)(Node *)> FUNCTIONS;
 
 bool (*getFunction(const std::string &value))(Node *) {
     std::unordered_map<std::string, bool (*)(Node *)>::const_iterator iter = FUNCTIONS.find(value);
