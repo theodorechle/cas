@@ -50,7 +50,9 @@ public :
     Node *copyNodeWithChildsAndNexts();
     Node *copyNodeWithChilds() const;
     void display(std::ostream &flow = std::cout) const;
+    void displayNext(std::ostream &flow = std::cout) const;
     std::string str() const;
+    std::string strNexts() const;
 
     friend bool operator==(const Node &, const Node &);
     friend std::ostream &operator<<(std::ostream &o, const Node &n);

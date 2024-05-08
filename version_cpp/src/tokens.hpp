@@ -38,7 +38,7 @@ public:
 };
 
 
-std::string tokenToStr(const Token &type);
+std::string tokenName(const Token &type);
 
 int getOperatorPriority(const Token &token);
 

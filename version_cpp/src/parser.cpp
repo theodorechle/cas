@@ -107,7 +107,7 @@ void Parser::parseVariable() {
 
 void Parser::parseComma() {
     if (isNodeNull(expressionTree->getParent()) || expressionTree->getParent()->getTokenType() != Token::OpeningParenthesis) {
-        throw InvalidExpression(tokenToStr(expressionTokens->getTokenType()));
+        throw InvalidExpression(tokenName(expressionTokens->getTokenType()));
     }
     expressionTree = expressionTree->getParent();
 }

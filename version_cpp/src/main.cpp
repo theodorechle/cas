@@ -18,12 +18,8 @@ int main() {
     tokens = tokenizer->getResult();
     delete tokenizer;
     if (settings->debug) {
-        Node *tmp = tokens;
         cerr << "Tokens" << endl;
-        while (tmp != nullptr) {
-            tmp->display(cerr);
-            tmp = tmp->getNext();
-        }
+        tokens->displayNext(cerr);
     }
     Node *tree;
     Parser *parser = new Parser{tokens, settings};

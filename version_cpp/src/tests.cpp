@@ -9,12 +9,12 @@
 
 using namespace std;
 
-void testStringEqual(const string &expr, const string &expected, Settings *settings) {
+void testExpressionsStrings(bool equal, const string &expr, const string &expected, Settings *settings) {
     cerr << "Test tokenizer + parser " << expr << " == \"" << expected << "\" : ";
     try {
         Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
-        if (result->str() == expected) cerr << "OK";
+        if ((result->str() == expected) == equal) cerr << "OK";
         else cerr << "KO";
         delete result;
         delete tokens;
@@ -25,30 +25,14 @@ void testStringEqual(const string &expr, const string &expected, Settings *setti
     cerr << endl;
 }
 
-void testStringDifferent(const string &expr, const string &notExpected, Settings *settings) {
-    cerr << "Test tokenizer + parser " << expr << " != \"" << notExpected << "\" : ";
+void testExpressions(bool equal, const string &expr, const string &expected, Settings *settings) {
+    cerr << "Test expr " << expr << " == " << expected << " : ";
     try {
         Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
-        if (result->str() != notExpected) cerr << "OK";
-        else cerr << "KO";
-        delete result;
-        delete tokens;
-    }
-    catch (const exception& e) {
-        cerr << "Failed with error : " << e.what();
-    }
-    cerr << endl;
-}
-
-void testExprEqual(const string &expr, const string &expr2, Settings *settings) {
-    cerr << "Test expr " << expr << " == " << expr2 << " : ";
-    try {
-        Node *tokens = Tokenizer(expr, settings).getResult();
-        Node *result = Parser(tokens, settings).getFinalTree();
-        Node *tokens2 = Tokenizer(expr2, settings).getResult();
+        Node *tokens2 = Tokenizer(expected, settings).getResult();
         Node *result2 = Parser(tokens2, settings).getFinalTree();
-        if (result->str() == result2->str()) cerr << "OK";
+        if ((result->str() == result2->str()) == equal) cerr << "OK";
         else cerr << "KO";
         delete result;
         delete result2;
@@ -61,42 +45,23 @@ void testExprEqual(const string &expr, const string &expr2, Settings *settings) 
     cerr << endl;
 }
 
-
-void testExprDifferent(const string &expr, const string &expr2, Settings *settings) {
-    cerr << "Test expr " << expr << " != " << expr2 << " : ";
-    try {
-        Node *tokens = Tokenizer(expr, settings).getResult();
-        Node *result = Parser(tokens, settings).getFinalTree();
-        Node *tokens2 = Tokenizer(expr2, settings).getResult();
-        Node *result2 = Parser(tokens2, settings).getFinalTree();
-        if (result->str() != result2->str()) cerr << "OK";
-        else cerr << "KO";
-        delete result;
-        delete result2;
-        delete tokens;
-        delete tokens2;
-    }
-    catch (const exception& e) {
-        cerr << "Failed with error : " << e.what();
-    }
-    cerr << endl;
-}
-
-void testEqualTokenizerNode(const string &expr, const Node *node, Settings *settings) {
-    cerr << "Test tokenizer " << expr << " == node : ";
+void testTokenizer(bool equal, const string &expr, const Node *expected, Settings *settings) {
+    cerr << "Test tokenizer " << expr << " == " << endl;
+    expected->displayNext(cerr);
+    cerr << " : ";
     try {
         Node *result = Tokenizer(expr, settings).getResult();
         Node *n = result;
         while (n != nullptr) {
-            if (node == nullptr || !(*n == *node)) {
+            if ((expected == nullptr || !(*n == *expected)) == equal) {
                 cerr << "KO" << endl;
                 delete result;
                 return;
             }
             n = n->getNext();
-            node = node->getNext();
+            expected = expected->getNext();
         }
-        if (node != nullptr) cerr << "KO";
+        if (expected != nullptr) cerr << "KO";
         else cerr << "OK";
         delete result;
     }
@@ -106,36 +71,11 @@ void testEqualTokenizerNode(const string &expr, const Node *node, Settings *sett
     cerr << endl;
 }
 
-
-void testDifferentTokenizerNode(const string &expr, const Node *node, Settings *settings) {
-    cerr << "Test tokenizer " << expr << " != node : ";
-    try {
-        Node *result = Tokenizer(expr, settings).getResult();
-        Node *n = result;
-        while (n != nullptr) {
-            if (node == nullptr || *n == *node) {
-                cerr << "KO" << endl;
-                delete result;
-                return;
-            }
-            n = n->getNext();
-            node = node->getNext();
-        }
-        if (node != nullptr) cerr << "KO";
-        else cerr << "OK";
-        delete result;
-    }
-    catch (const exception& e) {
-        cerr << "Failed with error : " << e.what();
-    }
-    cerr << endl;
-}
-
-void testEqualParserNode(Node *expr, const Node *node, Settings *settings) {
-    cerr << "Test parser " << *expr << " == node " << *node << " : ";
+void testParser(bool equal, Node *expr, const Node *expected, Settings *settings) {
+    cerr << "Test parser " << *expr << " == " << *expected << " : ";
     try {
         Node *result = Parser(expr, settings).getFinalTree();
-        if (areSameNodes(result, node)) cerr << "OK";
+        if (areSameNodes(result, expected) == equal) cerr << "OK";
         else cerr << "KO";
         delete result;
     }
@@ -145,27 +85,12 @@ void testEqualParserNode(Node *expr, const Node *node, Settings *settings) {
     cerr << endl;
 }
 
-
-void testDifferentParserNode(Node *expr, const Node *node, Settings *settings) {
-    cerr << "Test parser " << *expr << " != node " << *node << " : ";
-    try {
-        Node *result = Parser(expr, settings).getFinalTree();
-        if (!areSameNodes(result, node)) cerr << "OK";
-        else cerr << "KO";
-        delete result;
-    }
-    catch (const exception& e) {
-        cerr << "Failed with error : " << e.what();
-    }
-    cerr << endl;
-}
-
-void testEqualNode(const string &expr, const Node *node, Settings *settings) {
-    cerr << "Test tokenizer + parser " << expr << " == node " << *node << " : ";
+void testTokenizerAndParser(bool equal, const string &expr, const Node *expected, Settings *settings) {
+    cerr << "Test tokenizer + parser " << expr << " == " << *expected << " : ";
     try {
         Node *tokens = Tokenizer(expr, settings).getResult();
         Node *result = Parser(tokens, settings).getFinalTree();
-        if (areSameNodes(result, node)) cerr << "OK";
+        if (areSameNodes(result, expected) == equal) cerr << "OK";
         else cerr << "KO";
         delete result;
         delete tokens;
@@ -176,61 +101,44 @@ void testEqualNode(const string &expr, const Node *node, Settings *settings) {
     cerr << endl;
 }
 
-
-void testDifferentNode(const string &expr, const Node *node, Settings *settings) {
-    cerr << "Test tokenizer + parser " << expr << " != node " << *node << " : ";
-    try {
-        Node *tokens = Tokenizer(expr, settings).getResult();
-        Node *result = Parser(tokens, settings).getFinalTree();
-        if (!areSameNodes(result, node)) cerr << "OK";
-        else cerr << "KO";
-        delete result;
-        delete tokens;
-    }
-    catch (const exception& e) {
-        cerr << "Failed with error : " << e.what();
-    }
-    cerr << endl;
-}
-
-string isBoolValid(bool a, bool b) {
-    if (a == b) return "OK";
+string testBools(bool equal, bool a, bool b) {
+    if ((a == b) == equal) return "OK";
     return "Error, " + to_string(a) + " instead of " + to_string(b);
 }
 
-string areStringEquals(const string &a, const string &b) {
-    if (a == b) return "OK";
+string testStrings(bool equal, const string &a, const string &b) {
+    if ((a == b) == equal) return "OK";
     return "Error, " + a + " instead of " + b;
 }
 
 void isGreaterNumber(Number *a, Number *b, bool expected) {
-    cerr << *a << " > " << *b << " : " << isBoolValid(a->isGreaterThan(b), expected) << endl;
+    cerr << *a << " > " << *b << " : " << testBools(true, a->isGreaterThan(b), expected) << endl;
 }
 
 void isLowerNumber(Number *a, Number *b, bool expected) {
-    cerr << *a << " < " << *b << " : " << isBoolValid(a->isLowerThan(b), expected) << endl;
+    cerr << *a << " < " << *b << " : " << testBools(true, a->isLowerThan(b), expected) << endl;
 }
 
 void isEqualNumber(Number *a, Number *b, bool expected) {
-    cerr << *a << " == " << *b << " : " << isBoolValid(a->isEqualTo(b), expected) << endl;
+    cerr << *a << " == " << *b << " : " << testBools(true, a->isEqualTo(b), expected) << endl;
 }
 
 int main() {
     Settings *settings = new Settings;
     settings->debug = false;
-    testExprEqual("3x**2", "3x^2", settings);
-    testExprDifferent("3x**2", "3x*2", settings);
-    testStringEqual("3x**2", "3*x^2", settings);
-    testStringDifferent("3x**2", "3x^2", settings);
+    testExpressions(true, "3x**2", "3x^2", settings);
+    testExpressions(false, "3x**2", "3x*2", settings);
+    testExpressionsStrings(true, "3x**2", "3*x^2", settings);
+    testExpressionsStrings(false, "3x**2", "3x^2", settings);
     settings->implicitMultiplicationPriority = true;
-    testStringEqual("3x**2*(-2)+3", "3*x^2*(0-2)+3", settings);
+    testExpressionsStrings(true, "3x**2*(-2)+3", "3*x^2*(0-2)+3", settings);
     settings->implicitMultiplicationPriority = false;
     Node *value = new Node{Token::Minus};
     Node *next1 = new Number{"3"};
     Node *next2 = new Node{Token::Name, "x"};
     value->appendNext(next1);
     next1->appendNext(next2);
-    testEqualTokenizerNode("-3x", value, settings);
+    testTokenizer(true, "-3x", value, settings);
     delete value;
     Number *a = new Number{"53.9"};
     Number *a2 = new Number{"53.9"};
@@ -249,27 +157,27 @@ int main() {
     isEqualNumber(b, b, true);
     isEqualNumber(a, b, false);
     isEqualNumber(b, a, false);
-    cout << *a << " + " << *b << " : ";
+    cerr << *a << " + " << *b << " : ";
     a->add(b);
-    cout << areStringEquals(a->getValue(), "-38.6") << endl;
-    cout << *b << " + " << *a2 << " : ";
+    cerr << testStrings(true, a->getValue(), "-38.6") << endl;
+    cerr << *b << " + " << *a2 << " : ";
     b->add(a2);
-    cout << areStringEquals(b->getValue(), "-38.6") << endl;
-    cout << *a2 << " + " << *a2 << " : ";
+    cerr << testStrings(true, b->getValue(), "-38.6") << endl;
+    cerr << *a2 << " + " << *a2 << " : ";
     a2->add(a2);
-    cout << areStringEquals(a2->getValue(), "107.8") << endl;
-    cout << *c << " + " << *c << " : ";
+    cerr << testStrings(true, a2->getValue(), "107.8") << endl;
+    cerr << *c << " + " << *c << " : ";
     c->add(c);
-    cout << areStringEquals(c->getValue(), "-6.4") << endl;
+    cerr << testStrings(true, c->getValue(), "-6.4") << endl;
     isEqualNumber(zero, zeroFloat, true);
     isGreaterNumber(zero, a, true);
     isLowerNumber(zero, c, false);
-    cout << *zero << " + " << *one << " : ";
+    cerr << *zero << " + " << *one << " : ";
     zero->add(one);
-    cout << areStringEquals(zero->getValue(), "1") << endl;
-    cout << *zeroFloat << " + " << *one << " : ";
+    cerr << testStrings(true, zero->getValue(), "1") << endl;
+    cerr << *zeroFloat << " + " << *one << " : ";
     zeroFloat->add(one);
-    cout << areStringEquals(zeroFloat->getValue(), "1") << endl;
+    cerr << testStrings(true, zeroFloat->getValue(), "1") << endl;
     delete a;
     delete a2;
     delete b;

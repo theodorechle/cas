@@ -2,7 +2,7 @@
 
 #include "tokens.hpp"
 
-std::string tokenToStr(const Token &type) {
+std::string tokenName(const Token &type) {
     std::string value;
     switch (type) {
         case Token::Name: value = "Name";break;
@@ -59,7 +59,7 @@ std::string OperatorsString(const Token &token) {
 }
 
 std::ostream& operator<<(std::ostream& o, const Token type) {
-    o << tokenToStr(type);
+    o << tokenName(type);
     return o;
 }
 

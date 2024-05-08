@@ -11,7 +11,7 @@
 class UnknownToken: public std::exception {
     std::string message;
 public:
-    UnknownToken(const Node token): message{"Error : Unknown token '" + token.getValue() + " (" + tokenToStr(token.getTokenType()) + ")'"} {};
+    UnknownToken(const Node token): message{"Error : Unknown token '" + token.getValue() + " (" + tokenName(token.getTokenType()) + ")'"} {};
     const char* what() const noexcept override {return message.c_str();}
 };
 
