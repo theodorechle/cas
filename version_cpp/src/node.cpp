@@ -79,7 +79,7 @@ string Node::str() const {
         s += getValue();
         s += "(";
         child = getChild();
-        if (child != nullptr) {
+        if (child != nullptr && child->getTokenType() != Token::ClosingParenthesis) {
             s += child->str();
             child = child->getNext();
             while (child != nullptr) {
@@ -100,11 +100,33 @@ string Node::str() const {
 
 void Node::setChild(Node *child)  {
     this->child = child;
-    child->setParent(this);
+    if (child != nullptr) child->setParent(this);
 }
 
 void Node::setNext(Node *next) {
     this->next = next;
+}
+
+void Node::removeSpecificChild(Node *child) {
+    if (child == nullptr) return;
+    if (child == getChild()) {
+        setChild(child->getNext());
+        child->setNext(nullptr);
+        delete child;
+        return;
+    }
+    next = getChild()->getNext();
+    while (next != nullptr)
+    {
+        if (next == child) {
+            child->setNext(next->getNext());
+            next->setNext(nullptr);
+            delete child;
+            return;
+        }
+        next = next->getNext();
+    }
+    
 }
 
 void Node::appendNext(Node *next) {
@@ -139,7 +161,6 @@ Node *Node::addEmptyChild() {
 void Node::replaceData(Node *tree) {
     if (tree == nullptr) return;
     tree = tree->copyNodeWithChildsAndNexts();
-    cout << tree->getNext() << endl;
     setValue(tree->getValue());
     setTokenType(tree->getTokenType());
     delete getChild();
@@ -160,7 +181,7 @@ Node::~Node() {
 }
 
 Node *root(Node *node) {
-    if (node == nullptr ||
+    if (Parser::isNodeNull(node) ||
         Parser::isNodeNull(node->getParent())) return node;
     return root(node->getParent());
 }

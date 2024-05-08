@@ -31,7 +31,8 @@ public :
     Node *getChild() const {return child;};
     /*Set the child pointer*/
     void setChild(Node *child);
-    void removeChild() {setChild(nullptr);};
+    void removeFirstChild() {setChild(nullptr);};
+    void removeSpecificChild(Node *child);
     void appendNext(Node *next);
     /**add a child at the end of them
      * Return the child

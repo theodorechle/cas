@@ -14,7 +14,10 @@ void Parser::getRootOrStopBeforeParenthesis() {
 
 void Parser::removeParenthesis(Node *t) {
     if (t == nullptr) return;
-    if (t->getTokenType() == Token::ClosingParenthesis) t->replaceData(t->getChild());
+    if (t->getTokenType() == Token::ClosingParenthesis) {
+        if (isNodeNull(t->getChild())) return;
+        t->replaceData(t->getChild());
+    }
     else if (t->getTokenType() == Token::OpeningParenthesis) throw MissingToken(")");
     Node *child = t->getChild();
     while (child != nullptr) {
@@ -69,14 +72,19 @@ void Parser::parse() {
         }
         if (settings->debug) {
             cerr << endl << "Root : " << endl;
+            cout << *expressionTreeRoot << endl;
             root(expressionTree)->display(cerr);
             cerr << endl;
         }
         expressionTokens = expressionTokens->getNext();
     }
-
     removeParenthesis(expressionTreeRoot);
     replaceImplicitTimes(expressionTreeRoot);
+    if (expressionTree == expressionTreeRoot) {
+        delete expressionTreeRoot;
+        expressionTreeRoot = nullptr;
+        return;
+    }
     expressionTreeRoot = expressionTreeRoot->getChild();
     deleteNullRoot(expressionTreeRoot);
 }
@@ -112,7 +120,7 @@ void Parser::parseOperator() {
         Token nextTokenType = nextToken->getTokenType();
         if (isOperator(nextTokenType)) {
             if (nextTokenType != Token::Minus) {
-                // Avoid things like 5-/3
+                // Avoid things like -/
                 string actualTokenTypeString = OperatorsString(actualToken->getTokenType());
                 string nextTokenTypeString = OperatorsString(nextToken->getTokenType());
                 actualToken = nullptr;
@@ -154,6 +162,13 @@ void Parser::parseOpeningParenthesis() {
 }
 
 void Parser::parseClosingParenthesis() {
+    if (expressionTree->getTokenType() == Token::OpeningParenthesis) {// useless parenthesis or function without argument parenthesis
+        if (expressionTree->getParent()->getTokenType() == Token::Function) {
+            expressionTree->setTokenType(Token::ClosingParenthesis);
+            return;
+        }
+        throw InvalidExpression("()");
+    }
     getRootOrStopBeforeParenthesis();
     if (isNodeNull(expressionTree->getParent())) {
         throw MissingToken("(");

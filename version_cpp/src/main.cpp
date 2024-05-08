@@ -30,6 +30,13 @@ int main() {
     tree = parser->getFinalTree();
     delete parser;
     delete tokens;
+    if (tree == nullptr) { // something is not freed, need to find it
+        cout << "Empty result" << endl;
+        delete expr;
+        delete tree;
+        delete settings;
+        return 0;
+    }
     if (settings->debug) {
         cerr << "Parsed tree" << endl;
         tree->display(cerr);
