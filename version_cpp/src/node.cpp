@@ -79,7 +79,7 @@ string Node::str() const {
         s += getValue();
         s += "(";
         child = getChild();
-        if (child != nullptr && child->getTokenType() != Token::ClosingParenthesis) {
+        if (child != nullptr && child->getTokenType() != Token::Empty) { // don't print anything in the parenthesis if the function doesn't have parameters
             s += child->str();
             child = child->getNext();
             while (child != nullptr) {

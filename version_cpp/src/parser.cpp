@@ -15,7 +15,6 @@ void Parser::getRootOrStopBeforeParenthesis() {
 void Parser::removeParenthesis(Node *t) {
     if (t == nullptr) return;
     if (t->getTokenType() == Token::ClosingParenthesis) {
-        if (isNodeNull(t->getChild())) return;
         t->replaceData(t->getChild());
     }
     else if (t->getTokenType() == Token::OpeningParenthesis) throw MissingToken(")");
@@ -164,7 +163,7 @@ void Parser::parseOpeningParenthesis() {
 void Parser::parseClosingParenthesis() {
     if (expressionTree->getTokenType() == Token::OpeningParenthesis) {// useless parenthesis or function without argument parenthesis
         if (expressionTree->getParent()->getTokenType() == Token::Function) {
-            expressionTree->setTokenType(Token::ClosingParenthesis);
+            expressionTree->setTokenType(Token::Empty); // no parameter function is registered with empty child
             return;
         }
         throw InvalidExpression("()");
