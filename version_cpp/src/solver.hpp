@@ -5,16 +5,6 @@
 
 void findSuperiorGroup(Node *node, int priority, Node *nodes);
 
-bool addition(Node *node);
-
-bool substraction(Node *node);
-
-bool multiplication(Node *node);
-
-bool division(Node *node);
-
-bool power(Node *node);
-
 Node *goToLeaf(Node *node);
 
 /**

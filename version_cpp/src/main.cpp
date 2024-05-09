@@ -38,7 +38,7 @@ int main() {
         tree->display(cerr);
         cerr << tree->str() << endl;
     }
-    // tree = solve(tree, debug);
+    tree = solve(tree, settings->debug);
     if (settings->debug) {
         cerr << "Solved tree" << endl;
         tree->display(cerr);

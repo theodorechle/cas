@@ -28,12 +28,16 @@ void Tokenizer::tokenizeName() {
 }
 
 void Tokenizer::tokenizeNumber() {
-    if (!isdigit(expression[index])) return;
     bool dotFound = false;
+    if (expression[index] == '.') dotFound = true;
+    else if (!isdigit(expression[index])) return;
     size_t i = 1;
     while (index+i < expressionLength && (isdigit(expression[index+i]) ||
-            expression[index+i] == '_' ||
-            (!dotFound && expression[index+i] == '.'))) {
+            expression[index+i] == '_' || expression[index+i] == '.')) {
+        if (expression[index+i] == '.') {
+            if (!dotFound) dotFound = true;
+            else return;
+        }
         i++;
     }
     expressionTree->appendNext(new Node{Token::Number, expression.substr(index, i)});
@@ -95,7 +99,6 @@ void Tokenizer::tokenize() {
         if (!tokenized) tokenizeName();
         if (!tokenized) tokenizeSpecialCharacters();
         if (!tokenized) {
-            // avoid memory leak
             delete expressionTree;
             throw UnknownValue(expression.substr(index));
         }
