@@ -40,45 +40,50 @@ bool Parser::isNodeNull(Node *node) {
 }
 
 void Parser::parse() {
-    while (expressionTokens != nullptr) {
-        Token tokenType = expressionTokens->getTokenType();
-        if (tokenType == Token::Number) {
-            parseNumber();
+    try {
+        while (expressionTokens != nullptr) {
+            Token tokenType = expressionTokens->getTokenType();
+            if (tokenType == Token::Number) {
+                parseNumber();
+            }
+            else if (tokenType == Token::Name) {
+                parseVariable();
+            }
+            else if (tokenType == Token::Comma) {
+                parseComma();
+            }
+            else if (tokenType == Token::Plus ||
+                    tokenType == Token::Minus ||
+                    tokenType == Token::Times ||
+                    tokenType == Token::Slash ||
+                    tokenType == Token::Caret ||
+                    tokenType == Token::DoubleTimes) {
+                parseOperator();
+            }
+            else if (tokenType == Token::OpeningParenthesis) {
+                parseOpeningParenthesis();
+            }
+            else if (tokenType == Token::ClosingParenthesis) {
+                parseClosingParenthesis();
+            }
+            else {
+                throw UnknownToken(*expressionTokens);
+            }
+            if (settings->debug) {
+                cerr << endl << "Root : " << endl;
+                cout << *expressionTreeRoot << endl;
+                root(expressionTree)->display(cerr);
+                cerr << endl;
+            }
+            expressionTokens = expressionTokens->getNext();
         }
-        else if (tokenType == Token::Name) {
-            parseVariable();
-        }
-        else if (tokenType == Token::Comma) {
-            parseComma();
-        }
-        else if (tokenType == Token::Plus ||
-                tokenType == Token::Minus ||
-                tokenType == Token::Times ||
-                tokenType == Token::Slash ||
-                tokenType == Token::Caret ||
-                tokenType == Token::DoubleTimes) {
-            parseOperator();
-        }
-        else if (tokenType == Token::OpeningParenthesis) {
-            parseOpeningParenthesis();
-        }
-        else if (tokenType == Token::ClosingParenthesis) {
-            parseClosingParenthesis();
-        }
-        else {
-            delete expressionTreeRoot;
-            throw UnknownToken(*expressionTokens);
-        }
-        if (settings->debug) {
-            cerr << endl << "Root : " << endl;
-            cout << *expressionTreeRoot << endl;
-            root(expressionTree)->display(cerr);
-            cerr << endl;
-        }
-        expressionTokens = expressionTokens->getNext();
+        removeParenthesis(expressionTreeRoot);
+        replaceImplicitTimes(expressionTreeRoot);
     }
-    removeParenthesis(expressionTreeRoot);
-    replaceImplicitTimes(expressionTreeRoot);
+    catch (const exception &) {
+        delete expressionTreeRoot;
+        throw;
+    }
     if (expressionTree == expressionTreeRoot) {
         delete expressionTreeRoot;
         expressionTreeRoot = nullptr;

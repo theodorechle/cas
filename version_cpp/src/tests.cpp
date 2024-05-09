@@ -123,6 +123,94 @@ void isEqualNumber(Number *a, Number *b, bool expected) {
     cerr << *a << " == " << *b << " : " << testBools(true, a->isEqualTo(b), expected) << endl;
 }
 
+void testInvalidExpression(string expression, Settings* settings) {
+    cerr << "Test InvalidExpression exception with expression '" << expression << "' : ";
+    Node *tokens = nullptr;
+    Node *result = nullptr;
+    try {
+        tokens = Tokenizer(expression, settings).getResult();
+        result = Parser(tokens, settings).getFinalTree();
+        delete result;
+        delete tokens;
+        cerr << "KO";
+    }
+    catch (const InvalidExpression &e) {
+        cerr << "OK";
+    }
+    catch (const exception &e) {
+        cerr << "Error : " << e.what();
+    }
+    delete tokens;
+    delete result;
+    cerr << endl;
+}
+
+void testUnknownToken(string expression, Settings* settings) {
+    cerr << "Test UnknownToken exception with expression '" << expression << "' : ";
+    Node *tokens = nullptr;
+    Node *result = nullptr;
+    try {
+        tokens = Tokenizer(expression, settings).getResult();
+        result = Parser(tokens, settings).getFinalTree();
+        delete result;
+        delete tokens;
+        cerr << "KO";
+    }
+    catch (const UnknownToken &e) {
+        cerr << "OK";
+    }
+    catch (const exception &e) {
+        cerr << "Error : " << e.what();
+    }
+    delete tokens;
+    delete result;
+    cerr << endl;
+}
+
+void testMissingToken(string expression, Settings* settings) {
+    cerr << "Test MissingToken exception with expression '" << expression << "' : ";
+    Node *tokens = nullptr;
+    Node *result = nullptr;
+    try {
+        tokens = Tokenizer(expression, settings).getResult();
+        result = Parser(tokens, settings).getFinalTree();
+        delete result;
+        delete tokens;
+        cerr << "KO";
+    }
+    catch (const MissingToken &e) {
+        cerr << "OK";
+    }
+    catch (const exception &e) {
+        cerr << "Error : " << e.what();
+    }
+    delete tokens;
+    delete result;
+    cerr << endl;
+}
+
+void testUnknownValue(string expression, Settings* settings) {
+    cerr << "Test UnknownValue exception with expression '" << expression << "' : ";
+    Node *tokens = nullptr;
+    Node *result = nullptr;
+    try {
+        tokens = Tokenizer(expression, settings).getResult();
+        result = Parser(tokens, settings).getFinalTree();
+        delete result;
+        delete tokens;
+        cerr << "KO";
+    }
+    catch (const UnknownValue &e) {
+        cerr << "OK";
+    }
+    catch (const exception &e) {
+        cerr << "Error : " << e.what();
+    }
+    delete tokens;
+    delete result;
+    cerr << endl;
+}
+
 int main() {
     Settings *settings = new Settings;
     settings->debug = false;
@@ -185,6 +273,14 @@ int main() {
     delete one;
     delete zero;
     delete zeroFloat;
+    testInvalidExpression("a,b", settings);
+    testInvalidExpression("a+*b", settings);
+    testInvalidExpression("a()", settings);
+    testInvalidExpression("()", settings);
+    testMissingToken("a(", settings);
+    testMissingToken("a)", settings);
+    testUnknownValue("a~b", settings);
+    testUnknownToken("a!", settings);
     delete settings;
     return 0;
 }
