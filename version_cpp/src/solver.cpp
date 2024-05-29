@@ -6,15 +6,28 @@ void sortTree(Node* node) {
     
 }
 
+Node *goToFirstLeaf(Node *node) {
+    if (node->getChild() != nullptr) return goToFirstLeaf(node->getChild());
+    return node;
+}
 
-
-
+Node *goToNextExpr(Node *node) {
+    if (node->getNext() != nullptr) return node->getNext();
+    return node->getParent();
+}
 
 Node *solve(Node *expr, bool debug) {
     bool updated = true;
+    bool delete_node = false;
+    Operator *ope;
     while (updated || !Parser::isNodeNull(expr->getParent())) {
+        if (updated) expr = goToFirstLeaf(expr);
+        else expr = goToNextExpr(expr);
+        delete_node = false;
         updated = false;
+        ope = dynamic_cast<Operator*>(expr);
+        if (ope != nullptr) updated = ope->solve(&delete_node);
+        if (delete_node && ope->getParent() != nullptr) ope->getParent()->replaceChild(ope, ope->getChild());
     }
-
     return expr;
 }

@@ -1,17 +1,17 @@
-#ifndef ADDITION_HPP
-#define ADDITION_HPP
+#ifndef DIVISION_HPP
+#define DIVISION_HPP
 
 #include <string>
 
 #include "operator.hpp"
 
-class Addition: public Operator {
+class Division: public Operator {
 
 public:
-    Addition(Node *parent=nullptr)
+    Division(Node *parent=nullptr)
     : Operator{Token::Plus, parent} {};
 
     bool solve(bool *delete_self);
 };
 
-#endif // ADDITION_HPP
+#endif // DIVISION_HPP

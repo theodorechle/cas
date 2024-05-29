@@ -5,7 +5,6 @@
 using namespace std;
 
 void Number::parseNumber() {
-    negative = false;
     string v = getValue();
     string integer;
     string fraction;

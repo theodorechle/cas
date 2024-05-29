@@ -1,4 +1,5 @@
 #include "tokenizer.hpp"
+#include "addition.hpp"
 
 void Tokenizer::tokenizeSpace() {
     size_t i = 0;
@@ -52,6 +53,19 @@ void Tokenizer::tokenizeSpecialCharacters() {
         tokenized = true;
         return;
     }
+    bool found = false;
+    switch (expression[index]) {
+    case '+':
+        expressionTree->appendNext(new Addition);
+        found = true;
+        break;
+    }
+    if (found) {
+        index++;
+        tokenized = true;
+        return;
+    }
+
     Token token;
     switch (expression[index]) {
     case '(':
@@ -59,9 +73,6 @@ void Tokenizer::tokenizeSpecialCharacters() {
         break;
     case ')':
         token = Token::ClosingParenthesis;
-        break;
-    case '+':
-        token = Token::Plus;
         break;
     case '-':
         token = Token::Minus;

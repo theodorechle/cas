@@ -1,17 +1,17 @@
-#ifndef ADDITION_HPP
-#define ADDITION_HPP
+#ifndef POWER_HPP
+#define POWER_HPP
 
 #include <string>
 
 #include "operator.hpp"
 
-class Addition: public Operator {
+class Power: public Operator {
 
 public:
-    Addition(Node *parent=nullptr)
+    Power(Node *parent=nullptr)
     : Operator{Token::Plus, parent} {};
 
     bool solve(bool *delete_self);
 };
 
-#endif // ADDITION_HPP
+#endif // POWER_HPP

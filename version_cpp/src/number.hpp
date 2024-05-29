@@ -6,7 +6,7 @@
 class Number: public Node {
     std::string integerPart;
     std::string fractionPart;
-    bool negative;
+    bool negative = false;
     void parseNumber();
     void setIntegerPart(const std::string &);
     void setFractionPart(const std::string &);

@@ -5,12 +5,12 @@
 
 void findSuperiorGroup(Node *node, int priority, Node *nodes);
 
-Node *goToLeaf(Node *node);
+Node *goToFirstLeaf(Node *node);
 
 /**
   *Go up in the tree and returns the next child to solve (use the childIndex)
 */
-Node *goToNextExpr(Node *node, bool *change);
+Node *goToNextExpr(Node *node);
 
 Node *solve(Node *expr, bool debug);
 

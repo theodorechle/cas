@@ -133,12 +133,12 @@ void Node::removeSpecificChild(Node *child) {
         delete child;
         return;
     }
-    next = getChild()->getNext();
+    next = getChild();
     while (next != nullptr)
     {
-        if (next == child) {
-            child->setNext(next->getNext());
-            next->setNext(nullptr);
+        if (next->getNext() == child) {
+            next->setNext(child->getNext());
+            child->setNext(nullptr);
             delete child;
             return;
         }
@@ -191,6 +191,33 @@ void Node::replaceData(Node *tree) {
     setNext(tree->getNext());
     tree->setNext(nullptr);
     delete tree;
+}
+
+/**
+ * Find the child in the childs of the node and replace it with the new one
+*/
+void Node::replaceChild(Node *child, Node *newChild) {
+    if (child == nullptr || newChild == nullptr) return;
+    Node *c = getChild();
+    if (c == child) {
+        newChild->setNext(c->getNext());
+        setChild(newChild);
+        c->setNext(nullptr);
+        delete c;
+        return;
+    }
+    while (c != nullptr) {
+        if (c->getNext() == child) {
+            delete newChild->getNext();
+            newChild->setNext(c->getNext());
+            c->setNext(newChild);
+            newChild->setParent(this);
+            child->setNext(nullptr);
+            delete child;
+            return;
+        }
+        c = c->getNext();
+    }
 }
 
 Node::~Node() {
