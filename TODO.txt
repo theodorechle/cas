@@ -1,5 +1,2 @@
 Modify functions like sortTree and areSameNodes to allow any number of childs
 
-Forbid multiple dots in one number
-
-Rework tokenizer to tokenize blocks, not char by char

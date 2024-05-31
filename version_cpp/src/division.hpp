@@ -9,7 +9,7 @@ class Division: public Operator {
 
 public:
     Division(Node *parent=nullptr)
-    : Operator{Token::Plus, parent} {};
+    : Operator{Token::Slash, parent} {};
 
     bool solve(bool *delete_self);
 };

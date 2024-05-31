@@ -9,7 +9,7 @@ class Multiplication: public Operator {
 
 public:
     Multiplication(Node *parent=nullptr)
-    : Operator{Token::Plus, parent} {};
+    : Operator{Token::Times, parent} {};
 
     bool solve(bool *delete_self);
 };

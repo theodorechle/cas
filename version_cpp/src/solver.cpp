@@ -12,6 +12,7 @@ Node *goToFirstLeaf(Node *node) {
 }
 
 Node *goToNextExpr(Node *node) {
+    // TODO : Modify to allow going down in the childs of the nexts
     if (node->getNext() != nullptr) return node->getNext();
     return node->getParent();
 }

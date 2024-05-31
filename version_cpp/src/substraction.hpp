@@ -9,7 +9,7 @@ class Substraction: public Operator {
 
 public:
     Substraction(Node *parent=nullptr)
-    : Operator{Token::Plus, parent} {};
+    : Operator{Token::Minus, parent} {};
 
     bool solve(bool *delete_self);
 };

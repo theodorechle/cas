@@ -9,7 +9,7 @@ class Factorial: public Operator {
 
 public:
     Factorial(Node *parent=nullptr)
-    : Operator{Token::Plus, parent} {};
+    : Operator{Token::Bang, parent} {};
 
     bool solve(bool *delete_self);
 };

@@ -9,7 +9,7 @@ class Power: public Operator {
 
 public:
     Power(Node *parent=nullptr)
-    : Operator{Token::Plus, parent} {};
+    : Operator{Token::Caret, parent} {};
 
     bool solve(bool *delete_self);
 };
