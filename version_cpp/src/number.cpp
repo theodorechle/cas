@@ -5,7 +5,6 @@
 using namespace std;
 
 void Number::parseNumber() {
-    negative = false;
     string v = getValue();
     string integer;
     string fraction;
@@ -142,6 +141,11 @@ bool Number::isEqualTo(Number *n) const {
         otherChar++;
     }
     return true;
+}
+
+Number *Number::getAbsolute() const {
+    if (isNegative()) return new Number(getValue().substr(1));
+    return new Number(getValue());
 }
 
 void Number::add(Number *n) {

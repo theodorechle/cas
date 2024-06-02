@@ -4,10 +4,10 @@
 #include <unordered_map>
 
 enum class Token {
-    Name,
-    Number,
+    Name, // Only used by the parser
     Function,
     Variable,
+    Number,
     OpeningParenthesis,
     ClosingParenthesis,
     Space,
@@ -22,8 +22,8 @@ enum class Token {
     Bang,
     Empty,
     /**NullRoot is used only when an algorithm must start with an existing node
-     * Nodes with this type will be ignored by the root and getRootOrStopBeforeParenthesis functions
-     * (they return the NullRoot node's child)
+     * Nodes with this type will be ignored by the root and Parser::getRootOrStopBeforeParenthesis functions
+     * (they return the NullRoot node's child, except if it's the only node)
     */
    NullRoot
 };
@@ -38,7 +38,7 @@ public:
 };
 
 
-std::string tokenName(const Token &type);
+std::string tokenToString(const Token &type);
 
 int getOperatorPriority(const Token &token);
 

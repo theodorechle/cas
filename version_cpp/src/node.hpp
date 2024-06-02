@@ -40,13 +40,16 @@ public :
     Node *appendChild(Node *child);
     Node *appendChild(Node &child);
     Node *addEmptyChild();
+    
     /**
         *Replace the data of the node (value, type, childs and nexts)
         *by the ones of the given tree.
         Delete the last childs
     */
     void replaceData(Node *tree);
+    void replaceChild(Node *child, Node *newChild);
 
+    virtual Node *createNewNode() const {return new Node;}
     Node *copyNodeWithChildsAndNexts();
     Node *copyNodeWithChilds() const;
     void display(std::ostream &flow = std::cout) const;

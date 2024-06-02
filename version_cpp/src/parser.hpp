@@ -11,7 +11,7 @@
 class UnknownToken: public std::exception {
     std::string message;
 public:
-    UnknownToken(const Node token): message{"Error : Unknown token '" + token.getValue() + " (" + tokenName(token.getTokenType()) + ")'"} {};
+    UnknownToken(const Node token): message{"Error : Unknown token '" + token.getValue() + " (" + tokenToString(token.getTokenType()) + ")'"} {};
     const char* what() const noexcept override {return message.c_str();}
 };
 
@@ -30,7 +30,8 @@ public:
 };
 
 class Parser {
-    Node *expressionTokens;
+    Node *expressionTokens; // maybe change the program to forbid modification
+    // only used to avoid recalculing many times the root
     Node *expressionTreeRoot = new Node{Token::NullRoot};
     Node *expressionTree = expressionTreeRoot;
     Settings *settings;

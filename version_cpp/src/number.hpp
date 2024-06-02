@@ -6,7 +6,7 @@
 class Number: public Node {
     std::string integerPart;
     std::string fractionPart;
-    bool negative;
+    bool negative = false;
     void parseNumber();
     void setIntegerPart(const std::string &);
     void setFractionPart(const std::string &);
@@ -28,14 +28,14 @@ public:
     bool isEqualTo(Number *) const;
     const std::string &getIntegerPart() const {return integerPart;}
     const std::string &getFractionPart() const {return fractionPart;}
-    Number *getAbsolute() const {return new Number(negative ? getValue().substr(1) : getValue());}
-    int getIntegerSize() const {return integerPart.size() - negative;}
+    Number *getAbsolute() const;
+    int getIntegerSize() const {return integerPart.size();}
     int getFractionSize() const {return fractionPart.size();}
     void add(Number *n);
     void substract(Number *n);
     void multiply(Number *n);
     void divide(Number *n);
-
+    Node *createNewNode() const override {return new Number("");}
 };
 
 std::ostream &operator<<(std::ostream &o, const Number &n);

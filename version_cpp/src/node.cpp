@@ -6,7 +6,7 @@
 using namespace std;
 
 Node *Node::copyNodeWithChildsAndNexts() {
-    Node *n = new Node;
+    Node *n = createNewNode();
     Node *child = getChild();
     Node *next = getNext();
     n->setTokenType(getTokenType());
@@ -20,7 +20,7 @@ Node *Node::copyNodeWithChildsAndNexts() {
  * Copy the node and his childs (not the nexts)
 */
 Node *Node::copyNodeWithChilds() const {
-    Node *n = new Node;
+    Node *n = createNewNode();
     Node *child = getChild();
     n->setTokenType(getTokenType());
     n->setValue(getValue());
@@ -99,7 +99,7 @@ string Node::str() const {
         s += ")";
     }
     else if (getTokenType() == Token::OpeningParenthesis ||
-    getTokenType() == Token::ClosingParenthesis) {
+            getTokenType() == Token::ClosingParenthesis) {
         s += getChild()->str();
     }
     else s += getValue();
@@ -133,12 +133,12 @@ void Node::removeSpecificChild(Node *child) {
         delete child;
         return;
     }
-    next = getChild()->getNext();
+    next = getChild();
     while (next != nullptr)
     {
-        if (next == child) {
-            child->setNext(next->getNext());
-            next->setNext(nullptr);
+        if (next->getNext() == child) {
+            next->setNext(child->getNext());
+            child->setNext(nullptr);
             delete child;
             return;
         }
@@ -191,6 +191,33 @@ void Node::replaceData(Node *tree) {
     setNext(tree->getNext());
     tree->setNext(nullptr);
     delete tree;
+}
+
+/**
+ * Find the child in the childs of the node and replace it with the new one
+*/
+void Node::replaceChild(Node *child, Node *newChild) {
+    if (child == nullptr || newChild == nullptr) return;
+    Node *c = getChild();
+    if (c == child) {
+        newChild->setNext(c->getNext());
+        setChild(newChild);
+        c->setNext(nullptr);
+        delete c;
+        return;
+    }
+    while (c != nullptr) {
+        if (c->getNext() == child) {
+            delete newChild->getNext();
+            newChild->setNext(c->getNext()->getNext());
+            c->setNext(newChild);
+            newChild->setParent(this);
+            child->setNext(nullptr);
+            delete child;
+            return;
+        }
+        c = c->getNext();
+    }
 }
 
 Node::~Node() {

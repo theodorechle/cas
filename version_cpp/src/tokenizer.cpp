@@ -1,4 +1,5 @@
 #include "tokenizer.hpp"
+#include "addition.hpp"
 
 void Tokenizer::tokenizeSpace() {
     size_t i = 0;
@@ -28,12 +29,16 @@ void Tokenizer::tokenizeName() {
 }
 
 void Tokenizer::tokenizeNumber() {
-    if (!isdigit(expression[index])) return;
     bool dotFound = false;
+    if (expression[index] == '.') dotFound = true;
+    else if (!isdigit(expression[index])) return;
     size_t i = 1;
     while (index+i < expressionLength && (isdigit(expression[index+i]) ||
-            expression[index+i] == '_' ||
-            (!dotFound && expression[index+i] == '.'))) {
+            expression[index+i] == '_' || expression[index+i] == '.')) {
+        if (expression[index+i] == '.') {
+            if (!dotFound) dotFound = true;
+            else return;
+        }
         i++;
     }
     expressionTree->appendNext(new Node{Token::Number, expression.substr(index, i)});
@@ -48,6 +53,19 @@ void Tokenizer::tokenizeSpecialCharacters() {
         tokenized = true;
         return;
     }
+    bool found = false;
+    switch (expression[index]) {
+    case '+':
+        expressionTree->appendNext(new Addition);
+        found = true;
+        break;
+    }
+    if (found) {
+        index++;
+        tokenized = true;
+        return;
+    }
+
     Token token;
     switch (expression[index]) {
     case '(':
@@ -55,9 +73,6 @@ void Tokenizer::tokenizeSpecialCharacters() {
         break;
     case ')':
         token = Token::ClosingParenthesis;
-        break;
-    case '+':
-        token = Token::Plus;
         break;
     case '-':
         token = Token::Minus;
@@ -95,7 +110,6 @@ void Tokenizer::tokenize() {
         if (!tokenized) tokenizeName();
         if (!tokenized) tokenizeSpecialCharacters();
         if (!tokenized) {
-            // avoid memory leak
             delete expressionTree;
             throw UnknownValue(expression.substr(index));
         }
