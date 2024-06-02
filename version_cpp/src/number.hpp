@@ -15,6 +15,7 @@ class Number: public Node {
      * The value attribute is used to have a representing string of the Number.
      * The updateValue method must be called after each modification of the inner attributes.
     */
+    void setValue(const std::string &s) override;
     void updatevalue();
     std::string addPart(const std::string &thisNumber, const std::string &otherNumber, bool substract, bool *overflow);
 public:

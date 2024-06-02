@@ -23,11 +23,8 @@ Node *solve(Node *expr, bool debug) {
     while (updated || !Parser::isNodeNull(expr->getParent())) {
         if (updated) expr = goToFirstLeaf(expr);
         else expr = goToNextExpr(expr);
-        root(expr)->display(std::cerr);
         delete_node = false;
         updated = false;
-        std::cerr << expr->getValue() << std::endl;
-        std::cerr << tokenToString(expr->getTokenType()) << std::endl;
         ope = dynamic_cast<Operator*>(expr);
         if (ope != nullptr) updated = ope->solve(&delete_node);
         if (delete_node) {

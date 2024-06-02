@@ -4,6 +4,11 @@
 
 using namespace std;
 
+void Number::setValue(const std::string &s) {
+    Node::setValue(s);
+    parseNumber();
+}
+
 void Number::parseNumber() {
     string v = getValue();
     string integer;
@@ -56,7 +61,7 @@ void Number::setFractionPart(const std::string &value) {
 }
 
 void Number::updatevalue() {
-    setValue((negative ? "-" : "") + getIntegerPart() + (!getFractionPart().empty() ? "." + getFractionPart() : ""));
+    Node::setValue((negative ? "-" : "") + getIntegerPart() + (!getFractionPart().empty() ? "." + getFractionPart() : ""));
 }
 
 bool Number::isGreaterThan(Number *n) const {
@@ -176,7 +181,7 @@ void Number::add(Number *n) {
 }
 
 string Number::addPart(const string &thisNumber, const string &otherNumber, bool substract, bool *overflow) {
-    int zero = (int)'0';
+    int zero = '0';
     string result;
     int r;
     int thisSize = thisNumber.size();
@@ -198,7 +203,7 @@ string Number::addPart(const string &thisNumber, const string &otherNumber, bool
             r += 10;
         }
         
-        result += (char)(r + zero);
+        result += (r + zero);
     }
     reverse(result.begin(), result.end());
     return result;

@@ -10,12 +10,9 @@ bool Addition::solve(bool *delete_self) {
     if (typeFirstChild == Token::Number && typeSecondChild == Token::Number) {
         Number *c1 = dynamic_cast<Number*>(child1);
         Number *c2 = dynamic_cast<Number*>(child2);
-        std::cerr << *c1 << ", " << *c2 << std::endl;
         c1->add(c2);
-        std::cerr << *c1 << ", " << *c2 << std::endl;
         c1->setNext(nullptr);
         delete c2;
-        std::cerr << "addition done : " << getChild() << std::endl;
         *delete_self = true;
         return true;
     }

@@ -16,7 +16,7 @@ class Node {
 public :
     Node(Token type=Token::Empty, std::string value="", Node *parent=nullptr): type{type}, value{value}, next{}, child{}, parent{parent} {};
     virtual ~Node();
-    void setValue(const std::string& s) {value = s;};
+    virtual void setValue(const std::string& s) {value = s;};
     virtual const std::string& getValue() const {return value;};
     void setTokenType(const Token& t) {type = t;};
     const Token& getTokenType() const {return type;};
