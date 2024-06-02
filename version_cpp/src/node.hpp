@@ -50,8 +50,8 @@ public :
     void replaceChild(Node *child, Node *newChild);
 
     virtual Node *createNewNode() const {return new Node;}
-    Node *copyNodeWithChildsAndNexts();
     Node *copyNodeWithChilds() const;
+    Node *copyNodeWithChildsAndNexts() const;
     void display(std::ostream &flow = std::cout) const;
     void displayNext(std::ostream &flow = std::cout) const;
     std::string str() const;

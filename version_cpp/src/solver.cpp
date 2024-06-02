@@ -25,15 +25,16 @@ Node *solve(Node *expr, bool debug) {
         else expr = goToNextExpr(expr);
         delete_node = false;
         updated = false;
+        expr->display(std::cerr);
         ope = dynamic_cast<Operator*>(expr);
         if (ope != nullptr) updated = ope->solve(&delete_node);
         if (delete_node) {
-            expr = expr->getChild();
+            expr = ope->getChild();
+            ope->setChild(nullptr);
             if (ope->getParent() != nullptr) {
-                ope->getParent()->replaceChild(ope, ope->getChild());
+                ope->getParent()->replaceChild(ope, expr);
             }
             else {
-                ope->setChild(nullptr);
                 expr->setParent(nullptr);
                 delete ope;
             }

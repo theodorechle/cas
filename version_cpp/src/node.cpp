@@ -5,17 +5,6 @@
 
 using namespace std;
 
-Node *Node::copyNodeWithChildsAndNexts() {
-    Node *n = createNewNode();
-    Node *child = getChild();
-    Node *next = getNext();
-    n->setTokenType(getTokenType());
-    n->setValue(getValue());
-    if (child != nullptr) n->setChild(child->copyNodeWithChildsAndNexts());
-    if (next != nullptr) n->setNext(next->copyNodeWithChildsAndNexts());
-    return n;
-}
-
 /**
  * Copy the node and his childs (not the nexts)
 */
@@ -25,6 +14,13 @@ Node *Node::copyNodeWithChilds() const {
     n->setTokenType(getTokenType());
     n->setValue(getValue());
     if (child != nullptr) n->setChild(child->copyNodeWithChildsAndNexts());
+    return n;
+}
+
+Node *Node::copyNodeWithChildsAndNexts() const {
+    Node *n = copyNodeWithChilds();
+    Node *next = getNext();
+    if (next != nullptr) n->setNext(next->copyNodeWithChildsAndNexts());
     return n;
 }
 
