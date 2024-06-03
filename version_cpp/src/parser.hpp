@@ -37,7 +37,7 @@ class Parser {
     Settings *settings;
 
     void getRootOrStopBeforeParenthesis();
-    void removeParenthesis(Node *t);
+    Node *removeParenthesis(Node *t);
     void replaceImplicitTimes(Node *t);
 
 public:
@@ -52,6 +52,7 @@ public:
     void parse();
     void parseNumber();
     void parseVariable();
+    void parseFunction();
     void parseComma();
     void parseOperator();
     void parseOpeningParenthesis();

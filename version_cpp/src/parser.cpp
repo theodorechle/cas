@@ -18,17 +18,21 @@ void Parser::getRootOrStopBeforeParenthesis() {
     getRootOrStopBeforeParenthesis();
 }
 
-void Parser::removeParenthesis(Node *t) {
-    if (t == nullptr) return;
+Node *Parser::removeParenthesis(Node *t) {
+    if (t == nullptr) return t;
     if (t->getTokenType() == Token::ClosingParenthesis) {
-        t->replaceData(t->getChild());
+        Node *temp = t->getChild();
+        t->setChild(nullptr);
+        t->getParent()->replaceChild(t, temp);
+        t = temp;
     }
     else if (t->getTokenType() == Token::OpeningParenthesis) throw MissingToken(")");
     Node *child = t->getChild();
     while (child != nullptr) {
-        removeParenthesis(child);
+        child = removeParenthesis(child);
         child = child->getNext();
     }
+    return t;
 }
 
 void Parser::replaceImplicitTimes(Node *t) {
@@ -86,7 +90,7 @@ void Parser::parse() {
             }
             expressionTokens = expressionTokens->getNext();
         }
-        removeParenthesis(expressionTreeRoot);
+        expressionTreeRoot = removeParenthesis(expressionTreeRoot);
         replaceImplicitTimes(expressionTreeRoot);
     }
     catch (const exception &) {
@@ -122,7 +126,10 @@ void Parser::parseVariable() {
 }
 
 void Parser::parseComma() {
-    if (isNodeNull(expressionTree->getParent()) || expressionTree->getParent()->getTokenType() != Token::OpeningParenthesis) {
+    if (isNodeNull(expressionTree->getParent()) ||
+            expressionTree->getParent()->getTokenType() != Token::OpeningParenthesis ||
+            isNodeNull(expressionTree->getParent()->getParent()) ||
+            expressionTree->getParent()->getParent()->getTokenType() != Token::Function) {
         throw InvalidExpression(tokenToString(expressionTokens->getTokenType()));
     }
     expressionTree = expressionTree->getParent();

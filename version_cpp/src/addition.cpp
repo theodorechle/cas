@@ -7,6 +7,8 @@ bool Addition::solve(bool *delete_self) {
     Token typeFirstChild = child1->getTokenType();
     Token typeSecondChild = child2->getTokenType();
     if (isOneTokenTheSame(typeFirstChild, typeSecondChild, Token::Function)) return false;
+    if (isOneTokenTheSame(typeFirstChild, typeSecondChild, Token::Variable) &&
+        isOneTokenTheSame(typeFirstChild, typeSecondChild, Token::Number)) return false;
     if (typeFirstChild == Token::Number && typeSecondChild == Token::Number) {
         Number *c1 = dynamic_cast<Number*>(child1);
         Number *c2 = dynamic_cast<Number*>(child2);
