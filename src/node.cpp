@@ -201,6 +201,7 @@ void Node::replaceData(Node *tree) {
 void Node::replaceChild(Node *child, Node *newChild) {
     if (child == nullptr || newChild == nullptr) return;
     Node *c = getChild();
+    delete newChild->getNext();
     if (c == child) {
         newChild->setNext(c->getNext());
         setChild(newChild);
@@ -210,7 +211,6 @@ void Node::replaceChild(Node *child, Node *newChild) {
     }
     while (c != nullptr) {
         if (c->getNext() == child) {
-            delete newChild->getNext();
             newChild->setNext(c->getNext()->getNext());
             c->setNext(newChild);
             newChild->setParent(this);
