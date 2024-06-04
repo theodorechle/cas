@@ -1,7 +1,5 @@
 __pycache__/
 .vscode/
-cas_c/compiled_cas
-bin/exe
 bin/*
 !bin/.gitkeep
 obj/*
