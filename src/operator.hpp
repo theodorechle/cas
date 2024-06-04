@@ -5,6 +5,12 @@
 
 class Operator: public Node {
 public:
+    static const int DEFAULT_PRIORITY = INT32_MAX;
+    // operators and their priorities
+    static const std::unordered_map<Token, int> OperatorsPriorities;
+    // operators and the strings associated to
+    static const std::unordered_map<Token, std::string> OperatorsStrings;
+    
     Operator(Token token, Node *parent = nullptr): Node{token, "", parent} {}
     /**
      * Return true if the tree was updated else false
@@ -12,6 +18,19 @@ public:
     */
     virtual bool solve(bool *delete_self) = 0;
 };
+
+
+int getOperatorPriority(const Token &token);
+
+/**
+ * Take a token and if it is an operator, return a char * associated to.
+ * Ex :
+ * OperatorString(Token::Plus) // "+"
+*/
+std::string OperatorsString(const Token &token);
+
+std::ostream& operator<<(std::ostream& o, const Token type);
+
 
 /**
  * Check if the two tokens are equal regardless of the order (node1 can be equal to expected1 or 2 and same for node2)

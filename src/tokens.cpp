@@ -27,39 +27,3 @@ std::string tokenToString(const Token &type) {
     }
     return value;
 }
-
-const std::unordered_map<Token, int> Operators::OperatorsPriorities {
-    {Token::Plus, 1},
-    {Token::Minus, 1},
-    {Token::Times, 2},
-    {Token::Slash, 2},
-    {Token::ImplicitTimes, 3},
-    {Token::Caret, 4}
-};
-
-const std::unordered_map<Token, std::string> Operators::OperatorsStrings {
-    {Token::Plus, "+"},
-    {Token::Minus, "-"},
-    {Token::Times, "*"},
-    {Token::Slash, "/"},
-    {Token::Caret, "^"},
-    {Token::DoubleTimes, "**"}
-};
-
-int getOperatorPriority(const Token &token) {
-    const std::unordered_map<Token, int>::const_iterator iter = Operators::OperatorsPriorities.find(token);
-    if (iter != Operators::OperatorsPriorities.cend()) return iter->second;
-    return Operators::DEFAULT_PRIORITY;
-}
-
-std::string OperatorsString(const Token &token) {
-    const std::unordered_map<Token, std::string>::const_iterator iter = Operators::OperatorsStrings.find(token);
-    if (iter != Operators::OperatorsStrings.cend()) return iter->second;
-    return "";
-}
-
-std::ostream& operator<<(std::ostream& o, const Token type) {
-    o << tokenToString(type);
-    return o;
-}
-

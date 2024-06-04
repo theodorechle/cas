@@ -1,18 +1,24 @@
 #include <iostream>
 
 #include "node.hpp"
+#include "operator.hpp"
 #include "parser.hpp"
 
 using namespace std;
+
+Node *Node::copyNode() const {
+    Node *n = createNewNode();
+    n->setTokenType(getTokenType());
+    n->setValue(getValue());
+    return n;
+}
 
 /**
  * Copy the node and his childs (not the nexts)
 */
 Node *Node::copyNodeWithChilds() const {
-    Node *n = createNewNode();
+    Node *n = copyNode();
     Node *child = getChild();
-    n->setTokenType(getTokenType());
-    n->setValue(getValue());
     if (child != nullptr) n->setChild(child->copyNodeWithChildsAndNexts());
     return n;
 }
