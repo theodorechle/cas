@@ -4,22 +4,16 @@
 #include "substraction.hpp"
 
 Node *getFirstSubNumber(Node *self) {
-    std::cerr << "self : " << *self << std::endl;
     if (!isOperator(self->getTokenType())) return nullptr;
-    std::cerr << "here" << std::endl;
     Node *child = self->getChild();
     while (child != nullptr) {
-        std::cerr << "child : " << *child << std::endl;
         if (!isOperator(child->getTokenType())) {
             if (dynamic_cast<Number *>(child) != nullptr) return child;
             continue;
         }
-        std::cerr << "still here" << std::endl;
         if (getOperatorPriority(child->getTokenType()) > getOperatorPriority(self->getTokenType())) continue;
-        std::cerr << "and still here" << std::endl;
         Node *foundNumber = getFirstSubNumber(child);
         if (foundNumber != nullptr) return foundNumber;
-        std::cerr << "it seems no number has been found yet" << std::endl;
         child = child->getNext();
     }
     return nullptr;
@@ -59,10 +53,7 @@ bool Addition::solve(bool *delete_self) {
             value = getFirstSubNumber(child2);
         }
         else return false;
-        std::cerr << "value : ";
-        std::cerr << value << std::endl;
         if (value != nullptr) {
-            std::cerr << *value << std::endl;
         }
         if (value != nullptr) {
             Node *newNodes;
