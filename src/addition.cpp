@@ -54,8 +54,6 @@ bool Addition::solve(bool *delete_self) {
         }
         else return false;
         if (value != nullptr) {
-        }
-        if (value != nullptr) {
             Node *newNodes;
             if (dynamic_cast<Substraction *>(value->getParent()) && value->getParent()->getChild() != value) newNodes = new Substraction();
             else newNodes = new Addition();
@@ -65,7 +63,6 @@ bool Addition::solve(bool *delete_self) {
             *delete_self = true;
             return true;
         }
-
         
     }
     return false;
