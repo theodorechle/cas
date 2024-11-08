@@ -1,4 +1,5 @@
 #include "operator.hpp"
+#include "number.hpp"
 
 bool areSameTokens(Token token1, Token token2, Token expected1, Token expected2) {
     return (token1 == expected1 && token2 == expected2) ||
@@ -43,4 +44,21 @@ std::string OperatorsString(const Token &token) {
 std::ostream& operator<<(std::ostream& o, const Token type) {
     o << tokenToString(type);
     return o;
+}
+
+
+Node *getFirstSubNumber(Node *self, int parentPriority) {
+    if (!isOperator(self->getTokenType())) {
+        if (self->getTokenType() == Token::Number) return self;
+        return nullptr;
+    }
+    int selfPriority = getOperatorPriority(self->getTokenType());
+    if (selfPriority > parentPriority) return nullptr;
+    Node *child = self->getChild();
+    while (child != nullptr) {
+        Node *foundNumber = getFirstSubNumber(child, selfPriority);
+        if (foundNumber != nullptr) return foundNumber;
+        child = child->getNext();
+    }
+    return nullptr;
 }

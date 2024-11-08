@@ -19,7 +19,7 @@ int main() {
     delete tokenizer;
     if (settings->debug) {
         cerr << "Tokens" << endl;
-        tokens->displayNext(cerr);
+        tokens->displayNexts(cerr);
     }
     Node *tree;
     Parser *parser = new Parser{tokens, settings};
