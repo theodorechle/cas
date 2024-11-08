@@ -137,24 +137,48 @@ void Parser::parseComma() {
 
 void Parser::parseOperator() {
     Node *actualToken = expressionTokens;
-    Node *nextToken = actualToken->getNext();
-    if (nextToken != nullptr) {
-        Token nextTokenType = nextToken->getTokenType();
-        if (isOperator(nextTokenType)) {
-            // Avoid things like -/ or /*
-            // but allow a second operator when it's a substraction
-            if (nextTokenType != Token::Minus) {
-                string actualTokenTypeString = OperatorsString(actualToken->getTokenType());
-                string nextTokenTypeString = OperatorsString(nextToken->getTokenType());
-                throw InvalidExpression(actualTokenTypeString + nextTokenTypeString);
-            }
-            //  Replace -- with +
-            if (actualToken->getTokenType() == Token::Minus) {
+    Token sign = Token::Empty;
+    while (true) {
+        if (actualToken == nullptr) {
+            if (sign != Token::Empty) {
+                expressionTokens->setTokenType(sign);
                 expressionTokens = expressionTokens->getNext();
-                actualToken->setTokenType(Token::Plus);
+            }
+            return;
+        }
+        Token actuelTokenType = actualToken->getTokenType();
+        if (isOperator(actuelTokenType)) {
+            // TODO: allow infinite number of -
+            // for now, it doesn't work because it just change them by pairs, and ++ isn't recognized by the solver
+            if (sign == Token::Empty) {
+                if (actuelTokenType == Token::Plus) sign = Token::Plus;
+                else if (actuelTokenType == Token::Minus) sign = Token::Minus;
+                else break;
+            }
+            else {
+                //  Replace -- with +
+                if (sign == Token::Minus && actuelTokenType == Token::Minus) {
+                    sign = Token::Plus;
+                }
+                //  Replace +- with -
+                else if (sign == Token::Plus && actuelTokenType == Token::Minus) {
+                    sign = Token::Minus;
+                }
+                //  Replace -+ with -
+                else if (sign == Token::Minus && actuelTokenType == Token::Plus) {
+                    sign = Token::Minus;
+                }
+                // Avoid things like -/ or /*
+                // but allow a second operator when it's a substraction
+                else {
+                    string actualTokenTypeString = OperatorsString(actualToken->getTokenType());
+                    throw InvalidExpression("Invalid operators sequence with operator '" + actualTokenTypeString + "'");
+                }
             }
         }
+        actualToken = actualToken->getNext();
     }
+
     // ** is equivalent to ^, they both mean exponential
     if (actualToken->getTokenType() == Token::DoubleTimes) actualToken->setTokenType(Token::Caret);
 
