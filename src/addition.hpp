@@ -8,8 +8,7 @@
 class Addition: public Operator {
 
 public:
-    Addition(Node *parent=nullptr)
-    : Operator{Token::Plus, parent} {};
+    Addition(Node *parent=nullptr): Operator{Token::Plus, parent} {};
 
     bool solve(bool *delete_self);
     Node *createNewNode() const override {return new Addition();}

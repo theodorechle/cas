@@ -3,6 +3,14 @@
 
 #include "node.hpp"
 
+class InvalidOperation : public std::exception {
+    std::string message;
+public:
+    InvalidOperation(const std::string& errorMessage): message{"InvalidOperation: '" + errorMessage + "'"} {};
+    const char* what() const noexcept override {return message.c_str();}
+};
+
+
 class Operator: public Node {
 public:
     static const int DEFAULT_PRIORITY = INT32_MAX;

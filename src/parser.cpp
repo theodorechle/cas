@@ -136,24 +136,48 @@ void Parser::parseComma() {
 }
 
 void Parser::parseOperator() {
-    Node *actualToken = expressionTokens;
-    Node *nextToken = actualToken->getNext();
-    if (nextToken != nullptr) {
+    Node* actualToken = expressionTokens;
+    Node* nextToken = expressionTokens;
+    Node* nextPreviousToken = expressionTokens; // except for the first loop, the token before the 'nextToken'
+    Token sign = Token::Empty;
+    while (true) {
+        if (nextToken == nullptr || !isOperator(nextToken->getTokenType())) {
+            if (sign != Token::Empty) {
+                expressionTokens->setTokenType(sign);
+                expressionTokens = nextPreviousToken;
+            }
+            break;
+        }
         Token nextTokenType = nextToken->getTokenType();
-        if (isOperator(nextTokenType)) {
+        // TODO: allow infinite number of -
+        // for now, it doesn't work because it just change them by pairs, and ++ isn't recognized by the solver
+        if (sign == Token::Empty) {
+            if (nextTokenType == Token::Plus) sign = Token::Plus;
+            else if (nextTokenType == Token::Minus) sign = Token::Minus;
+            else break;
+        }
+        else {
+            //  Replace -- with +
+            if (sign == Token::Minus && nextTokenType == Token::Minus) {
+                sign = Token::Plus;
+            }
+            //  Replace +- with -
+            else if (sign == Token::Plus && nextTokenType == Token::Minus) {
+                sign = Token::Minus;
+            }
+            //  Replace -+ with -
+            else if (sign == Token::Minus && nextTokenType == Token::Plus) {
+                sign = Token::Minus;
+            }
             // Avoid things like -/ or /*
             // but allow a second operator when it's a substraction
-            if (nextTokenType != Token::Minus) {
-                string actualTokenTypeString = OperatorsString(actualToken->getTokenType());
+            else {
                 string nextTokenTypeString = OperatorsString(nextToken->getTokenType());
-                throw InvalidExpression(actualTokenTypeString + nextTokenTypeString);
-            }
-            //  Replace -- with +
-            if (actualToken->getTokenType() == Token::Minus) {
-                expressionTokens = expressionTokens->getNext();
-                actualToken->setTokenType(Token::Plus);
+                throw InvalidExpression("Invalid operators sequence with operator '" + nextTokenTypeString + "'");
             }
         }
+        nextPreviousToken = nextToken;
+        nextToken = nextToken->getNext();
     }
     // ** is equivalent to ^, they both mean exponential
     if (actualToken->getTokenType() == Token::DoubleTimes) actualToken->setTokenType(Token::Caret);
@@ -190,7 +214,7 @@ void Parser::parseOperator() {
         newNode = new Factorial();
         break;
     default:
-        throw InvalidExpression("Invalid token " + tokenToString(actualToken->getTokenType())); // should never happen
+        throw InvalidExpression("Invalid token " + tokenToString(actualToken->getTokenType())); // should never happen while each token type have an assigned parser method
     }
 
     // if the actual operator node have the lower priority, directly take the last node and add it as a child of the operator

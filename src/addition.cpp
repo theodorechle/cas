@@ -6,6 +6,9 @@
 
 bool Addition::solve(bool *delete_self) {
     Node *child1 = getChild();
+    if (child1 == nullptr or child1->getNext() == nullptr) {
+        throw InvalidOperation("Can't addition with less than two values");
+    }
     Node *child2 = child1->getNext();
     Token typeFirstChild = child1->getTokenType();
     Token typeSecondChild = child2->getTokenType();
