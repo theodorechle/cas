@@ -44,7 +44,7 @@ void Node::display(ostream &flow) const {
     displayTree(flow, 0);
 }
 
-void Node::displayNext(ostream &flow) const {
+void Node::displayNexts(ostream &flow) const {
     const Node *next = this;
     while (next != nullptr) {
         flow << next->getValue() << " (" << next->getTokenType() << ")" << endl;
@@ -181,17 +181,21 @@ Node *Node::addEmptyChild() {
 void Node::replaceData(Node *tree) {
     if (tree == nullptr) return;
     tree = tree->copyNodeWithChildsAndNexts();
+    // copy node
     setValue(tree->getValue());
     setTokenType(tree->getTokenType());
+    // replace child
     delete getChild();
     setChild(tree->getChild());
     if (getChild() != nullptr) {
         getChild()->setParent(this);   
         tree->setChild(nullptr);
     }
+    // replace next
     delete getNext();
     setNext(tree->getNext());
     tree->setNext(nullptr);
+
     delete tree;
 }
 

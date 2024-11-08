@@ -25,7 +25,12 @@ Node *solve(Node *expr, bool debug) {
         else expr = goToNextExpr(expr);
         delete_node = false;
         updated = false;
-        expr->display(std::cerr);
+        if (debug) {
+            std::cerr << "Current tree" << std::endl;
+            expr->display(std::cerr);
+            std::cerr << "Root tree" << std::endl;
+            root(expr)->display(std::cerr);
+        }
         ope = dynamic_cast<Operator*>(expr);
         if (ope != nullptr) updated = ope->solve(&delete_node);
         if (delete_node) {

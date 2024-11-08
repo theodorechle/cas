@@ -54,7 +54,7 @@ public :
     Node *copyNodeWithChilds() const;
     Node *copyNodeWithChildsAndNexts() const;
     void display(std::ostream &flow = std::cout) const;
-    void displayNext(std::ostream &flow = std::cout) const;
+    void displayNexts(std::ostream &flow = std::cout) const;
     std::string str() const;
     std::string strNexts() const;
 

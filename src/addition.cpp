@@ -3,27 +3,6 @@
 #include "multiplication.hpp"
 #include "substraction.hpp"
 
-Node *getFirstSubNumber(Node *self) {
-    std::cerr << "self : " << *self << std::endl;
-    if (!isOperator(self->getTokenType())) return nullptr;
-    std::cerr << "here" << std::endl;
-    Node *child = self->getChild();
-    while (child != nullptr) {
-        std::cerr << "child : " << *child << std::endl;
-        if (!isOperator(child->getTokenType())) {
-            if (dynamic_cast<Number *>(child) != nullptr) return child;
-            continue;
-        }
-        std::cerr << "still here" << std::endl;
-        if (getOperatorPriority(child->getTokenType()) > getOperatorPriority(self->getTokenType())) continue;
-        std::cerr << "and still here" << std::endl;
-        Node *foundNumber = getFirstSubNumber(child);
-        if (foundNumber != nullptr) return foundNumber;
-        std::cerr << "it seems no number has been found yet" << std::endl;
-        child = child->getNext();
-    }
-    return nullptr;
-}
 
 bool Addition::solve(bool *delete_self) {
     Node *child1 = getChild();
@@ -51,31 +30,39 @@ bool Addition::solve(bool *delete_self) {
         }
     }
     else {
-        Node *value;
-        if (isOperator(child1->getTokenType()) && dynamic_cast<Number *>(child2) != nullptr) {
-            value = getFirstSubNumber(child1);
+        child1 = getFirstSubNumber(child1, getOperatorPriority(getTokenType()));
+        child2 = getFirstSubNumber(child2, getOperatorPriority(getTokenType()));
+        std::cerr << child1 << " " << child2 << std::endl;
+        if (child1 == nullptr || child2 == nullptr) return false;
+        bool substraction = false;
+        if (dynamic_cast<Substraction *>(child1->getParent()) &&
+                child1->getParent()->getChild() != child1) { // value is not the first child
+            substraction = !substraction;
         }
-        else if (isOperator(child2->getTokenType()) && dynamic_cast<Number *>(child1) != nullptr) {
-            value = getFirstSubNumber(child2);
+        if (dynamic_cast<Substraction *>(child2->getParent()) &&
+                child2->getParent()->getChild() != child2) { // value is not the first child
+            substraction = !substraction;
         }
-        else return false;
-        std::cerr << "value : ";
-        std::cerr << value << std::endl;
-        if (value != nullptr) {
-            std::cerr << *value << std::endl;
-        }
-        if (value != nullptr) {
-            Node *newNodes;
-            if (dynamic_cast<Substraction *>(value->getParent()) && value->getParent()->getChild() != value) newNodes = new Substraction();
-            else newNodes = new Addition();
-            newNodes->appendChild(value->copyNodeWithChilds());
-            newNodes->appendChild(child2->copyNodeWithChilds());
-            value->getParent()->replaceChild(value, newNodes);
-            *delete_self = true;
+        Node *newNodes;
+        if (substraction) newNodes = new Substraction();
+        else newNodes = new Addition();
+        newNodes->appendChild(child1->copyNodeWithChilds());
+        newNodes->appendChild(child2->copyNodeWithChilds());
+
+        child1->getParent()->replaceChild(child1, newNodes);
+
+        Node *child2Parent = child2->getParent();
+        if (child2Parent == this) {
+            child2Parent->replaceData(child2Parent->getChild());
             return true;
         }
 
-        
+        child2Parent->removeSpecificChild(child2);
+
+        child2Parent->getParent()->getParent()->replaceChild(child2Parent->getParent(), child2Parent->copyNodeWithChilds());
+
+        *delete_self = true;
+        return true;
     }
     return false;
 }

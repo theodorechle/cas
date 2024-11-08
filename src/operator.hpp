@@ -40,4 +40,6 @@ bool areSameTokens(Token node1, Token node2, Token expected1, Token expected2);
 
 bool isOneTokenTheSame(Token token1, Token token2, Token expected);
 
+Node *getFirstSubNumber(Node *self, int parentPriority);
+
 #endif // OPERATOR_HPP
